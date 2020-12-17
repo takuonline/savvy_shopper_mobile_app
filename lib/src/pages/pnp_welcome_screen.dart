@@ -29,8 +29,6 @@ class _PnPWelcomeScreenState extends State<PnPWelcomeScreen> {
           ),
         ),
         Positioned(
-//          bottom: -200,
-//          left: -410,
           top: 390,
           right: 10,
 
@@ -44,11 +42,8 @@ class _PnPWelcomeScreenState extends State<PnPWelcomeScreen> {
           ),
         ),
         Positioned(
-//          bottom: -200,
-//          left: -410,
           top: 230,
           left: 100,
-
           child: Transform.rotate(
             angle: 80,
             child: SvgPicture.asset(
@@ -58,10 +53,33 @@ class _PnPWelcomeScreenState extends State<PnPWelcomeScreen> {
             ),
           ),
         ),
+        Positioned(
+          top: 20,
+          left: 50,
+          child: SvgPicture.asset(
+            "assets/pnp/pnp_w_1.svg",
+            width: 300,
+          ),
+        ),
+        Positioned(
+          bottom: 50,
+          left: 30,
+          child: SvgPicture.asset(
+            "assets/pnp/pnp_w_2.svg",
+            width: 380,
+          ),
+        ),
+        Positioned(
+          bottom: 330,
+          right: 10,
+          child: SvgPicture.asset(
+            "assets/pnp/pnp_w_3.svg",
+            width: 50,
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
-//            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Spacer(
@@ -106,7 +124,7 @@ class _PnPWelcomeScreenState extends State<PnPWelcomeScreen> {
                         borderRadius: BorderRadius.circular(5)),
                     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                     child: Text(
-                      "Explore",
+                      "Coming Soon...",
                       style: TextStyle(
                           fontFamily: "Montserrat",
                           color: Colors.white,

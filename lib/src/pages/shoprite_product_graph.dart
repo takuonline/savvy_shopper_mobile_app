@@ -41,8 +41,6 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
     return temp;
   }
 
-//  double cutOffYValue = 10;
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -56,73 +54,120 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
       body: Container(
           color: kShopriteSecondary,
           child: ListView(
-        children: [
-          SizedBox(
-            height: 30,
-          ),
-
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            width: screenWidth,
-            height: screenHeight * .5,
-color: kShopriteSecondary,
-            child: SfCartesianChart(
-              plotAreaBorderWidth: 1,
-              crosshairBehavior: CrosshairBehavior(
-                enable: true,
+            children: [
+              SizedBox(
+                height: 10,
               ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: Card(
+                        color: kBgShoprite.withOpacity(1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        elevation: 10,
+                        child: Container(
+                          height: 50,
+                          width: 50,
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(50)),
+                child: Material(
+                  elevation: 5,
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                    width: screenWidth,
+                    height: screenHeight * .55,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: kShopriteSecondary,
+                    ),
+                    child: SfCartesianChart(
+                      plotAreaBorderWidth: 1,
+                      crosshairBehavior: CrosshairBehavior(
+                        enable: true,
+                      ),
 
-                    palette: [
+                      palette: [
 //                      Colors.black,
-                     kBgShoprite
-                    ],
-              //set type for x and y axis
-              primaryXAxis: DateTimeAxis(
-                title: AxisTitle(
-                  text: 'Date',
-                ),
-
-                intervalType: DateTimeIntervalType.days,
-              ),
-              primaryYAxis: NumericAxis(
-                title: AxisTitle(
-                  text: 'Price',
-                ),
+                        kBgShoprite
+                      ],
+                      //set type for x and y axis
+                      primaryXAxis: DateTimeAxis(
+                        title: AxisTitle(
+                          text: 'Date',
+                        ),
+                        intervalType: DateTimeIntervalType.days,
+                      ),
+                      primaryYAxis: NumericAxis(
+                        title: AxisTitle(
+                          text: 'Price',
+                        ),
 
 //                        labelFormat: 'R{value}'
 //                    interval: 7
-              ),
-              //give chart title
-              title: ChartTitle(text: widget.productItem.title),
-              onMarkerRender: (args) {
+                      ),
+                      //give chart title
+                      title: ChartTitle(text: widget.productItem.title),
+                      onMarkerRender: (args) {
 //                      args.
-              },
-              legend: Legend(overflowMode: LegendItemOverflowMode.wrap),
-              tooltipBehavior: TooltipBehavior(enable: true),
+                      },
+                      legend: Legend(overflowMode: LegendItemOverflowMode.wrap),
+                      tooltipBehavior: TooltipBehavior(enable: true),
 
-              series: <LineSeries>[
-                LineSeries(
-                    dataSource: _getData(),
-                    xValueMapper: (product, _) => product.time,
-                    yValueMapper: (product, _) => product.price,
-                    // Enable data label
-                    dataLabelSettings: DataLabelSettings(isVisible: false))
-              ],
-            ),
+                      series: <LineSeries>[
+                        LineSeries(
+                            dataSource: _getData(),
+                            xValueMapper: (product, _) => product.time,
+                            yValueMapper: (product, _) => product.price,
+                            // Enable data label
+                            dataLabelSettings:
+                                DataLabelSettings(isVisible: false))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 70,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Material(
+                  elevation: 5,
+                  color: kShopriteSecondary,
+                  child: Container(
+                    decoration: BoxDecoration(
+//  color: Colors.transparent,
 
-          ),
-
-          SizedBox(
-            height: 10,
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50),
-            child: Image.network(
-                widget.productItem.imageUrl ?? _shopriteNullImageUrl),
-          )
-        ],
-      )),
+                        borderRadius: BorderRadius.circular(20)),
+                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                    child: Image.network(
+                      widget.productItem.imageUrl ?? _shopriteNullImageUrl,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          )),
     ));
   }
 }

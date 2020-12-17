@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/product_item.dart';
+import 'package:e_grocery/src/components/shoprite_product_card.dart';
 import 'package:e_grocery/src/components/shoprite_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/shoprite_data.dart';
@@ -25,20 +26,12 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
   final _gridScrollController = ScrollController();
   ScrollController _scrollController = ScrollController();
 
-
   List<ProductItem> cheap = [];
   List<ProductItem> expensive = [];
   List<ProductItem> allProducts = [];
 
   @override
-  void initState() {
-
-
-
-
-
-  }
-
+  void initState() {}
 
   final _outlineBorder = OutlineInputBorder(
       borderSide: BorderSide(color: Colors.transparent),
@@ -52,9 +45,7 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
     super.dispose();
   }
 
-  void _getBestBuys(){
-
-  }
+  void _getBestBuys() {}
 
   void _cleanExpensive(List<dynamic> items) {
     for (var i in items) {
@@ -75,7 +66,6 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
 
       expensive.add(_productItem);
     }
-
 
     setState(() {});
   }
@@ -116,19 +106,19 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    dynamic data =  Provider.of<AllProductList>(context,listen: true).data;
+    dynamic data = Provider.of<AllProductList>(context, listen: true).data;
 
-    if (data != null){
+    if (data != null) {
       _cleanCheap(jsonDecode(data["cheap"]));
       _cleanExpensive(jsonDecode(data["expensive"]));
-
     }
-
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-      allProducts = cheap + expensive;
-      allProducts.shuffle();
+
+    allProducts = cheap + expensive;
+    List<ProductItem> bestBuys = cheap.take(5).toList();
+    allProducts.shuffle();
 
     return Container(
 //      color: kShopriteSecondary,
@@ -165,86 +155,55 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                   SizedBox(
                     height: 20,
                   ),
-
-
-
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: _horizontalPadding),
-                    child:
-                    Center(
-                      child: GestureDetector(
-                        onTap: ()async{
+                      padding:
+                      EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                      child: Center(
+                        child: GestureDetector(
+                          onTap: () async {
 //                          print(data);
-                          Provider.of<ProductNameList>(context,listen: false).getProductNameList(data,context);
-                          final result = await showSearch(context: context, delegate: ShoeSearch());
-                          print(result);
-                          ShopriteData _shopriteData = ShopriteData();
 
-                          if (result !=null){
-                            dynamic response = await _shopriteData.getSingleProductData(result);
-                            dynamic parsedResponse = jsonDecode(response);
-
-                            List<DateTime> tempDateList = [];
-
-                            List<dynamic> datesList = parsedResponse[parsedResponse.keys.elementAt(0).toString()]['dates'];
-
-                            for (var dateString in datesList) {
-                              tempDateList.add((DateTime.parse(dateString)));
-                            }
-
-                            ProductItem _parsedProductItem = ProductItem(
-                                parsedResponse[parsedResponse.keys.elementAt(0).toString()]['image_url'],
-                                parsedResponse[parsedResponse.keys.elementAt(0).toString()]['prices_list'],
-                                tempDateList,
-                                parsedResponse.keys.elementAt(0).toString(),
-                                parsedResponse[parsedResponse.keys.elementAt(0).toString()]['change']);
-
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ShopriteProductGraph(
-                                        productItem:
-                                        _parsedProductItem),
-                              ),
-                            );
-                          }
-
-
-
-//                          print(response);
-
-
-
-
-
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(.8),
-
-                            borderRadius: BorderRadius.circular(10)
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 70,vertical: 20),
-                            child: Text(
-                            "Search Product",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: "Montserrat",
-                                decoration: TextDecoration.none,
-                                color: kTextColor,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18),
+                            Provider.of<ProductNameList>(context, listen: false)
+                                .getProductNameList(data, context);
+                            final result = await showSearch(
+                                context: context, delegate: ShoeSearch());
+                            print(result);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(.8),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.search,
+                                  color: Colors.black,
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 20),
+                                  child: Text(
+                                    "Search Product",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: "Montserrat",
+                                        decoration: TextDecoration.none,
+                                        color: kTextColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18),
+                                  ),
+                                ),
+                              ],
                             ),
-                          )
-
-                          ,
+                          ),
                         ),
-                      ),
-                    )
+                      )
 
 //                    Material(
 //                      color: Colors.transparent,
@@ -302,26 +261,30 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                         ),
                       ],
                     ),
-                    BestChoiceProduct(title: "Ritebrand Mayonnaise Cream"),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    BestChoiceProduct(title: "Crown blended cooking oil"),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    BestChoiceProduct(
-                        title:
-                            "Country Fair fresh chicken 10 pierce braaipack"),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    BestChoiceProduct(
-                        title: "Crystal Valley Gouda Cheese Pack "),
-                    SizedBox(
-                      height: 30,
-                    ),
+//                    BestChoiceProduct(title: "Ritebrand Mayonnaise Cream"),
+//                    SizedBox(
+//                      height: 10,
+//                    ),
+//                    BestChoiceProduct(title: "Crown blended cooking oil"),
+//                    SizedBox(
+//                      height: 10,
+//                    ),
+//                    BestChoiceProduct(
+//                        title:
+//                            "Country Fair fresh chicken 10 pierce braaipack"),
+//                    SizedBox(
+//                      height: 10,
+//                    ),
+//                    BestChoiceProduct(
+//                        title: "Crystal Valley Gouda Cheese Pack "),
+//                    SizedBox(
+//                      height: 30,
+//                    ),
 
+                    ...bestBuys
+                        .map((e) => BestChoiceProduct(title: e.title))
+                        .toList(),
+                    SizedBox(height: 20)
                   ],
                 ),
               ),
@@ -397,10 +360,11 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
             height: 30,
           ),
           Container(
-            height: _isGrid ?  70 * cheap.length.toDouble(): 150 * cheap.length.toDouble() ,
+            height: _isGrid
+                ? 70 * cheap.length.toDouble()
+                : 150 * cheap.length.toDouble(),
             child: DefaultTabController(
               length: 3,
-
               child: Column(
                 children: [
                   Material(
@@ -411,32 +375,35 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                       tabs: [
                         Tab(
 //                                    text: "All",
-                            child: Text(
-                          "All",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: "Montserrat",
-                            fontSize: 20
-                          ),
-                        )),
-                        Tab(
-//                                    text: "All",
-                            child: Text(
-                              "Cheap",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: "Montserrat",
-                                  fontSize: 18
+                            child: FittedBox(
+                              child: Text(
+                                "All",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: "Montserrat",
+                                    fontSize: 20),
                               ),
                             )),
                         Tab(
 //                                    text: "All",
-                            child: Text(
-                              "Expensive",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: "Montserrat",
-                                  fontSize: 20
+                            child: FittedBox(
+                              child: Text(
+                                "Cheap",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: "Montserrat",
+                                    fontSize: 18),
+                              ),
+                            )),
+                        Tab(
+//                                    text: "All",
+                            child: FittedBox(
+                              child: Text(
+                                "Expensive",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: "Montserrat",
+                                    fontSize: 20),
                               ),
                             )),
                       ],
@@ -447,11 +414,9 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                         child: TabBarView(
 //                                  controller: _tabController,
                       children: [
-
-                        productTabBarView(context,allProducts),
-                        productTabBarView(context,cheap),
-                        productTabBarView(context,expensive),
-
+                        productTabBarView(context, allProducts),
+                        productTabBarView(context, cheap),
+                        productTabBarView(context, expensive),
                       ],
                     )),
                   ),
@@ -467,150 +432,142 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
     );
   }
 
-  ListView productTabBarView(BuildContext context, List<ProductItem>  itemList) {
+  ListView productTabBarView(BuildContext context, List<ProductItem> itemList) {
     return ListView(
-                        controller: _scrollController,
-                        physics: NeverScrollableScrollPhysics(),
-                        children: [
-                          SizedBox(
-                            height: 50,
-                          ),
+      controller: _scrollController,
+      physics: NeverScrollableScrollPhysics(),
+      children: [
+        SizedBox(
+          height: 50,
+        ),
+        _isGrid
+            ? Material(
+          child: DataTable(
+            columnSpacing: 5,
+            headingTextStyle: TextStyle(
+                fontFamily: "Montserrat",
+                fontWeight: FontWeight.w600,
+                color: Colors.black),
 
-                          _isGrid
-                              ? Material(
-                            child: DataTable(
-                              columnSpacing: 5,
-                              headingTextStyle: TextStyle(
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black),
-
-                              showBottomBorder: false,
-                              sortAscending: true,
-                              sortColumnIndex: 1,
-                              dividerThickness: 0,
+            showBottomBorder: false,
+            sortAscending: true,
+            sortColumnIndex: 1,
+            dividerThickness: 0,
 //                  horizontalMargin: 20,
-                              dataRowHeight: 55,
-                              headingRowColor:
-                              MaterialStateProperty.all(
-                                  kShopriteSecondary
-                                      .withOpacity(.3)),
-                              columns: [
-                                DataColumn(
-                                  label: Text('Image'),
-                                ),
-                                DataColumn(
-                                  label: Text('Title'),
-                                ),
-                                DataColumn(
-                                    label: Text(
-                                      'Price',
-                                    ),
-                                    numeric: true),
-                                DataColumn(
-                                    label: Text(
-                                      'Change',
-                                    ),
-                                    numeric: true),
-                              ],
-                              rows: [
-                                ...itemList.map(
-                                      (product) => DataRow(
-                                    cells: [
-                                      DataCell(
-                                          Image.network(product
-                                              .imageUrl ??
-                                              _shopriteNullImageUrl),
-                                          onTap: () =>
-                                          product.imageUrl == null
-                                              ? null
-                                              : _showDialog(product,
-                                              context)),
-                                      DataCell(
-                                        Text(
-                                          "${product.title}",
-                                          maxLines: 3,
-                                          style: TextStyle(
+            dataRowHeight: 55,
+            headingRowColor: MaterialStateProperty.all(
+                kShopriteSecondary.withOpacity(.3)),
+            columns: [
+              DataColumn(
+                label: Text('Image'),
+              ),
+              DataColumn(
+                label: Text('Title'),
+              ),
+              DataColumn(
+                  label: Text(
+                    'Price',
+                  ),
+                  numeric: true),
+              DataColumn(
+                  label: Text(
+                    'Change',
+                  ),
+                  numeric: true),
+            ],
+            rows: [
+              ...itemList.map(
+                    (product) =>
+                    DataRow(
+                      cells: [
+                        DataCell(
+                            Image.network(
+                                product.imageUrl ?? _shopriteNullImageUrl),
+                            onTap: () =>
+                            product.imageUrl == null
+                                ? null
+                                : _showDialog(product, context)),
+                        DataCell(
+                          Text(
+                            "${product.title}",
+                            maxLines: 3,
+                            style: TextStyle(
 //                                color: Colors.redAccent,
-                                            fontWeight: FontWeight.w300,
-                                          ),
-                                        ),
-                                        onTap: () => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ShopriteProductGraph(
-                                                    productItem:
-                                                    product),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Text(
-                                          'R${product.prices[product.prices.length-1]}',
-                                          style: TextStyle(
-//                                color: Colors.redAccent,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Text(
-                                          "${product.change.round()}%",
-                                          style: TextStyle(
-                                              color: product.change  > 0  ?  Colors.red : Colors.green  ,
-
-
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                              : Scrollbar(
-                            controller: _gridScrollController,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10),
-                              child: GridView.builder(
-                                  controller: _gridScrollController,
-                                  itemCount: itemList.length,
-                                  shrinkWrap: true,
-                                  gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    childAspectRatio: 1 / 1.4,
-                                    crossAxisSpacing: 10,
-                                  ),
-                                  itemBuilder: (_, index) {
-                                    return
-
-                                      GestureDetector(
-                                       onTap: ()=> Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ShopriteProductGraph(
-                                                      productItem:
-                                                      itemList[index]),
-                                            ),
-                                       ),
-                                        child: ProductCard(
-                                          index: index,
-                                          cheap: itemList,
-                                          shopriteNullImageUrl:_shopriteNullImageUrl,
-//                                    showDialog: _showDialog(itemList[index], context),
-                                        product: itemList[index],
-                                    ),
-                                      );
-                                  }),
+                              fontWeight: FontWeight.w300,
                             ),
                           ),
-                        ],
-                      );
+                          onTap: () =>
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ShopriteProductGraph(
+                                          productItem: product),
+                                ),
+                              ),
+                        ),
+                        DataCell(
+                          Text(
+                            'R${product.prices[product.prices.length - 1]}',
+                            style: TextStyle(
+//                                color: Colors.redAccent,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            "${product.change.round()}%",
+                            style: TextStyle(
+                              color: product.change > 0
+                                  ? Colors.red
+                                  : Colors.green,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+              )
+            ],
+          ),
+        )
+            : Scrollbar(
+          controller: _gridScrollController,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: GridView.builder(
+                controller: _gridScrollController,
+                itemCount: itemList.length,
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1 / 1.4,
+                  crossAxisSpacing: 10,
+                ),
+                itemBuilder: (_, index) {
+                  return GestureDetector(
+                    onTap: () =>
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ShopriteProductGraph(
+                                    productItem: itemList[index]),
+                          ),
+                        ),
+                    child: ProductCard(
+                      index: index,
+                      cheap: itemList,
+                      shopriteNullImageUrl: _shopriteNullImageUrl,
+//                                    showDialog: _showDialog(itemList[index], context),
+                      product: itemList[index],
+                    ),
+                  );
+                }),
+          ),
+        ),
+      ],
+    );
   }
 
   Future<void> _showDialog(ProductItem product, BuildContext context) async {
@@ -644,132 +601,26 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
   }
 }
 
-class ProductCard extends StatelessWidget {
-  List<ProductItem> cheap;
-  String shopriteNullImageUrl;
-  int index;
-  ProductItem product;
-
-  ProductCard({this.cheap, this.shopriteNullImageUrl, this.index,this.product});
-  final double gridCardBorderRadius = 25;
-
-
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      margin: EdgeInsets.symmetric(vertical: 10),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(gridCardBorderRadius)),
-      color: kBgShoprite.withOpacity(.1),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            flex: 13,
-            child: Stack(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 10,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: kBgShoprite.withOpacity(1),
-                            borderRadius: BorderRadius.only(
-                                bottomRight:
-                                    Radius.circular(gridCardBorderRadius),
-                                topLeft:
-                                    Radius.circular(gridCardBorderRadius))),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 8,
-                      child: Container(),
-                    )
-                  ],
-                ),
-
-//                                            BackdropFilter(
-//                                              filter: ui.ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
-//                                              child: Container(
-//                                                height: 30,
-//                                                decoration: BoxDecoration(color: Colors.black),
-//                                              ),
-//                                            ),
-
-                Center(
-                  child: Image.network(
-                    cheap[index].imageUrl ?? shopriteNullImageUrl,
-                    height: 250,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 10,
-
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Price:  R${cheap[index].prices[cheap[index].prices.length - 1]}",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: "Montserrat",
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      "${cheap[index].title}",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: "Montserrat",
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
 class BestChoiceProduct extends StatelessWidget {
-  String title;
+  final String title;
 
   BestChoiceProduct({this.title});
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-        color: Colors.black,
-        fontFamily: "Montserrat",
-        decoration: TextDecoration.none,
-        fontSize: 18,
-        fontWeight: FontWeight.w400,
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 5),
+      child: Text(
+        title,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: Colors.black,
+          fontFamily: "Montserrat",
+          decoration: TextDecoration.none,
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
+        ),
       ),
     );
   }

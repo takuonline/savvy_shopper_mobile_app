@@ -23,7 +23,7 @@ class _WoolworthsWelcomeScreenState extends State<WoolworthsWelcomeScreen> {
           child: SvgPicture.asset(
             "assets/blob-1.svg",
             width: 900,
-            color: Colors.white,
+            color: Colors.white.withOpacity(.7),
           ),
         ),
         Positioned(
@@ -39,15 +39,28 @@ class _WoolworthsWelcomeScreenState extends State<WoolworthsWelcomeScreen> {
           ),
         ),
         Positioned(
-//          bottom: -200,
-//          left: -410,
           bottom: -180,
           left: -370,
-
           child: SvgPicture.asset(
             "assets/blob-3.svg",
             color: Colors.grey.withOpacity(.9),
             width: 800,
+          ),
+        ),
+        Positioned(
+          top: 20,
+          left: 60,
+          child: SvgPicture.asset(
+            "assets/woolworths/woolies_w_1.svg",
+            width: 250,
+          ),
+        ),
+        Positioned(
+          bottom: 100,
+          left: 50,
+          child: SvgPicture.asset(
+            "assets/woolworths/woolies_w_2.svg",
+            width: 300,
           ),
         ),
         Padding(
@@ -96,7 +109,7 @@ class _WoolworthsWelcomeScreenState extends State<WoolworthsWelcomeScreen> {
                         borderRadius: BorderRadius.circular(5)),
                     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                     child: Text(
-                      "Explore",
+                      "Coming Soon...",
                       style: TextStyle(
                           fontFamily: "Montserrat",
                           color: Colors.white,

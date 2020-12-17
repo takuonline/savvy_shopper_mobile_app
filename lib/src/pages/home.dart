@@ -90,10 +90,10 @@ class _HomePageState extends State<HomePage> {
 
                     Positioned(
                       right: 20,
-                      bottom: 40,
+                      bottom: 30,
                       child: SvgPicture.asset(
-                        "assets/shoprite cart.svg",
-                        height: 100,
+                        "assets/shoprite/shoprite_cart.svg",
+                        height: 110,
                         color: Colors.white,
 
                       ),)
@@ -102,11 +102,12 @@ class _HomePageState extends State<HomePage> {
                           bottom: 20,
                           left: 20,
                           child: Text("Shoprite",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 40)),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.w700,
+                                fontSize: 40),
+                          ),
                         ),
                       ],
                     ),
@@ -119,8 +120,6 @@ class _HomePageState extends State<HomePage> {
               ),
               InkWell(
                 onTap: () {
-
-
                   Navigator.pushNamed(context, PnPWelcomeScreen.id);
 
                 },
@@ -147,11 +146,11 @@ class _HomePageState extends State<HomePage> {
                         ),
 
                         Positioned(
-                          left: 20,
-                          bottom: 40,
+                          left: 40,
+                          bottom: 70,
                           child: SvgPicture.asset(
-                            "assets/pnp_cart.svg",
-                            height: 100,
+                            "assets/pnp/pnp_cart.svg",
+                            height: 70,
                             color: Colors.white,
 
                           ),)
@@ -198,10 +197,10 @@ class _HomePageState extends State<HomePage> {
                         ),
 
                         Positioned(
-                          right: 20,
-                          bottom: 40,
+                          right: 30,
+                          bottom: 60,
                           child: SvgPicture.asset(
-                            "assets/woolies_cart.svg",
+                            "assets/woolworths/woolies_cart.svg",
                             height: 80,
                             color: Colors.white,
 
