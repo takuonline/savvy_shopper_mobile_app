@@ -1,31 +1,67 @@
-import 'package:e_grocery/src/pages/pnp_welcome_screen.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/deletables/pnp_welcome_screen.dart';
+import 'package:e_grocery/src/pages/pnp_home_screen.dart';
+import 'package:e_grocery/src/pages/pnp_product_graph.dart';
 import 'package:e_grocery/src/pages/shoprite_product_graph.dart';
-import 'package:e_grocery/src/pages/shoprite_welcome_screen.dart';
-import 'package:e_grocery/src/pages/woolworths_welcome_screen.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/deletables/shoprite_welcome_screen.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/deletables/woolworths_welcome_screen.dart';
+import 'package:e_grocery/src/providers/got_data_provider.dart';
+import 'package:e_grocery/src/providers/pnp_product_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'src/pages/home.dart';
 import 'package:e_grocery/src/pages/shoprite_home_screen.dart';
-void main() {
-  runApp(MyApp());
-}
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+void main() => runApp(
+//    SystemChrome.setEnabledSystemUIOverlays ([SystemUiOverlay.top]);
+
+// to hide only status bar:
+//    SystemChrome.setEnabledSystemUIOverlays ([SystemUiOverlay.bottom]);
+
+// to hide both:
+
+
+//  DevicePreview(
+//    enabled: true,
+//    builder: (context) =>
+        MyApp(), // Wrap your app
+//  ),
+);
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  // to hide only bottom bar:
+//  SystemChrome.setEnabledSystemUIOverlays ([]);
+//  final screenWidth = MediaQuery.of(context).size.width;
+//  final screenHeight = MediaQuery.of(context).size.height;
+
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(
+            value: GotData())
+        ,
         ChangeNotifierProvider.value(
           value:ProductNameList() ,
         ),
         ChangeNotifierProvider.value(
           value:AllProductList() ,
         ),
+        ChangeNotifierProvider.value(
+            value: PnPAllProductList())
       ],
       child: MaterialApp(
+//        locale: DevicePreview.locale(context), // Add the locale here
+//        builder: DevicePreview.appBuilder,
 //        title: 'Flutter Demo',
         theme: ThemeData(
           // This is the theme of your application.
@@ -46,12 +82,15 @@ class MyApp extends StatelessWidget {
         initialRoute: HomePage.id,
         routes: {
           HomePage.id: (context) => HomePage(),
-          ShopriteWelcomeScreen.id:(context) => ShopriteWelcomeScreen(),
-          PnPWelcomeScreen.id:(context) => PnPWelcomeScreen(),
-          WoolworthsWelcomeScreen.id:(context) => WoolworthsWelcomeScreen(),
+
+//          ShopriteWelcomeScreen.id:(context) => ShopriteWelcomeScreen(),
+//          PnPWelcomeScreen.id:(context) => PnPWelcomeScreen(),
+//          WoolworthsWelcomeScreen.id:(context) => WoolworthsWelcomeScreen(),
 
           ShopriteHomeScreen.id:(context) => ShopriteHomeScreen(),
+          PnPHomeScreen.id:(context) => PnPHomeScreen(),
           ShopriteProductGraph.id:(context) => ShopriteProductGraph(),
+          PnPProductGraph.id:(context) => PnPProductGraph(),
         },
 
       ),

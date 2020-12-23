@@ -8,6 +8,7 @@ class ProductCard extends StatelessWidget {
   int index;
   ProductItem product;
 
+
   ProductCard(
       {this.cheap, this.shopriteNullImageUrl, this.index, this.product});
 
@@ -15,9 +16,14 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight10p = screenHeight*(10/MediaQuery.of(context).size.height);
+    final screenWidth10p =screenWidth* (10/MediaQuery.of(context).size.width);
+
     return Card(
       elevation: 0,
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.only(top:  screenHeight*.01,bottom:  screenHeight*.01,),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(gridCardBorderRadius)),
       color: kBgShoprite.withOpacity(.1),
@@ -60,7 +66,7 @@ class ProductCard extends StatelessWidget {
                 Center(
                   child: Image.network(
                     cheap[index].imageUrl ?? shopriteNullImageUrl,
-                    height: 250,
+                    height:  screenHeight*.35,
                   ),
                 ),
               ],
@@ -71,22 +77,24 @@ class ProductCard extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                  height: 10,
+                  height:  screenHeight*.015,
                 ),
-                Text(
-                  "Price:  R${cheap[index].prices[cheap[index].prices.length - 1]}",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: "Montserrat",
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20,
+                FittedBox(
+                  child: Text(
+                    "Price:  R${cheap[index].prices[cheap[index].prices.length - 1]}",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: "Montserrat",
+                      fontWeight: FontWeight.w700,
+                      fontSize: screenWidth10p*1.5,
+                    ),
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: screenHeight*.013,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.symmetric(horizontal:  screenWidth10p*1),
                   child: Text(
                     "${cheap[index].title}",
                     maxLines: 2,
@@ -95,10 +103,15 @@ class ProductCard extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: "Montserrat",
                       fontWeight: FontWeight.w400,
-                      fontSize: 16,
+                      fontSize: screenWidth10p*1.2,
                     ),
                   ),
                 ),
+
+//                SizedBox(
+//                  height: screenHeight10p*,
+//                ),
+
               ],
             ),
           ),

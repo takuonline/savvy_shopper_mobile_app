@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:e_grocery/src/networking/connection_test.dart';
+import 'package:e_grocery/src/networking/pnp_data.dart';
 import 'package:e_grocery/src/networking/shoprite_data.dart';
 import 'package:flutter/material.dart';
 
-class AllProductList with ChangeNotifier {
+class PnPAllProductList with ChangeNotifier {
   dynamic _data ;
 
   dynamic get data {
@@ -14,8 +15,9 @@ class AllProductList with ChangeNotifier {
 
   Future<void> getItems () async {
     if(await TestConnection.checkForConnection()){
-      ShopriteData _shopritedata = ShopriteData();
-      dynamic data = await _shopritedata.getData();
+
+      PnPData _pnpdata = PnPData();
+      dynamic data = await _pnpdata.getData();
 
       _data = data;
       notifyListeners();

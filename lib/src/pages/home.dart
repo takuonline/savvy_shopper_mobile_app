@@ -1,7 +1,10 @@
+import 'package:e_grocery/src/pages/pnp_home_screen.dart';
+import 'package:e_grocery/src/pages/welcome_screen.dart';
+import 'package:e_grocery/src/components/welcome_screen_components.dart';
 import 'package:e_grocery/src/constants/constants.dart';
-import 'package:e_grocery/src/pages/pnp_welcome_screen.dart';
-import 'package:e_grocery/src/pages/shoprite_welcome_screen.dart';
-import 'package:e_grocery/src/pages/woolworths_welcome_screen.dart';
+import 'package:e_grocery/src/networking/connection_test.dart';
+import 'package:e_grocery/src/pages/shoprite_home_screen.dart';
+import 'package:e_grocery/src/providers/pnp_product_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,220 +18,537 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  AnimationController _aController;
+
+  Animation<double> _textFadeAnimation;
+  Animation<Offset> _textSlide;
+
+  Animation<Offset> _shopriteSlide;
+  Animation<Offset> _pnpSlide;
+  Animation<Offset> _woolworthsSlide;
+
+  bool _isInit = false;
+  bool _pnpIsInit = false;
+
 
   @override
   void initState() {
-
     super.initState();
+
+
+//    if (!_isInit) {
+//      Provider.of<AllProductList>(context,listen:false).getItems();
+//      setState(() {
+//        _isInit = true;
+//      });
+//    }
+
+    _aController = AnimationController(
+      duration: Duration(milliseconds: 3000),
+      vsync: this,
+    );
+
+    _aController.forward();
+
+    _textFadeAnimation = CurvedAnimation(
+      parent: _aController,
+      curve: Interval(
+        0,
+        .4,
+        curve: Curves.easeOut,
+      ),
+    );
+
+    _textSlide = Tween<Offset>(
+      begin: Offset(0, -0.15),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _aController,
+      curve: Interval(0, .5, curve: Curves.easeOut),
+    ));
+
+    _shopriteSlide = Tween<Offset>(
+      begin: Offset(2, 0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _aController,
+      curve: Interval(.6, .8, curve: Curves.easeOut),
+    ));
+
+    _pnpSlide = Tween<Offset>(
+      begin: Offset(2, 0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _aController,
+      curve: Interval(.7, .9, curve: Curves.easeOut),
+    ));
+
+    _woolworthsSlide = Tween<Offset>(
+      begin: Offset(2, 0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _aController,
+      curve: Interval(.8, 1, curve: Curves.easeOut),
+    ));
+
+    _aController.reverseDuration = Duration(milliseconds: 1500);
+    _aController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _aController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight10p =
+        screenHeight * (10 / MediaQuery.of(context).size.height);
+    final screenWidth10p =
+        screenWidth * (10 / MediaQuery.of(context).size.width);
+    final cardHeight = screenHeight * .24;
+    final cardWidth = screenWidth * .8;
+    final cardBorderRadius = BorderRadius.circular(20);
+    final cardPadding = EdgeInsets.symmetric(horizontal: 20, vertical: 10);
+    final _cardBoxShadow = BoxShadow(
+        color: Colors.black.withOpacity(.15),
+        spreadRadius: 10,
+        blurRadius: 15,
+        offset: Offset(10, 0));
+
+//    ScreenUtil.init(constrants);
+//    allowFontScaling:false;
+//    ScreenUtil.instance = ScreenUtil.getInstance()..init(context);
+
+//If the design is based on the size of the iPhone6 ​​(iPhone6 ​​750*1334)
+//    ScreenUtil.instance = ScreenUtil()..init(context);
+
+    Future<void> _whenCardIsClicked() async{
+      _aController.reverse();
+      await Future.delayed(
+        Duration(milliseconds: 3000),
+      );
+      _aController.animateTo(1,
+          duration: Duration(milliseconds: 500));
+
+
+    }
 
     return Scaffold(
-//      backgroundColor: kTextFieldBgGrey,
-
-      appBar: AppBar(
-        title: Text("Home",
-          style: TextStyle(
-              fontFamily: "Montserrat",
-              fontWeight: FontWeight.w700,
-              fontSize: 24
-          ),
-        ),
-        backgroundColor: kBgBlue,
-      ),
       body: Container(
-          color: kTextFieldBgGrey,
-          child: ListView(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                child: Text(
-                  "Welcome",
-                  style: TextStyle(
-                      fontFamily: "Montserrat",
-                      fontWeight: FontWeight.w700,
-                      color: kTextColor,
-                      fontSize: 40),
-                ),
+        color: kTextFieldBgGrey,
+        child: Stack(
+          children: [
+            Positioned(
+              right: 50,
+              top: -250,
+              child: SvgPicture.asset(
+                "assets/blob-1.svg",
+                height: screenHeight * 1,
+                color: Colors.black.withOpacity(.1),
               ),
-              InkWell(
-                onTap: () {
-                  Provider.of<AllProductList>(context,listen:false).getItems();
-                  Navigator.pushNamed(context, ShopriteWelcomeScreen.id);},
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Container(
-                    width: screenWidth * .8,
-                    height: screenHeight * .24,
-                    decoration: BoxDecoration(
-                        color: kBgShoprite,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Stack(
-                      children: [
-
-
-
-
-                        Positioned(
-                      left: -80,
-                      bottom: -50,
-                      child: SvgPicture.asset(
-                        "assets/blob-1.svg",
-                        height: 220,
-                        color: Colors.black.withOpacity(.3),
-
+            ),
+            Positioned(
+              left: 50,
+              bottom: -370,
+              child: SvgPicture.asset(
+                "assets/blob-1.svg",
+                height: screenHeight * 1,
+                color: Colors.black.withOpacity(.1),
+              ),
+            ),
+            ListView(
+              children: [
+                FadeTransition(
+                  opacity: _textFadeAnimation,
+                  child: SlideTransition(
+                    position: _textSlide,
+                    child: Padding(
+                      padding:  EdgeInsets.symmetric(
+                          horizontal: screenWidth10p*2 , vertical: screenHeight10p*3),
+                      child: Text(
+                        "Welcome",
+                        style: TextStyle(
+                            fontFamily: "Montserrat",
+                            fontWeight: FontWeight.w700,
+                            color: kTextColor,
+                            fontSize: screenWidth10p * 4),
                       ),
-
-                        ),
-
-                    Positioned(
-                      right: 20,
-                      bottom: 30,
-                      child: SvgPicture.asset(
-                        "assets/shoprite/shoprite_cart.svg",
-                        height: 110,
-                        color: Colors.white,
-
-                      ),)
-                        ,
-                        Positioned(
-                          bottom: 20,
-                          left: 20,
-                          child: Text("Shoprite",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Montserrat",
-                                fontWeight: FontWeight.w700,
-                                fontSize: 40),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ),
-              ),
+                SlideTransition(
+                  position: _shopriteSlide,
+                  child: InkWell(
+                    onTap: () async {
 
-              SizedBox(
-                height: 20,
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, PnPWelcomeScreen.id);
 
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Container(
-                    width: screenWidth * .8,
-                    height: screenHeight * .24,
-                    decoration: BoxDecoration(
-                        color: kBgPnP,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          right: -80,
-                          bottom: -100,
+                      if (!_isInit) {
+      Provider.of<AllProductList>(context,listen:false).getItems();
+                        setState(() {
+                          _isInit = true;
+                        });
+                      }
+
+
+                      final _item = WelcomeScreenItem(
+                        header: "Shoprite",
+                        details: "The Largest retailer in South Africa "
+                            "bringing the lowest prices in quality food and essential home "
+                            "goods to its customers.",
+                        blob1: Positioned(
+                          top: -screenHeight * .4,
+                          left: -screenWidth * .85,
                           child: SvgPicture.asset(
                             "assets/blob-1.svg",
-                            height: 220,
-                            color: Colors.black.withOpacity(.3),
-
+                            width: screenHeight * 1.2,
                           ),
-
                         ),
-
-                        Positioned(
-                          left: 40,
-                          bottom: 70,
+                        blob2: Positioned(
+                          top: screenHeight * .08,
+                          left: screenWidth * .55,
                           child: SvgPicture.asset(
-                            "assets/pnp/pnp_cart.svg",
-                            height: 70,
+                            "assets/blob-2.svg",
                             color: Colors.white,
-
-                          ),)
-                        ,
-                        Positioned(
-                          bottom: 20,
-                          right: 20,
-                          child: Text("Pick n Pay",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 40)),
+                            width: screenHeight * .93,
+                          ),
                         ),
-                      ],
+                        blob3: Positioned(
+                          bottom: -screenHeight * .28,
+                          left: -screenWidth * .88,
+                          child: SvgPicture.asset(
+                            "assets/blob-3.svg",
+                            color: Colors.black,
+                            width: screenHeight * 1.1,
+                          ),
+                        ),
+                        bgColor: kBgShoprite,
+
+                        btn: WelcomeScreenButton(
+                          text: "Explore",
+                          color: kBgShoprite,
+                          navigationFunction: () async {
+//                            bool _isConnected =  await TestConnection.checkForConnection();
+//
+//                           _isConnected
+
+                               Navigator.pushNamed(
+                                    context, ShopriteHomeScreen.id);
+//                                : TestConnection.showNetworkDialog(context);
+                          },
+                        ),
+                      );
+                       await   _whenCardIsClicked();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WelcomeScreen(_item),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: cardPadding,
+                      child: ClipRRect(
+                        borderRadius: cardBorderRadius,
+                        child: Container(
+                          width: cardHeight,
+                          height: cardHeight,
+                          decoration: BoxDecoration(
+                              boxShadow: [_cardBoxShadow],
+                              color: kBgShoprite,
+                              borderRadius: cardBorderRadius),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                left: -80,
+                                bottom: -50,
+                                child: SvgPicture.asset(
+                                  "assets/blob-1.svg",
+                                  height: screenHeight * .31,
+                                  color: Colors.black.withOpacity(.3),
+                                ),
+                              ),
+                              Positioned(
+                                right: 30,
+                                bottom: 40,
+                                child: SvgPicture.asset(
+                                  "assets/shoprite/shoprite_cart.svg",
+                                  height: screenWidth * .25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 20,
+                                left: 20,
+                                child: FittedBox(
+                                  child: Text(
+                                    "Shoprite",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: "Montserrat",
+                                      fontWeight: FontWeight.w700,
+                                      fontSize:  screenWidth * .08,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              InkWell(
-                onTap: ()=> Navigator.pushNamed(context, WoolworthsWelcomeScreen.id),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Container(
-                    width: screenWidth * .8,
-                    height: screenHeight * .24,
-                    decoration: BoxDecoration(
-                        color: kBgWoolies,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          left: -80,
-                          top: -100,
+                SizedBox(
+                  height: 20,
+                ),
+                SlideTransition(
+                  position: _pnpSlide,
+                  child: InkWell(
+                    onTap: ()async {
+
+                      if (!_pnpIsInit) {
+                        Provider.of<PnPAllProductList>(context,listen:false).getItems();
+                        setState(() {
+                          _pnpIsInit = true;
+                        });
+                      }
+
+
+                      final _item = WelcomeScreenItem(
+                        header: "Pick n Pay",
+                        details:
+                            "As a major retailer in Africa, the Group strives "
+                            "to address socio-economic challenges through the"
+                            " supply of high-quality, affordable food for all"
+                            " customers.",
+                        blob1: Positioned(
+                          top: -300,
+                          left: -70,
+                          child: Transform.rotate(
+                            angle: 100,
+                            child: SvgPicture.asset(
+                              "assets/blob-3.svg",
+                              width: screenHeight * 1.2,
+                            ),
+                          ),
+                        ),
+                        blob2: Positioned(
+                          top: 390,
+                          right: 10,
+                          child: Transform.rotate(
+                            angle: 180,
+                            child: SvgPicture.asset(
+                              "assets/blob-2.svg",
+                              color: Colors.white,
+                              width: screenHeight * .93,
+                            ),
+                          ),
+                        ),
+                        blob3: Positioned(
+                          top: 110,
+                          left: 170,
+                          child: Transform.rotate(
+                            angle: 37,
+                            child: SvgPicture.asset(
+                              "assets/blob-3.svg",
+                              color: Colors.black.withOpacity(1),
+                              width: screenHeight * 1.1,
+                            ),
+                          ),
+                        ),
+                        bgColor: kBgPnP,
+                        btn: WelcomeScreenButton(
+                          text: "Explore",
+                          color: kPnPSecondary,
+                          navigationFunction: () async{
+
+                              Navigator.pushNamed( context, PnPHomeScreen.id);
+
+                          },
+                        ),
+                      );
+                      await   _whenCardIsClicked();
+
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WelcomeScreen(_item),
+                        ),
+                      );
+                      },
+                    child: Padding(
+                      padding: cardPadding,
+                      child: ClipRRect(
+                        borderRadius: cardBorderRadius,
+                        child: Container(
+                          width: cardWidth,
+                          height: cardHeight,
+                          decoration: BoxDecoration(
+                              boxShadow: [_cardBoxShadow],
+                              color: kBgPnP,
+                              borderRadius: cardBorderRadius),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                right: -120,
+                                bottom: -80,
+                                child: SvgPicture.asset(
+                                  "assets/blob-1.svg",
+                                  height: screenHeight * .31,
+                                  color: Colors.black.withOpacity(.3),
+                                ),
+                              ),
+                              Positioned(
+                                left: 30,
+                                bottom: 60,
+                                child: SvgPicture.asset(
+                                  "assets/pnp/pnp_cart.svg",
+                                  height: screenHeight * .12,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 20,
+                                right: 20,
+                                child: FittedBox(
+                                  child: Text("Pick n Pay",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: "Montserrat",
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: screenWidth * .08)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                SlideTransition(
+                  position: _woolworthsSlide,
+                  child: InkWell(
+                    onTap: () async{
+                      final _item = WelcomeScreenItem(
+                        header: "Woolworths",
+                        details:
+                            "Building on our reputation for superior quality, "
+                            "exciting innovation and excellent value.",
+                        blob1: Positioned(
+                          top: screenHeight10p * -30,
+                          left: screenWidth10p * -46,
                           child: SvgPicture.asset(
                             "assets/blob-1.svg",
-                            height: 220,
-                            color: Colors.white.withOpacity(.2),
-
+                            width: screenWidth10p * 90,
+                            color: Colors.white.withOpacity(.7),
                           ),
                         ),
+                        blob2: Positioned(
+//          bottom: -200,
+//          left: -410,
+                          top: screenHeight10p,
+                          left: screenWidth10p * 20,
 
-                        Positioned(
-                          right: 30,
-                          bottom: 60,
                           child: SvgPicture.asset(
-                            "assets/woolworths/woolies_cart.svg",
-                            height: 80,
+                            "assets/blob-2.svg",
                             color: Colors.white,
-
-                          ),)
-                        ,
-                        Positioned(
-                          bottom: 20,
-                          left: 20,
-                          child: Text("Woolworths",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 40)),
+                            width: 70 * screenWidth10p,
+                          ),
                         ),
+                        blob3: Positioned(
+                          bottom: screenHeight10p * -18,
+                          left: -37 * screenWidth10p,
+                          child: SvgPicture.asset(
+                            "assets/blob-3.svg",
+                            color: Colors.grey.withOpacity(.9),
+                            width: 80 * screenWidth10p,
+                          ),
+                        ),
+                        bgColor: kBgWoolies,
+                        btn: WelcomeScreenButton(
+                          text: "Coming Soon...",
+                          color: kWooliesSecondary,
+                          navigationFunction: () => null,
+                        ),
+                      );
+                      await   _whenCardIsClicked();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WelcomeScreen(_item),
+                        ),
+                      );
 
-
-
-                      ],
+                    },
+                    child: Padding(
+                      padding: cardPadding,
+                      child: ClipRRect(
+                        borderRadius: cardBorderRadius,
+                        child: Container(
+                          width: cardWidth,
+                          height: cardHeight,
+                          decoration: BoxDecoration(
+                              boxShadow: [_cardBoxShadow],
+                              color: kBgWoolies,
+                              borderRadius: cardBorderRadius),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                left: -80,
+                                top: -100,
+                                child: SvgPicture.asset(
+                                  "assets/blob-1.svg",
+                                  height: screenHeight * .31,
+                                  color: Colors.white.withOpacity(.2),
+                                ),
+                              ),
+                              Positioned(
+                                right: 30,
+                                bottom: 60,
+                                child: SvgPicture.asset(
+                                  "assets/woolworths/woolies_cart.svg",
+                                  height: screenHeight * .12,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 20,
+                                left: 20,
+                                child: FittedBox(
+                                  child: Text("Woolworths",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: "Montserrat",
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: screenWidth * .08)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
-

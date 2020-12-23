@@ -7,16 +7,15 @@ import 'package:http/http.dart' as http;
 const url  = 'http://ec2-3-12-76-166.us-east-2.compute.amazonaws.com:4000';
 
 
-class ShopriteData {
+class PnPData {
 
   Future<dynamic> getData ()async {
     try {
       print("getting data......................");
       http.Response response =
-          await http.get('$url/client');
+      await http.get('$url/pnp-client');
 
       String data = response.body;
-//    print(response.statusCode);
 
       print("returning data................");
       return jsonDecode(data);
@@ -28,11 +27,9 @@ class ShopriteData {
   Future<dynamic> getSingleProductData(String title) async {
     try {
       print("getting single product data......................");
-      http.Response response = await http.get('$url/get-product-data/$title');
+      http.Response response = await http.get('$url/pnp-get-product-data/$title');
 
       String data = response.body;
-
-//    print(response.statusCode);
 
       print(data);
 

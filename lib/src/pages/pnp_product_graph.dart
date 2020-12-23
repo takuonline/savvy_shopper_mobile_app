@@ -6,18 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class ShopriteProductGraph extends StatefulWidget {
-  static const id = "shoprite-product-graph";
+class PnPProductGraph extends StatefulWidget {
+  static const id = "pnp-product-graph";
 
   ProductItem productItem;
 
-  ShopriteProductGraph({this.productItem});
+  PnPProductGraph({this.productItem});
 
   @override
-  _ShopriteProductGraphState createState() => _ShopriteProductGraphState();
+  _PnPProductGraphState createState() => _PnPProductGraphState();
 }
 
-class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
+class _PnPProductGraphState extends State<PnPProductGraph> {
 
 
   final _shopriteNullImageUrl =
@@ -42,16 +42,15 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
  ;
     return Container(
         child: Scaffold(
-//      appBar: AppBar(
-//        title: Text("${widget.productItem.title}"),
-//      ),
+
       body: Container(
-          color: kShopriteSecondary,
+
+      color: Colors.white,
           child: ListView(
             children: [
-SizedBox(
-  height: screenHeight10p*4,
-),
+              SizedBox(
+                height: screenHeight10p*4,
+              ),
               Stack(
 
                 children: [
@@ -76,7 +75,7 @@ SizedBox(
                     child: Container(
                       decoration:BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.orange
+                        color:kBgPnP.withOpacity(.2)
                       ),
                       
                       width: screenWidth10p*4.5,
@@ -84,7 +83,7 @@ SizedBox(
                       height: screenHeight10p*4.5,
 
                       child: IconButton(
-                        icon: Icon(Icons.arrow_back,color: Colors.black,size: screenHeight10p*3,) ,
+                        icon: Icon(Icons.arrow_back,color:kBgPnP,size: screenHeight10p*3,) ,
                           onPressed: ()=> Navigator.pop(context),
                       ),
 
@@ -135,7 +134,7 @@ SizedBox(
                     height: screenHeight * .55,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(screenHeight10p*2),
-                      color: Colors.orange,
+                      color: kBgPnP,
                     ),
                     child: SfCartesianChart(
                       plotAreaBorderWidth: 0,
@@ -146,7 +145,7 @@ SizedBox(
 
                       palette: [
 //                      Colors.black,
-                        kBgShoprite
+                        Colors.orange
                       ],
                       //set type for x and y axis
                       primaryXAxis: DateTimeAxis(
@@ -155,29 +154,29 @@ majorGridLines: MajorGridLines(
   width: 0
 )
                         ,labelStyle: TextStyle(
-                        color: Colors.black
+                        color: Colors.white
                       )
                        ,
                         title: AxisTitle(
 
                           text: 'Date',
                             textStyle:TextStyle(
-                                color: Colors.black
+                                color: Colors.white
                             )
                         ),
                         intervalType: DateTimeIntervalType.days,
                       ),
                       primaryYAxis: NumericAxis(
                       labelStyle: TextStyle(
-                      color: Colors.black
+                      color: Colors.white
                       ),majorGridLines: MajorGridLines(
-                          color: Colors.yellow.withOpacity(.2),
+                          color: Colors.black.withOpacity(.5),
                           width: 1
                       ),
                         title: AxisTitle(
                           text: 'Price',
                           textStyle:TextStyle(
-                            color: Colors.black
+                            color: Colors.white
                           )
 
                         ),
@@ -186,13 +185,15 @@ majorGridLines: MajorGridLines(
 //                    interval: 4
                       ),
                       //give chart title
-                      title: ChartTitle(text: widget.productItem.title),
+                      title: ChartTitle(text: widget.productItem.title,textStyle: TextStyle(
+                        color: Colors.white
+                      )),
                       onMarkerRender: (args) {
 //                      args.
                       },
                       legend: Legend(overflowMode: LegendItemOverflowMode.wrap),
                       tooltipBehavior: TooltipBehavior(enable: true),
-backgroundColor: Colors.orangeAccent,
+backgroundColor:Colors.black.withOpacity(.2),
 
                       series: <LineSeries>[
                         LineSeries(
@@ -253,7 +254,7 @@ backgroundColor: Colors.orangeAccent,
 class MaxMinCard extends StatelessWidget {
 
 
-   ShopriteProductGraph widget;
+   PnPProductGraph widget;
 
    String title;
 
@@ -271,18 +272,18 @@ class MaxMinCard extends StatelessWidget {
     final screenWidth10p =screenWidth* (10/MediaQuery.of(context).size.width);
 
     return Card(
-      color: Colors.orange,
+      color: kBgPnP,
       borderOnForeground: true,
       elevation: 20,
 
       child:
       Padding(
-        padding:  EdgeInsets.symmetric(horizontal:screenWidth10p*1.5,vertical: screenHeight10p*2.5),
+        padding:  EdgeInsets.symmetric(horizontal:screenWidth10p*2.5,vertical: screenHeight10p*2.5),
         child: Column(
           children: [
             Text(title,style: TextStyle(
               fontFamily: "Montserrat",
-              color: kBgShoprite.withOpacity(.6),
+              color: Colors.white.withOpacity(.6),
               fontSize: screenWidth10p*2,
               fontWeight: FontWeight.w700
 
@@ -294,7 +295,7 @@ class MaxMinCard extends StatelessWidget {
               child: Text("R$priceValue",
               style: TextStyle(
                   fontFamily: "Montserrat",
-                  color: Colors.black87,
+                  color: Colors.white,
                   fontSize: screenWidth10p*1.5,
                   fontWeight: FontWeight.w500
 
