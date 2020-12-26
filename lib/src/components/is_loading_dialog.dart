@@ -18,7 +18,7 @@ class IsLoading{
           height: double.infinity,
           child: Center(
             child: CircularProgressIndicator(
-              backgroundColor: Colors.red,
+//              backgroundColor: Colors.red,
 
             ),
           ),

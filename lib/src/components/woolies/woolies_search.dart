@@ -1,15 +1,15 @@
 import 'dart:convert';
-
 import 'package:e_grocery/src/components/is_loading_dialog.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/networking/pnp_data.dart';
-import 'package:e_grocery/src/pages/pnp_product_graph.dart';
-import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
+import 'package:e_grocery/src/networking/woolies_data.dart';
+import 'package:e_grocery/src/pages/woolies_product_graph.dart';
+import 'package:e_grocery/src/providers/woolies_product_name_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
 class ProductSearch extends SearchDelegate {
+
   @override
   TextStyle get searchFieldStyle => TextStyle(
         color: Colors.white,
@@ -21,19 +21,18 @@ class ProductSearch extends SearchDelegate {
   @override
   ThemeData appBarTheme(BuildContext context) {
     Map<int, Color> color = {
-      50:  Color.fromRGBO(0, 51, 89, .1),
-      100: Color.fromRGBO(0, 51, 89, .2),
-      200: Color.fromRGBO(0, 51, 89, .3),
-      300: Color.fromRGBO(0, 51, 89, .4),
-      400: Color.fromRGBO(0, 51, 89, .5),
-      500: Color.fromRGBO(0, 51, 89, .6),
-      600: Color.fromRGBO(0, 51, 89, .7),
-      700: Color.fromRGBO(0, 51, 89, .8),
-      800: Color.fromRGBO(0, 51, 89, .9),
-      900: Color.fromRGBO(0, 51, 89, 1),
+      50:  Color.fromRGBO(0,0,0, .1),
+      100: Color.fromRGBO(0,0,0, .2),
+      200: Color.fromRGBO(0,0,0, .3),
+      300: Color.fromRGBO(0,0,0, .4),
+      400: Color.fromRGBO(0,0,0, .5),
+      500: Color.fromRGBO(0,0,0, .6),
+      600: Color.fromRGBO(0,0,0, .7),
+      700: Color.fromRGBO(0,0,0, .8),
+      800: Color.fromRGBO(0,0,0, .9),
+      900: Color.fromRGBO(0,0,0, 1),
     };
-
-    MaterialColor colorCustom = MaterialColor(0xff003359, color);
+    MaterialColor colorCustom = MaterialColor(0xff000000, color);
 
     return ThemeData(
       primarySwatch: colorCustom,
@@ -76,14 +75,14 @@ class ProductSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var _providerData = Provider.of<PnPProductNameList>(context).items;
-    final results = _providerData
-                                  .where(
-                                    (product) => product.toLowerCase().contains(
-                                  query.toLowerCase(),
-                                ),
-                              )
-                                  .toList();
+    var _providerData = Provider.of<WooliesProductNameList>(context);
+    final results = _providerData.items
+        .where(
+          (product) => product.toLowerCase().contains(
+        query.toLowerCase(),
+      ),
+    )
+        .toList();
 
     return ((query == '')
         ? Container()
@@ -105,7 +104,7 @@ class ProductSearch extends SearchDelegate {
 
 
   void getProduct(dynamic result, BuildContext context) async {
-    PnPData _pnpData = PnPData();
+    WooliesData _wooliesData = WooliesData();
 
     if (result != null) {
 
@@ -113,7 +112,7 @@ class ProductSearch extends SearchDelegate {
       if( await TestConnection.checkForConnection()){
         IsLoading.showIsLoadingDialog(context);
 
-        dynamic response = await _pnpData.getSingleProductData(result);
+        dynamic response = await _wooliesData.getSingleProductData(result);
         dynamic parsedResponse = jsonDecode(response);
 
         List<DateTime> tempDateList = [];
@@ -125,9 +124,9 @@ class ProductSearch extends SearchDelegate {
           tempDateList.add((DateTime.parse(dateString)));
         }
 
-        ProductItem _parsedProductItem = ProductItem(
-            parsedResponse[parsedResponse.keys.elementAt(0)
-                .toString()]['image_url'],
+        WooliesProductItem _parsedProductItem = WooliesProductItem(
+//            parsedResponse[parsedResponse.keys.elementAt(0)
+//                .toString()]['image_url'],
             parsedResponse[parsedResponse.keys.elementAt(0)
                 .toString()]['prices_list'],
             tempDateList,
@@ -135,13 +134,14 @@ class ProductSearch extends SearchDelegate {
             parsedResponse[parsedResponse.keys.elementAt(0)
                 .toString()]['change']);
 
+
         Navigator.pop(context);
 
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) =>
-               PnPProductGraph(
+                WooliesProductGraph(
                     productItem:
                     _parsedProductItem),
           ),
@@ -155,5 +155,9 @@ class ProductSearch extends SearchDelegate {
       close(context, result);
     }
   }
+
+
+
+
 
 }

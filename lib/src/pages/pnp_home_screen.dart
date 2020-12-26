@@ -4,19 +4,16 @@ import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/homescreen_components.dart';
 import 'package:e_grocery/src/components/pnp/pnp_product_card.dart';
 import 'package:e_grocery/src/components/product_item.dart';
-import 'package:e_grocery/src/components/shoprite/shoprite_search.dart';
+import 'package:e_grocery/src/components/pnp/pnp_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/pages/pnp_product_graph.dart';
+import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
 import 'package:e_grocery/src/providers/pnp_product_provider.dart';
-import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
-
-
 class PnPHomeScreen extends StatefulWidget {
-
   static const id = "/pnpHomeScreen" ;
   @override
   _PnPHomeScreenState createState() => _PnPHomeScreenState();
@@ -28,7 +25,10 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
   final _gridScrollController = ScrollController();
   ScrollController _scrollController = ScrollController();
 
+  bool _isDataLoaded = false;
+
   bool _isLoading = false;
+  dynamic data;
 
 
   List<ProductItem> _cheap = [];
@@ -98,9 +98,7 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
 //      TestConnection.showNetworkDialog(context);
       await  _showNetworkDialog( context);
     }
-
   }
-
 
   @override
   void initState() {
@@ -157,27 +155,18 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
           i.keys.elementAt(0).toString(),
           i[i.keys.elementAt(0).toString()]['change']);
 
-//      print(_productItem.imageUrl);
-//      print(_productItem.dates);
-//      print(_productItem.prices);
-//      print(_productItem.title);
 
       _cheap.add(_productItem);
     }
-//    print(cheap);
 
     setState(() {});
   }
 
   Future<void> _getDataOnRefresh()async{
-
     if (await TestConnection.checkForConnection()){
-
-
       print('refreshing');
-      setState(() {
-        _isLoading = true;
-      });
+      setState(() => _isLoading = true);
+      setState(()=> _isDataLoaded=false);
 
       await Provider.of<PnPAllProductList>(context,listen:false).getItems();
 
@@ -185,51 +174,85 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
       _expensive=[];
       _allProducts= [];
 
-      setState(() {
-        _isLoading = false;
-      });
-    } else  {
+      data = Provider.of<PnPAllProductList>(context, listen: false).data;
 
+      print(data);
+      print(_isDataLoaded);
+
+      _cleanCheap(jsonDecode(data["cheap"]));
+      _cleanExpensive(jsonDecode(data["expensive"]));
+
+      setState(()=> _isLoading=false);
+      setState(()=> _isDataLoaded=true);
+
+    } else  {
+      _showNetworkDialog(context);
     }
 
   }
 
-  final double _horizontalPadding = 20.0;
-  bool _isGrid = false;
-  final _pnpNullImageUrl =
-      'https://cdn-prd-02.pnp.co.za/sys-master/images/h42/hf7/8796170453022/onlineshopping_logo.png';
 
+
+  final double _horizontalPadding = 20.0;
+  bool _isGridOff = false;
+  final _pnpNullImageUrl ='https://www.pnp.co.za/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_400x400.jpg';
+  final _badImageUrl = "/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_140x140.jpg";
   void toggleGrid(){
     setState(() {
-      _isGrid = !_isGrid;
+      _isGridOff = !_isGridOff;
     });
 
   }
 
 
+  void _loadData(BuildContext context){
+    if (data != null && !_isDataLoaded) {
+//        print("in if statement");
+      _cleanCheap(jsonDecode(data["cheap"]));
+      _cleanExpensive(jsonDecode(data["expensive"]));
+
+      setState(()=> _isLoading=false);
+      setState(()=> _isDataLoaded=true);
+
+    }else{
+//      print("in else statement");
+      setState(() => _isLoading=true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
-    dynamic data = Provider.of<PnPAllProductList>(context, listen: true).data;
+     data = Provider.of<PnPAllProductList>(context, listen: true).data;
 
-    if (data != null) {
-      setState(() {
-        _isLoading=false;
-      });
+//    _data = Provider.of<AllProductList>(context, listen: true).data;
 
-      try{
-        _cleanCheap(jsonDecode(data["cheap"]));
-        _cleanExpensive(jsonDecode(data["expensive"]));
-      } on FormatException catch(e){
-        print(e);
-      }
-
-
-    }else{
-      setState(() {
-        _isLoading=true;
-      });
+    if (!_isDataLoaded ) {
+      _loadData(context);
     }
+
+    if (_cheap.isNotEmpty && _expensive.isNotEmpty) {
+      setState(() => _isLoading=false);
+    }
+
+//    if (data != null) {
+//      setState(() {
+//        _isLoading=false;
+//      });
+//
+//      try{
+//        _cleanCheap(jsonDecode(data["cheap"]));
+//        _cleanExpensive(jsonDecode(data["expensive"]));
+//      } on FormatException catch(e){
+//        print(e);
+//      }
+//
+//
+//    }else{
+//      setState(() {
+//        _isLoading=true;
+//      });
+//    }
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -242,11 +265,8 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
     _allProducts.shuffle();
 
     return Container(
-//      color: kShopriteSecondary,
       color: Colors.white,
       child: RefreshIndicator(
-
-
         onRefresh: ()=> _getDataOnRefresh(),
         child: ListView(
 
@@ -295,7 +315,7 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
 
                               if(await TestConnection.checkForConnection()){
 
-                                Provider.of<ProductNameList>(context, listen: false)
+                                Provider.of<PnPProductNameList>(context, listen: false)
                                     .getProductNameList(data, context);
                                 final result = await showSearch(
                                     context: context, delegate: ProductSearch());
@@ -405,7 +425,7 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
                 horizontal: 10,
               ),
               child: DatatableGridSelector(
-                _isGrid,toggleGrid
+                _isGridOff,toggleGrid
 
               ),
             ),
@@ -417,7 +437,7 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
               height: 30,
             ),
             Container(
-              height: _isGrid
+              height: _isGridOff
                   ? 70 * _cheap.length.toDouble()
                   : 136 * _cheap.length.toDouble(),
               child: DefaultTabController(
@@ -504,7 +524,7 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
         SizedBox(
           height: 50,
         ),
-        if (_isGrid) Material(
+        if (_isGridOff) Material(
           child: DataTable(
             columnSpacing: 5,
             headingTextStyle: TextStyle(
@@ -548,7 +568,7 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
                     DataRow(
                       cells: [
                         DataCell(
-                            Image.network(
+                    product.imageUrl== _badImageUrl ? Image.network(_pnpNullImageUrl)  : Image.network(
                                 product.imageUrl ?? _pnpNullImageUrl),
                             onTap: () =>
                             product.imageUrl == null
@@ -698,9 +718,14 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
                   Expanded(
                     flex: 4,
                     child: Container(
-                        child: Image.network(
-                          product.imageUrl,
-                        )),
+                        child:
+                        product.imageUrl == _badImageUrl ? Image.network(_pnpNullImageUrl) : Image.network(
+                          product.imageUrl??_pnpNullImageUrl,
+                        ),
+
+
+
+                    ),
                   ),
                   Expanded(
                     flex: 1,

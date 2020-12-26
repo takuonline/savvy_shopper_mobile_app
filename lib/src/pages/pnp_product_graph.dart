@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +18,9 @@ class PnPProductGraph extends StatefulWidget {
 
 class _PnPProductGraphState extends State<PnPProductGraph> {
 
-
-  final _shopriteNullImageUrl =
-      'https://www.shoprite.co.za/medias/Food-min.webp?context=bWFzdGVyfHJvb3R8MTE2MDJ8aW1hZ2Uvd2VicHxoZGUvaDI1Lzg5OTgyNTE5MjE0Mzgud2VicHw4MzAyOGFmMTU0NmEwMmUwOWYwYjU2MTJhMzUzMWVhZWRlMWQ2ODg5NTRhZDIzODMwYTcxN2U1ODRhNGU2ZGZj';
+  final _badImageUrl = "/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_140x140.jpg";
+  final _pnpNullImageUrl =
+      'https://www.pnp.co.za//pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_400x400.jpg';
 
   List<ProductData> _getData() {
     List<ProductData> temp = [];
@@ -61,8 +60,10 @@ class _PnPProductGraphState extends State<PnPProductGraph> {
                       height: screenHeight*.35,
                       child: Padding(
                         padding:  EdgeInsets.symmetric(horizontal: screenHeight10p*1.5 ),
-                        child: Image.network(
-                          widget.productItem.imageUrl ?? _shopriteNullImageUrl,
+                        child:
+                        widget.productItem.imageUrl == _badImageUrl ? Image.network(_pnpNullImageUrl) :
+                        Image.network(
+                          widget.productItem.imageUrl ?? _pnpNullImageUrl,
                           fit: BoxFit.contain,
                         ),
                       ),
@@ -278,7 +279,7 @@ class MaxMinCard extends StatelessWidget {
 
       child:
       Padding(
-        padding:  EdgeInsets.symmetric(horizontal:screenWidth10p*2.5,vertical: screenHeight10p*2.5),
+        padding:  EdgeInsets.symmetric(horizontal:screenWidth10p*1.5,vertical: screenHeight10p*2.5),
         child: Column(
           children: [
             Text(title,style: TextStyle(

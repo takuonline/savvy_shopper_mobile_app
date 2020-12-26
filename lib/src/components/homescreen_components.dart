@@ -64,18 +64,16 @@ class _DatatableGridSelectorState extends State<DatatableGridSelector> {
                   borderRadius: BorderRadius.circular(10)),
               width: screenWidth * .5 * .8,
               padding:
-              EdgeInsets.symmetric(horizontal:screenWidth10p* 2, vertical: screenHeight10p *1.2),
-              child: FittedBox(
-                child: Text(
-                  "DataTable",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: "Montserrat",
-                      fontWeight: FontWeight.w500,
-                      fontSize: screenWidth10p* 1.8,
-                      decoration: TextDecoration.none),
-                ),
+              EdgeInsets.symmetric(horizontal:screenWidth10p* 2, vertical:screenHeight10p *1.6),
+              child: Text(
+                "DataTable",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w500,
+                    fontSize: screenWidth10p* 1.8,
+                    decoration: TextDecoration.none),
               )),
         ),
         GestureDetector(
@@ -88,7 +86,7 @@ class _DatatableGridSelectorState extends State<DatatableGridSelector> {
                   borderRadius: BorderRadius.circular(10)),
               width: screenWidth * .5 * .8,
               padding:
-              EdgeInsets.symmetric(horizontal:screenWidth10p* 2, vertical: screenHeight10p *1.5),
+              EdgeInsets.symmetric(horizontal:screenWidth10p* 2, vertical: screenHeight10p *1.6),
               child: Text(
                 "Grid",
                 textAlign: TextAlign.center,

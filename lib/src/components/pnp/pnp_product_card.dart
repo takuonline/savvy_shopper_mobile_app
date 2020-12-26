@@ -13,7 +13,8 @@ class ProductCard extends StatelessWidget {
       {this.cheap, this.shopriteNullImageUrl, this.index, this.product});
 
   final double gridCardBorderRadius = 25;
-
+  final _pnpNullImageUrl ='https://www.pnp.co.za/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_400x400.jpg';
+  final _badImageUrl = "/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_140x140.jpg";
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -64,7 +65,10 @@ class ProductCard extends StatelessWidget {
 //                                            ),
 
                 Center(
-                  child: Image.network(
+                  child:
+
+                  cheap[index].imageUrl == _badImageUrl ? Image.network(_pnpNullImageUrl)  :
+                  Image.network(
                     cheap[index].imageUrl ?? shopriteNullImageUrl,
                     height:  screenHeight*.35,
                   ),

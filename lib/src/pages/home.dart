@@ -2,10 +2,11 @@ import 'package:e_grocery/src/pages/pnp_home_screen.dart';
 import 'package:e_grocery/src/pages/welcome_screen.dart';
 import 'package:e_grocery/src/components/welcome_screen_components.dart';
 import 'package:e_grocery/src/constants/constants.dart';
-import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/pages/shoprite_home_screen.dart';
+import 'package:e_grocery/src/pages/woolies_home_screen.dart';
 import 'package:e_grocery/src/providers/pnp_product_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
+import 'package:e_grocery/src/providers/woolies_product_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,6 +32,7 @@ class _HomePageState extends State<HomePage>
 
   bool _isInit = false;
   bool _pnpIsInit = false;
+  bool _wooliesIsInit = false;
 
 
   @override
@@ -42,6 +44,20 @@ class _HomePageState extends State<HomePage>
 //      Provider.of<AllProductList>(context,listen:false).getItems();
 //      setState(() {
 //        _isInit = true;
+//      });
+//    }
+
+//    if (!_pnpIsInit) {
+//      Provider.of<PnPAllProductList>(context,listen:false).getItems();
+//      setState(() {
+//        _pnpIsInit = true;
+//      });
+//    }
+
+//    if (!_wooliesIsInit) {
+//      Provider.of<WooliesAllProductList>(context,listen:false).getItems();
+//      setState(() {
+//        _wooliesIsInit = true;
 //      });
 //    }
 
@@ -189,7 +205,7 @@ class _HomePageState extends State<HomePage>
 
 
                       if (!_isInit) {
-      Provider.of<AllProductList>(context,listen:false).getItems();
+                      Provider.of<AllProductList>(context,listen:false).getItems();
                         setState(() {
                           _isInit = true;
                         });
@@ -440,6 +456,14 @@ class _HomePageState extends State<HomePage>
                   position: _woolworthsSlide,
                   child: InkWell(
                     onTap: () async{
+
+                      if (!_wooliesIsInit) {
+                        Provider.of<WooliesAllProductList>(context,listen:false).getItems();
+                        setState(() {
+                          _wooliesIsInit = true;
+                        });
+                      }
+
                       final _item = WelcomeScreenItem(
                         header: "Woolworths",
                         details:
@@ -455,8 +479,6 @@ class _HomePageState extends State<HomePage>
                           ),
                         ),
                         blob2: Positioned(
-//          bottom: -200,
-//          left: -410,
                           top: screenHeight10p,
                           left: screenWidth10p * 20,
 
@@ -477,9 +499,11 @@ class _HomePageState extends State<HomePage>
                         ),
                         bgColor: kBgWoolies,
                         btn: WelcomeScreenButton(
-                          text: "Coming Soon...",
+                          text: "Explore",
                           color: kWooliesSecondary,
-                          navigationFunction: () => null,
+                          navigationFunction: () async{
+                            Navigator.pushNamed( context, WooliesHomeScreen.id);
+                          },
                         ),
                       );
                       await   _whenCardIsClicked();

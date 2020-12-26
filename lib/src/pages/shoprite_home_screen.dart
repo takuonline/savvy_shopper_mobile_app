@@ -26,6 +26,8 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
   final _textController = TextEditingController();
   final _gridScrollController = ScrollController();
   ScrollController _scrollController = ScrollController();
+  dynamic _data;
+  bool _isDataLoaded = false;
 
   bool _isLoading = false;
 
@@ -34,76 +36,12 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
   List<ProductItem> _expensive = [];
   List<ProductItem> _allProducts = [];
 
-  Future<void> _showNetworkDialog(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Please check your Network'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'An internet connection is required for this app, please make sure you are'
-                      ' connected to a network and try again',
-                  style: TextStyle(
-                    fontFamily: "Montserrat",
-                    color: Colors.black,
-                  ),
-                ),
-//                Text('Would you like to approve of this message?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'Retry',
-                style: TextStyle(color: kBgShoprite),
-              ),
-              onPressed: () async{
-                Navigator.of(context).pop();
-                if (await TestConnection.checkForConnection()){
-                  Provider.of<AllProductList>(context,listen: false).getItems();
-                }else{
-                  _showNetworkDialog(context);
-                }
-
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _testShopriteConnection() async{
-
-    if (await TestConnection.checkForConnection()){
-
-      await Future.delayed(Duration(seconds: 15));
-     if (Provider.of<AllProductList>(context,listen: false).data == null){
-       setState(() {
-         _isLoading = true;
-       });
-       await Provider.of<AllProductList>(context,listen:false).getItems();
-       setState(() {
-         _isLoading = false;
-       });
-     }
-    }else{
-
-//      TestConnection.showNetworkDialog(context);
-   await  _showNetworkDialog( context);
-    }
-
-  }
 
 @override
   void initState() {
     super.initState();
     _testShopriteConnection();
+
 }
 
   @override
@@ -115,109 +53,23 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
   }
 
 
-  void _cleanExpensive(List<dynamic> items) {
-    for (var i in items) {
-      List<DateTime> tempDateList = [];
-
-      List<dynamic> datesList = i[i.keys.elementAt(0).toString()]['dates'];
-
-      for (var dateString in datesList) {
-        tempDateList.add((DateTime.parse(dateString)));
-      }
-
-      ProductItem _productItem = ProductItem(
-          i[i.keys.elementAt(0).toString()]['image_url'],
-          i[i.keys.elementAt(0).toString()]['prices_list'],
-          tempDateList,
-          i.keys.elementAt(0).toString(),
-          i[i.keys.elementAt(0).toString()]['change']);
-
-      _expensive.add(_productItem);
-    }
-
-    setState(() {});
-  }
-
-  void _cleanCheap(List<dynamic> items) {
-    for (var i in items) {
-      List<DateTime> tempDateList = [];
-
-      List<dynamic> datesList = i[i.keys.elementAt(0).toString()]['dates'];
-
-      for (var dateString in datesList) {
-        tempDateList.add((DateTime.parse(dateString)));
-      }
-
-      ProductItem _productItem = ProductItem(
-          i[i.keys.elementAt(0).toString()]['image_url'],
-          i[i.keys.elementAt(0).toString()]['prices_list'],
-          tempDateList,
-          i.keys.elementAt(0).toString(),
-          i[i.keys.elementAt(0).toString()]['change']);
-
-//      print(_productItem.imageUrl);
-//      print(_productItem.dates);
-//      print(_productItem.prices);
-//      print(_productItem.title);
-
-      _cheap.add(_productItem);
-    }
-//    print(cheap);
-
-    setState(() {});
-  }
-
-  Future<void> _getDataOnRefresh()async{
-
-    if (await TestConnection.checkForConnection()){
-
-
-    print('refreshing');
-    setState(() {
-      _isLoading = true;
-    });
-
-    await Provider.of<AllProductList>(context,listen:false).getItems();
-
-    _cheap=[];
-    _expensive=[];
-    _allProducts= [];
-
-    setState(() {
-      _isLoading = false;
-    });
-  } else  {
-
-    }
-
-  }
-
-  void toggleGrid(){
-    setState(() {
-      _isGrid = !_isGrid;
-    });
-
-  }
 
   final double _horizontalPadding = 20.0;
-  bool _isGrid = false;
+  bool _isGridOff = false;
   final _shopriteNullImageUrl =
       'https://www.shoprite.co.za/medias/Food-min.webp?context=bWFzdGVyfHJvb3R8MTE2MDJ8aW1hZ2Uvd2VicHxoZGUvaDI1Lzg5OTgyNTE5MjE0Mzgud2VicHw4MzAyOGFmMTU0NmEwMmUwOWYwYjU2MTJhMzUzMWVhZWRlMWQ2ODg5NTRhZDIzODMwYTcxN2U1ODRhNGU2ZGZj';
 
   @override
   Widget build(BuildContext context) {
-    dynamic data = Provider.of<AllProductList>(context, listen: true).data;
 
-    if (data != null) {
-      setState(() {
-        _isLoading=false;
-      });
-      _cleanCheap(jsonDecode(data["cheap"]));
-      _cleanExpensive(jsonDecode(data["expensive"]));
-    }else{
-      setState(() {
-        _isLoading=true;
-      });
+    _data = Provider.of<AllProductList>(context, listen: true).data;
+
+    if (!_isDataLoaded ) {
+      _loadData(context);
+    }
+
+    if (_cheap.isNotEmpty && _expensive.isNotEmpty) {
+      setState(() => _isLoading=false);
     }
 
     final screenWidth = MediaQuery.of(context).size.width;
@@ -281,7 +133,7 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                                 if(await TestConnection.checkForConnection()){
 
                                   Provider.of<ProductNameList>(context, listen: false)
-                                      .getProductNameList(data, context);
+                                      .getProductNameList(_data, context);
                                   final result = await showSearch(
                                       context: context, delegate: ProductSearch());
                                   print(result);
@@ -408,7 +260,7 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                   horizontal: 10,
                 ),
                 child: DatatableGridSelector(
-                  _isGrid,toggleGrid
+                  _isGridOff,toggleGrid
                 ),
               ),
 
@@ -419,9 +271,9 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                 height: 30,
               ),
               Container(
-                height: _isGrid
-                    ? 70 * _cheap.length.toDouble()
-                    : 136 * _cheap.length.toDouble(),
+                height: _isGridOff
+                    ? screenHeight10p* 7 * _cheap.length.toDouble()
+                    : screenHeight10p * 13.6 * _cheap.length.toDouble(),
                 child: DefaultTabController(
                   length: 3,
                   child: Column(
@@ -489,6 +341,172 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
       );
   }
 
+  Future<void> _showNetworkDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Please check your Network'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'An internet connection is required for this app, please make sure you are'
+                      ' connected to a network and try again',
+                  style: TextStyle(
+                    fontFamily: "Montserrat",
+                    color: Colors.black,
+                  ),
+                ),
+//                Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Retry',
+                style: TextStyle(color: kBgShoprite),
+              ),
+              onPressed: () async{
+                Navigator.of(context).pop();
+                if (await TestConnection.checkForConnection()){
+                  Provider.of<AllProductList>(context,listen: false).getItems();
+                }else{
+                  _showNetworkDialog(context);
+                }
+
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _testShopriteConnection() async{
+
+    if (await TestConnection.checkForConnection()){
+
+      await Future.delayed(Duration(seconds: 15));
+      if (Provider.of<AllProductList>(context,listen: false).data == null){
+        setState(() {
+          _isLoading = true;
+        });
+        await Provider.of<AllProductList>(context,listen:false).getItems();
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }else{
+
+//      TestConnection.showNetworkDialog(context);
+      await  _showNetworkDialog( context);
+    }
+
+  }
+
+  void _loadData(BuildContext context){
+    if (_data != null && !_isDataLoaded) {
+//        print("in if statement");
+      _cleanCheap(jsonDecode(_data["cheap"]));
+      _cleanExpensive(jsonDecode(_data["expensive"]));
+
+      setState(()=> _isLoading=false);
+      setState(()=> _isDataLoaded=true);
+
+    }else{
+//      print("in else statement");
+      setState(() => _isLoading=true);
+    }
+  }
+
+  Future<void> _getDataOnRefresh()async{
+    if (await TestConnection.checkForConnection()){
+      print('refreshing');
+      setState(() => _isLoading = true);
+      setState(()=> _isDataLoaded=false);
+
+      await Provider.of<AllProductList>(context,listen:false).getItems();
+
+      _cheap=[];
+      _expensive=[];
+      _allProducts= [];
+
+      _data = Provider.of<AllProductList>(context, listen: false).data;
+
+      print(_data);
+      print(_isDataLoaded);
+
+      _cleanCheap(jsonDecode(_data["cheap"]));
+      _cleanExpensive(jsonDecode(_data["expensive"]));
+
+      setState(()=> _isLoading=false);
+
+
+      setState(()=> _isDataLoaded=true);
+
+
+    } else  {
+       _showNetworkDialog(context);
+    }
+
+  }
+
+  void toggleGrid(){
+    setState(() =>_isGridOff = !_isGridOff);
+}
+
+  void _cleanExpensive(List<dynamic> items) {
+    for (var i in items) {
+      List<DateTime> tempDateList = [];
+
+      List<dynamic> datesList = i[i.keys.elementAt(0).toString()]['dates'];
+
+      for (var dateString in datesList) {
+        tempDateList.add((DateTime.parse(dateString)));
+      }
+
+      ProductItem _productItem = ProductItem(
+          i[i.keys.elementAt(0).toString()]['image_url'],
+          i[i.keys.elementAt(0).toString()]['prices_list'],
+          tempDateList,
+          i.keys.elementAt(0).toString(),
+          i[i.keys.elementAt(0).toString()]['change']);
+
+      _expensive.add(_productItem);
+    }
+
+    setState(() {});
+  }
+
+  void _cleanCheap(List<dynamic> items) {
+    for (var i in items) {
+      List<DateTime> tempDateList = [];
+
+      List<dynamic> datesList = i[i.keys.elementAt(0).toString()]['dates'];
+
+      for (var dateString in datesList) {
+        tempDateList.add((DateTime.parse(dateString)));
+      }
+
+      ProductItem _productItem = ProductItem(
+          i[i.keys.elementAt(0).toString()]['image_url'],
+          i[i.keys.elementAt(0).toString()]['prices_list'],
+          tempDateList,
+          i.keys.elementAt(0).toString(),
+          i[i.keys.elementAt(0).toString()]['change']);
+
+      ;
+
+      _cheap.add(_productItem);
+    }
+//    print(cheap);
+
+    setState(() {});
+  }
+
   Row dataframeGridSelector(double screenWidth, double screenWidth10p) {
     return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -496,12 +514,12 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        _isGrid = !_isGrid;
+                        _isGridOff = !_isGridOff;
                       });
                     },
                     child: Container(
                         decoration: BoxDecoration(
-                            color: _isGrid ? Colors.white : Colors.transparent,
+                            color: _isGridOff ? Colors.white : Colors.transparent,
                             borderRadius: BorderRadius.circular(10)),
                         width: screenWidth * .5 * .8,
                         padding:
@@ -522,12 +540,12 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        _isGrid = !_isGrid;
+                        _isGridOff = !_isGridOff;
                       });
                     },
                     child: Container(
                         decoration: BoxDecoration(
-                            color: _isGrid ? Colors.transparent : Colors.white,
+                            color: _isGridOff ? Colors.transparent : Colors.white,
                             borderRadius: BorderRadius.circular(10)),
                         width: screenWidth * .5 * .8,
                         padding:
@@ -560,7 +578,7 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
         SizedBox(
           height: 50,
         ),
-        if (_isGrid) Material(
+        if (_isGridOff) Material(
           child: DataTable(
             columnSpacing: 5,
             headingTextStyle: TextStyle(

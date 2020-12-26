@@ -2,12 +2,17 @@ import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/deletables
 import 'package:e_grocery/src/pages/pnp_home_screen.dart';
 import 'package:e_grocery/src/pages/pnp_product_graph.dart';
 import 'package:e_grocery/src/pages/shoprite_product_graph.dart';
+import 'package:e_grocery/src/pages/woolies_home_screen.dart';
+import 'package:e_grocery/src/pages/woolies_product_graph.dart';
 import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/deletables/shoprite_welcome_screen.dart';
 import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/deletables/woolworths_welcome_screen.dart';
 import 'package:e_grocery/src/providers/got_data_provider.dart';
+import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
 import 'package:e_grocery/src/providers/pnp_product_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
+import 'package:e_grocery/src/providers/woolies_product_name_provider.dart';
+import 'package:e_grocery/src/providers/woolies_product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +62,13 @@ class MyApp extends StatelessWidget {
           value:AllProductList() ,
         ),
         ChangeNotifierProvider.value(
-            value: PnPAllProductList())
+            value: PnPAllProductList()),
+        ChangeNotifierProvider.value(
+            value: PnPProductNameList()),
+        ChangeNotifierProvider.value(
+            value: WooliesAllProductList()),
+        ChangeNotifierProvider.value(
+            value: WooliesProductNameList())
       ],
       child: MaterialApp(
 //        locale: DevicePreview.locale(context), // Add the locale here
@@ -88,9 +99,11 @@ class MyApp extends StatelessWidget {
 //          WoolworthsWelcomeScreen.id:(context) => WoolworthsWelcomeScreen(),
 
           ShopriteHomeScreen.id:(context) => ShopriteHomeScreen(),
-          PnPHomeScreen.id:(context) => PnPHomeScreen(),
           ShopriteProductGraph.id:(context) => ShopriteProductGraph(),
+          PnPHomeScreen.id:(context) => PnPHomeScreen(),
           PnPProductGraph.id:(context) => PnPProductGraph(),
+          WooliesHomeScreen.id:(context) => WooliesHomeScreen(),
+          WooliesProductGraph.id:(context) => WooliesProductGraph(),
         },
 
       ),
