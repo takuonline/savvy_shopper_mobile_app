@@ -16,3 +16,5 @@ const kWooliesSecondary = Color(0xff8fa508);
 const kTextFieldBgGrey = Color(0xffebedf8);
 
 const kBgBlue = Color(0xff456efd);
+
+const kHomeBg = Color(0xff0278ae);

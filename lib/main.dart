@@ -1,12 +1,15 @@
 import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/deletables/pnp_welcome_screen.dart';
+import 'package:e_grocery/src/pages/main_menu.dart';
 import 'package:e_grocery/src/pages/pnp_home_screen.dart';
 import 'package:e_grocery/src/pages/pnp_product_graph.dart';
+import 'package:e_grocery/src/pages/shopping_list.dart';
 import 'package:e_grocery/src/pages/shoprite_product_graph.dart';
 import 'package:e_grocery/src/pages/woolies_home_screen.dart';
 import 'package:e_grocery/src/pages/woolies_product_graph.dart';
 import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/deletables/shoprite_welcome_screen.dart';
 import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/deletables/woolworths_welcome_screen.dart';
 import 'package:e_grocery/src/providers/got_data_provider.dart';
+import 'package:e_grocery/src/providers/grocery_shopping_list.dart';
 import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
 import 'package:e_grocery/src/providers/pnp_product_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
@@ -59,16 +62,13 @@ class MyApp extends StatelessWidget {
           value:ProductNameList() ,
         ),
         ChangeNotifierProvider.value(
-          value:AllProductList() ,
+          value: AllProductList(),
         ),
-        ChangeNotifierProvider.value(
-            value: PnPAllProductList()),
-        ChangeNotifierProvider.value(
-            value: PnPProductNameList()),
-        ChangeNotifierProvider.value(
-            value: WooliesAllProductList()),
-        ChangeNotifierProvider.value(
-            value: WooliesProductNameList())
+        ChangeNotifierProvider.value(value: PnPAllProductList()),
+        ChangeNotifierProvider.value(value: PnPProductNameList()),
+        ChangeNotifierProvider.value(value: WooliesAllProductList()),
+        ChangeNotifierProvider.value(value: WooliesProductNameList()),
+        ChangeNotifierProvider.value(value: GroceryShoppingList())
       ],
       child: MaterialApp(
 //        locale: DevicePreview.locale(context), // Add the locale here
@@ -90,20 +90,17 @@ class MyApp extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: HomePage.id,
+        initialRoute: MainMenu.id,
         routes: {
           HomePage.id: (context) => HomePage(),
-
-//          ShopriteWelcomeScreen.id:(context) => ShopriteWelcomeScreen(),
-//          PnPWelcomeScreen.id:(context) => PnPWelcomeScreen(),
-//          WoolworthsWelcomeScreen.id:(context) => WoolworthsWelcomeScreen(),
-
-          ShopriteHomeScreen.id:(context) => ShopriteHomeScreen(),
-          ShopriteProductGraph.id:(context) => ShopriteProductGraph(),
-          PnPHomeScreen.id:(context) => PnPHomeScreen(),
-          PnPProductGraph.id:(context) => PnPProductGraph(),
-          WooliesHomeScreen.id:(context) => WooliesHomeScreen(),
-          WooliesProductGraph.id:(context) => WooliesProductGraph(),
+          ShopriteHomeScreen.id: (context) => ShopriteHomeScreen(),
+          ShopriteProductGraph.id: (context) => ShopriteProductGraph(),
+          PnPHomeScreen.id: (context) => PnPHomeScreen(),
+          PnPProductGraph.id: (context) => PnPProductGraph(),
+          WooliesHomeScreen.id: (context) => WooliesHomeScreen(),
+          WooliesProductGraph.id: (context) => WooliesProductGraph(),
+          MainMenu.id: (context) => MainMenu(),
+          ShoppingList.id: (context) => ShoppingList(),
         },
 
       ),

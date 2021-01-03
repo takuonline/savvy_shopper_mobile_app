@@ -39,21 +39,21 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
 
-
+//
 //    if (!_isInit) {
 //      Provider.of<AllProductList>(context,listen:false).getItems();
 //      setState(() {
 //        _isInit = true;
 //      });
 //    }
-
+//
 //    if (!_pnpIsInit) {
 //      Provider.of<PnPAllProductList>(context,listen:false).getItems();
 //      setState(() {
 //        _pnpIsInit = true;
 //      });
 //    }
-
+//
 //    if (!_wooliesIsInit) {
 //      Provider.of<WooliesAllProductList>(context,listen:false).getItems();
 //      setState(() {
