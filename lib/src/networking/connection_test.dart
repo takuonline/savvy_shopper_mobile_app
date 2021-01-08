@@ -67,6 +67,83 @@ class TestConnection {
       },
     );
   }
+
+  static Future<void> showProductErrorDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Product Infomation error'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Sorry but it seems like we are having trouble'
+                  ' getting infomation on this product',
+                  style: TextStyle(
+                    fontFamily: "Montserrat",
+                    color: Colors.black,
+                  ),
+                ),
+//                Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Back',
+                style: TextStyle(color: kBgShoprite),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  static Future<void> showOtherErrorDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Network Error'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Sorry but it seems like we are having trouble'
+                  ' getting infomation on your products.'
+                  'Please try again and if the problem persists, please restart the application.',
+                  style: TextStyle(
+                    fontFamily: "Montserrat",
+                    color: Colors.black,
+                  ),
+                ),
+//                Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Back',
+                style: TextStyle(color: kBgShoprite),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 

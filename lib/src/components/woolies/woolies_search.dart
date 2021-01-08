@@ -3,12 +3,16 @@ import 'package:e_grocery/src/components/is_loading_dialog.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/networking/woolies_data.dart';
-import 'package:e_grocery/src/pages/woolies_product_graph.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/woolies_product_graph.dart';
 import 'package:e_grocery/src/providers/woolies_product_name_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
-class ProductSearch extends SearchDelegate {
+class WooliesProductSearch extends SearchDelegate {
+  List items;
+  final networkData;
+
+  WooliesProductSearch({this.items, this.networkData});
 
   @override
   TextStyle get searchFieldStyle => TextStyle(
@@ -75,12 +79,13 @@ class ProductSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var _providerData = Provider.of<WooliesProductNameList>(context);
-    final results = _providerData.items
+    List<String> _providerData = items;
+    final results = _providerData
         .where(
-          (product) => product.toLowerCase().contains(
-        query.toLowerCase(),
-      ),
+          (product) =>
+          product.toLowerCase().contains(
+            query.toLowerCase(),
+          ),
     )
         .toList();
 
@@ -96,28 +101,25 @@ class ProductSearch extends SearchDelegate {
               ),
 
               onTap: () {
-                getProduct(results[index], context);
+                getProduct(results[index], context, networkData);
               },
               focusColor: Colors.red,
             )));
   }
 
 
-  void getProduct(dynamic result, BuildContext context) async {
-    WooliesData _wooliesData = WooliesData();
-
+  void getProduct(dynamic result, BuildContext context, networkData) async {
     if (result != null) {
-
-
-      if( await TestConnection.checkForConnection()){
+      if (await TestConnection.checkForConnection()) {
         IsLoading.showIsLoadingDialog(context);
 
-        dynamic response = await _wooliesData.getSingleProductData(result);
+        dynamic response = await networkData.getSingleProductData(result);
         dynamic parsedResponse = jsonDecode(response);
 
         List<DateTime> tempDateList = [];
 
-        List<dynamic> datesList = parsedResponse[parsedResponse.keys.elementAt(0)
+        List<dynamic> datesList = parsedResponse[parsedResponse.keys.elementAt(
+            0)
             .toString()]['dates'];
 
         for (var dateString in datesList) {
@@ -149,7 +151,6 @@ class ProductSearch extends SearchDelegate {
       } else{
        await  TestConnection.showNetworkDialog(context);
       }
-
 
     } else {
       close(context, result);

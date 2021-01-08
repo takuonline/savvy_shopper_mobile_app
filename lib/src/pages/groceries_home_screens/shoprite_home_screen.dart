@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/homescreen_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
-import 'package:e_grocery/src/components/shoprite/shoprite_product_card.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/components/grid_homescreen_product_card/shoprite_product_card.dart';
 import 'package:e_grocery/src/components/shoprite/shoprite_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/pages/shoprite_product_graph.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/shoprite_product_graph.dart';
 import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -61,15 +61,14 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _data = Provider.of<ShopriteAllProductList>(context, listen: true).data;
 
-    _data = Provider.of<AllProductList>(context, listen: true).data;
-
-    if (!_isDataLoaded ) {
+    if (!_isDataLoaded) {
       _loadData(context);
     }
 
     if (_cheap.isNotEmpty && _expensive.isNotEmpty) {
-      setState(() => _isLoading=false);
+      setState(() => _isLoading = false);
     }
 
     final screenWidth = MediaQuery.of(context).size.width;
@@ -131,8 +130,8 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                               onTap: () async {
 
                                 if(await TestConnection.checkForConnection()){
-
-                                  Provider.of<ProductNameList>(context, listen: false)
+                                  Provider.of<ShopriteProductNameList>(
+                                      context, listen: false)
                                       .getProductNameList(_data, context);
                                   final result = await showSearch(
                                       context: context, delegate: ProductSearch());
@@ -203,50 +202,7 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                   )
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: _horizontalPadding),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: kBgShoprite.withOpacity(.1),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20),
-                              child: Text(
-                                "Best Buys",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: "Montserrat",
-                                  decoration: TextDecoration.none,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-
-                        ...bestBuys
-                            .map((e) => BestChoiceProduct(title: e.title))
-                            .toList(),
-                        SizedBox(height: 20)
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              BestBuys(bestBuys: bestBuys, color: kBgShoprite.withOpacity(.1),),
               SizedBox(
                 height: 40,
               ),
@@ -372,7 +328,8 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
               onPressed: () async{
                 Navigator.of(context).pop();
                 if (await TestConnection.checkForConnection()){
-                  Provider.of<AllProductList>(context,listen: false).getItems();
+                  Provider.of<ShopriteAllProductList>(context, listen: false)
+                      .getItems();
                 }else{
                   _showNetworkDialog(context);
                 }
@@ -390,11 +347,14 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
     if (await TestConnection.checkForConnection()){
 
       await Future.delayed(Duration(seconds: 15));
-      if (Provider.of<AllProductList>(context,listen: false).data == null){
+      if (Provider
+          .of<ShopriteAllProductList>(context, listen: false)
+          .data == null) {
         setState(() {
           _isLoading = true;
         });
-        await Provider.of<AllProductList>(context,listen:false).getItems();
+        await Provider.of<ShopriteAllProductList>(context, listen: false)
+            .getItems();
         setState(() {
           _isLoading = false;
         });
@@ -426,15 +386,18 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
     if (await TestConnection.checkForConnection()){
       print('refreshing');
       setState(() => _isLoading = true);
-      setState(()=> _isDataLoaded=false);
+      setState(() => _isDataLoaded = false);
 
-      await Provider.of<AllProductList>(context,listen:false).getItems();
+      await Provider.of<ShopriteAllProductList>(context, listen: false)
+          .getItems();
 
-      _cheap=[];
-      _expensive=[];
-      _allProducts= [];
+      _cheap = [];
+      _expensive = [];
+      _allProducts = [];
 
-      _data = Provider.of<AllProductList>(context, listen: false).data;
+      _data = Provider
+          .of<ShopriteAllProductList>(context, listen: false)
+          .data;
 
       print(_data);
       print(_isDataLoaded);
@@ -442,7 +405,7 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
       _cleanCheap(jsonDecode(_data["cheap"]));
       _cleanExpensive(jsonDecode(_data["expensive"]));
 
-      setState(()=> _isLoading=false);
+      setState(() => _isLoading = false);
 
 
       setState(()=> _isDataLoaded=true);
@@ -719,12 +682,9 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                                     productItem: itemList[index]),
                           ),
                         ),
-                    child: ProductCard(
-                      index: index,
-
-                      cheap: itemList,
+                    child: ProductCardRed(
+//                      index: index,
                       shopriteNullImageUrl: _shopriteNullImageUrl,
-//                                    showDialog: _showDialog(itemList[index], context),
                       product: itemList[index],
                     ),
                   ) :
@@ -740,12 +700,9 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                                       productItem: itemList[index]),
                             ),
                           ),
-                      child: ProductCard(
-                        index: index,
-
-                        cheap: itemList,
+                      child: ProductCardRed(
+//                        index: index,
                         shopriteNullImageUrl: _shopriteNullImageUrl,
-//                                    showDialog: _showDialog(itemList[index], context),
                         product: itemList[index],
                       ),
                     ),

@@ -2,14 +2,13 @@ import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import "package:flutter/material.dart";
 
-class ProductCard extends StatelessWidget {
+class ProductCardWhite extends StatelessWidget {
   List<ProductItem> cheap;
   String shopriteNullImageUrl;
   int index;
   ProductItem product;
 
-
-  ProductCard(
+  ProductCardWhite(
       {this.cheap, this.shopriteNullImageUrl, this.index, this.product});
 
   final double gridCardBorderRadius = 25;
@@ -85,12 +84,12 @@ class ProductCard extends StatelessWidget {
                 ),
                 FittedBox(
                   child: Text(
-                    "Price:  R${cheap[index].prices[cheap[index].prices.length - 1]}",
+                    "Price:  R${cheap[index].prices.last}",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: "Montserrat",
                       fontWeight: FontWeight.w700,
-                      fontSize: screenWidth10p*1.5,
+                      fontSize: screenWidth10p * 1.5,
                     ),
                   ),
                 ),

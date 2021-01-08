@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:e_grocery/src/components/is_loading_dialog.dart';
 import 'package:e_grocery/src/components/product_item.dart';
+import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/networking/shoprite_data.dart';
-import 'package:e_grocery/src/pages/shoprite_product_graph.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/shoprite_product_graph.dart';
 import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
@@ -78,12 +80,13 @@ class ProductSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var _providerData = Provider.of<ProductNameList>(context);
+    var _providerData = Provider.of<ShopriteProductNameList>(context);
     final results = _providerData.items
         .where(
-          (product) => product.toLowerCase().contains(
-        query.toLowerCase(),
-      ),
+          (product) =>
+          product.toLowerCase().contains(
+            query.toLowerCase(),
+          ),
     )
         .toList();
 
@@ -99,12 +102,62 @@ class ProductSearch extends SearchDelegate {
               ),
 
               onTap: () {
-                getProduct(results[index], context);
+                try {
+                  getProduct(results[index], context);
+                } on NoSuchMethodError {
+                  Navigator.pop(context);
+                  showErrorDialog(context);
+                  print("is no such methodddddd");
+                } on SocketException catch (_) {
+                  Navigator.pop(context);
+                  TestConnection.showNetworkDialog(context);
+                } catch (error) {
+                  print(error);
+                  Navigator.pop(context);
+                  showErrorDialog(context);
+                }
               },
               focusColor: Colors.red,
             )));
   }
 
+  static Future<void> showErrorDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Product Infomation error'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Sorry but it seems like we are having trouble'
+                      ' getting infomation on this product',
+                  style: TextStyle(
+                    fontFamily: "Montserrat",
+                    color: Colors.black,
+                  ),
+                ),
+//                Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Back',
+                style: TextStyle(color: kBgShoprite),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void getProduct(dynamic result, BuildContext context) async {
     ShopriteData _shopriteData = ShopriteData();
@@ -112,7 +165,7 @@ class ProductSearch extends SearchDelegate {
     if (result != null) {
       _isLoading = true;
 
-      if( await TestConnection.checkForConnection()){
+      if (await TestConnection.checkForConnection()) {
         IsLoading.showIsLoadingDialog(context);
 
         dynamic response = await _shopriteData.getSingleProductData(result);

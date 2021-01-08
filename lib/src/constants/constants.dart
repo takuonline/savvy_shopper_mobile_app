@@ -18,3 +18,6 @@ const kTextFieldBgGrey = Color(0xffebedf8);
 const kBgBlue = Color(0xff456efd);
 
 const kHomeBg = Color(0xff0278ae);
+
+const kBgFoschini = Color(0xff000000);
+const kBgMarkham = Color(0xff000000);

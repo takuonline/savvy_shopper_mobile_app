@@ -1,9 +1,9 @@
-import 'package:e_grocery/src/pages/pnp_home_screen.dart';
+import 'package:e_grocery/src/pages/groceries_home_screens/pnp_home_screen.dart';
 import 'package:e_grocery/src/pages/welcome_screen.dart';
 import 'package:e_grocery/src/components/welcome_screen_components.dart';
 import 'package:e_grocery/src/constants/constants.dart';
-import 'package:e_grocery/src/pages/shoprite_home_screen.dart';
-import 'package:e_grocery/src/pages/woolies_home_screen.dart';
+import 'package:e_grocery/src/pages/groceries_home_screens/shoprite_home_screen.dart';
+import 'package:e_grocery/src/pages/groceries_home_screens/woolies_home_screen.dart';
 import 'package:e_grocery/src/providers/pnp_product_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
 import 'package:e_grocery/src/providers/woolies_product_provider.dart';
@@ -12,14 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  static const id = "home";
+class GroceriesHomePage extends StatefulWidget {
+  static const id = "/groceriesHome";
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _GroceriesHomePageState createState() => _GroceriesHomePageState();
 }
 
-class _HomePageState extends State<HomePage>
+class _GroceriesHomePageState extends State<GroceriesHomePage>
     with SingleTickerProviderStateMixin {
   AnimationController _aController;
 
@@ -119,6 +119,14 @@ class _HomePageState extends State<HomePage>
     super.dispose();
   }
 
+  Future<void> _whenCardIsClicked() async {
+    _aController.reverse();
+    await Future.delayed(
+      Duration(milliseconds: 3000),
+    );
+    _aController.animateTo(1, duration: Duration(milliseconds: 500));
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -144,16 +152,6 @@ class _HomePageState extends State<HomePage>
 //If the design is based on the size of the iPhone6 ​​(iPhone6 ​​750*1334)
 //    ScreenUtil.instance = ScreenUtil()..init(context);
 
-    Future<void> _whenCardIsClicked() async{
-      _aController.reverse();
-      await Future.delayed(
-        Duration(milliseconds: 3000),
-      );
-      _aController.animateTo(1,
-          duration: Duration(milliseconds: 500));
-
-
-    }
 
     return Scaffold(
       body: Container(
@@ -188,7 +186,7 @@ class _HomePageState extends State<HomePage>
                       padding:  EdgeInsets.symmetric(
                           horizontal: screenWidth10p*2 , vertical: screenHeight10p*3),
                       child: Text(
-                        "Welcome",
+                        "Groceries",
                         style: TextStyle(
                             fontFamily: "Montserrat",
                             fontWeight: FontWeight.w700,
@@ -202,14 +200,12 @@ class _HomePageState extends State<HomePage>
                   position: _shopriteSlide,
                   child: InkWell(
                     onTap: () async {
-
-
-                      if (!_isInit) {
-                      Provider.of<AllProductList>(context,listen:false).getItems();
-                        setState(() {
-                          _isInit = true;
-                        });
-                      }
+//                      if (!_isInit) {
+//                      Provider.of<ShopriteAllProductList>(context,listen:false).getItems();
+//                        setState(() {
+//                          _isInit = true;
+//                        });
+//                      }
 
 
                       final _item = WelcomeScreenItem(
@@ -327,19 +323,19 @@ class _HomePageState extends State<HomePage>
                   position: _pnpSlide,
                   child: InkWell(
                     onTap: ()async {
-
-                      if (!_pnpIsInit) {
-                        Provider.of<PnPAllProductList>(context,listen:false).getItems();
-                        setState(() {
-                          _pnpIsInit = true;
-                        });
-                      }
+//
+//                      if (!_pnpIsInit) {
+//                        Provider.of<PnPAllProductList>(context,listen:false).getItems();
+//                        setState(() {
+//                          _pnpIsInit = true;
+//                        });
+//                      }
 
 
                       final _item = WelcomeScreenItem(
                         header: "Pick n Pay",
                         details:
-                            "As a major retailer in Africa, the Group strives "
+                        "As a major retailer in Africa, the Group strives "
                             "to address socio-economic challenges through the"
                             " supply of high-quality, affordable food for all"
                             " customers.",
@@ -455,19 +451,18 @@ class _HomePageState extends State<HomePage>
                 SlideTransition(
                   position: _woolworthsSlide,
                   child: InkWell(
-                    onTap: () async{
-
-                      if (!_wooliesIsInit) {
-                        Provider.of<WooliesAllProductList>(context,listen:false).getItems();
-                        setState(() {
-                          _wooliesIsInit = true;
-                        });
-                      }
+                    onTap: () async {
+//                      if (!_wooliesIsInit) {
+//                        Provider.of<WooliesAllProductList>(context,listen:false).getItems();
+//                        setState(() {
+//                          _wooliesIsInit = true;
+//                        });
+//                      }
 
                       final _item = WelcomeScreenItem(
                         header: "Woolworths",
                         details:
-                            "Building on our reputation for superior quality, "
+                        "Building on our reputation for superior quality, "
                             "exciting innovation and excellent value.",
                         blob1: Positioned(
                           top: screenHeight10p * -30,

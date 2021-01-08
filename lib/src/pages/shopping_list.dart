@@ -1,8 +1,16 @@
-import 'package:e_grocery/src/components/grocery_shoppinglist_search.dart';
+import 'package:e_grocery/src/components/grocery_shoppinglist/grocery_shoppinglist_card.dart';
+import 'package:e_grocery/src/components/grocery_shoppinglist/grocery_shoppinglist_item.dart';
+import 'package:e_grocery/src/components/grocery_shoppinglist/grocery_shoppinglist_search.dart';
+import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
+import 'package:e_grocery/src/providers/grocery_shopping_list.dart';
+import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
+import 'package:e_grocery/src/providers/pnp_product_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
+import 'package:e_grocery/src/providers/woolies_product_name_provider.dart';
+import 'package:e_grocery/src/providers/woolies_product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +23,33 @@ class ShoppingList extends StatefulWidget {
 
 class _ShoppingListState extends State<ShoppingList> {
   ScrollController _scrollController = ScrollController();
+  double balance = 0;
+
+  List<GroceryShoppingListItem> _productsList = [];
+
+  void _dropItem(int index) {
+//    Provider.of<GroceryShoppingList>(context,listen: false).dropItemGroceryShoppingList(index);
+
+    setState(() {
+      _productsList.removeAt(index);
+    });
+  }
+
+  void _clearAllProducts() {
+//      Provider.of<GroceryShoppingList>(context,listen: false).clearGroceryShoppingList();
+
+    setState(() {
+      _productsList.clear();
+    });
+  }
+
+  void _calculateBalance() {
+    balance = 0;
+    for (GroceryShoppingListItem i in _productsList) {
+      balance += i.prices.last * i.quantity;
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +59,11 @@ class _ShoppingListState extends State<ShoppingList> {
         screenHeight * (10 / MediaQuery.of(context).size.height);
     final screenWidth10p =
         screenWidth * (10 / MediaQuery.of(context).size.width);
+    _calculateBalance();
+
     return Scaffold(
+      backgroundColor: kTextFieldBgGrey,
+      extendBody: true,
       body: Container(
         color: kTextFieldBgGrey,
         child: ListView(
@@ -33,10 +72,16 @@ class _ShoppingListState extends State<ShoppingList> {
           children: [
             Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: screenWidth10p * 3),
+                padding: EdgeInsets.symmetric(vertical: screenWidth10p * 1),
                 child: GestureDetector(
                   onTap: () {
-                    Provider.of<AllProductList>(context, listen: false)
+                    Provider.of<PnPAllProductList>(context, listen: false)
+                        .getItems();
+
+                    Provider.of<WooliesAllProductList>(context, listen: false)
+                        .getItems();
+
+                    Provider.of<ShopriteAllProductList>(context, listen: false)
                         .getItems();
                   },
                   child: Text(
@@ -54,15 +99,15 @@ class _ShoppingListState extends State<ShoppingList> {
             Container(
               margin: EdgeInsets.only(top: 0),
               width: screenWidth,
-              height: screenHeight,
+              height: _productsList.isEmpty ? screenHeight : null,
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(screenWidth10p * 4)),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: screenWidth10p * 4),
+                padding: EdgeInsets.symmetric(horizontal: screenWidth10p * 2),
                 child: ListView(
-//                physics: NeverScrollableScrollPhysics(),
                   controller: _scrollController,
+                  physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   children: [
                     SizedBox(
@@ -71,15 +116,52 @@ class _ShoppingListState extends State<ShoppingList> {
                     GestureDetector(
                       onTap: () async {
                         if (await TestConnection.checkForConnection()) {
-                          final _data = Provider.of<AllProductList>(context,
-                                  listen: false)
-                              .data;
-                          Provider.of<ProductNameList>(context, listen: false)
-                              .getProductNameList(_data, context);
+                          try {
+//                          get client data with all the info stored in provider
+                            final _dataShoprite = Provider
+                                .of<ShopriteAllProductList>(context,
+                                listen: false)
+                                .data;
+
+                            final _dataPnP = Provider
+                                .of<PnPAllProductList>(context,
+                                listen: false)
+                                .data;
+
+                            final _dataWoolies = Provider
+                                .of<WooliesAllProductList>(context,
+                                listen: false)
+                                .data;
+
+                            //                          only get the Title data from all the info
+                            Provider.of<ShopriteProductNameList>(
+                                context, listen: false)
+                                .getProductNameList(_dataShoprite, context);
+
+                            Provider.of<PnPProductNameList>(
+                                context, listen: false)
+                                .getProductNameList(_dataPnP, context);
+
+                            Provider.of<WooliesProductNameList>(
+                                context, listen: false)
+                                .getProductNameList(_dataWoolies, context);
+                          } on Exception {
+                            TestConnection.showOtherErrorDialog(context);
+                          }
+
                           final result = await showSearch(
                               context: context,
                               delegate: GroceryShoppingListSearch());
                           print(result);
+
+                          if (result != null) {
+                            setState(() {
+                              _productsList =
+                                  (_productsList + result).toSet().toList();
+                            });
+                          } else {
+                            _productsList = _productsList.toSet().toList();
+                          }
                         } else {
                           await TestConnection.showNetworkDialog(context);
                         }
@@ -88,7 +170,7 @@ class _ShoppingListState extends State<ShoppingList> {
                         margin: EdgeInsets.symmetric(
                             horizontal: screenWidth10p * 3),
                         decoration: BoxDecoration(
-                            color: Colors.orange.withOpacity(.2),
+                            color: kHomeBg.withOpacity(.2),
                             borderRadius: BorderRadius.circular(10)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -124,15 +206,25 @@ class _ShoppingListState extends State<ShoppingList> {
                     SizedBox(
                       height: 40,
                     ),
-                    ShoppingListCard(),
-                    ShoppingListCard(),
-                    ShoppingListCard(),
+
+
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: _productsList.length,
+                        controller: _scrollController,
+                        itemBuilder: (BuildContext _, int index) {
+                          return ShoppingListCard(
+                              index: index, productItem: _productsList[index]
+                              ,
+                              calculateBalance: _calculateBalance,
+                              dropItem: _dropItem
+                          );
+                        }
+                    ),
+
                     SizedBox(
                       height: screenHeight * .27,
                     ),
-//                  ShoppingListCard(screenWidth: screenWidth, screenHeight: screenHeight, screenWidth10p: screenWidth10p, screenHeight10p: screenHeight10p),
-//                  ShoppingListCard(screenWidth: screenWidth, screenHeight: screenHeight, screenWidth10p: screenWidth10p, screenHeight10p: screenHeight10p),
-//                  ShoppingListCard(screenWidth: screenWidth, screenHeight: screenHeight, screenWidth10p: screenWidth10p, screenHeight10p: screenHeight10p)
                   ],
                 ),
               ),
@@ -164,7 +256,7 @@ class _ShoppingListState extends State<ShoppingList> {
                       fontSize: screenWidth10p * 2),
                 ),
                 Text(
-                  '3',
+                  '${_productsList.length}',
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
@@ -190,7 +282,7 @@ class _ShoppingListState extends State<ShoppingList> {
                       fontSize: screenWidth10p * 2),
                 ),
                 Text(
-                  'R90',
+                  'R${balance.toStringAsFixed(2)}',
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
@@ -204,7 +296,7 @@ class _ShoppingListState extends State<ShoppingList> {
               height: screenHeight10p,
             ),
             GestureDetector(
-              onTap: () => showClearAllDialog(context),
+              onTap: () => showClearAllDialog(context, _clearAllProducts),
               child: Container(
                 color: Colors.black,
                 child: Center(
@@ -227,7 +319,8 @@ class _ShoppingListState extends State<ShoppingList> {
     );
   }
 
-  static Future<void> showClearAllDialog(BuildContext context) async {
+  static Future<void> showClearAllDialog(BuildContext context,
+      Function clearAllProducts) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -238,7 +331,7 @@ class _ShoppingListState extends State<ShoppingList> {
             child: ListBody(
               children: <Widget>[
                 Text(
-                  'Are you sure you want to remove this item from your shopping list?',
+                  'Are you sure you want to remove all items from your shopping list?',
                   style: TextStyle(
                     fontFamily: "Montserrat",
                     color: Colors.black,
@@ -255,6 +348,7 @@ class _ShoppingListState extends State<ShoppingList> {
                 style: TextStyle(color: kTextColor),
               ),
               onPressed: () {
+
                 Navigator.of(context).pop();
               },
             ),
@@ -264,6 +358,7 @@ class _ShoppingListState extends State<ShoppingList> {
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () {
+                clearAllProducts();
                 Navigator.of(context).pop();
               },
             )
@@ -274,149 +369,3 @@ class _ShoppingListState extends State<ShoppingList> {
   }
 }
 
-class ShoppingListCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenHeight10p =
-        screenHeight * (10 / MediaQuery.of(context).size.height);
-    final screenWidth10p =
-        screenWidth * (10 / MediaQuery.of(context).size.width);
-    return Container(
-      width: screenWidth * .7,
-      height: screenHeight * .26,
-      margin: EdgeInsets.only(bottom: 20),
-      padding: EdgeInsets.only(left: 10, right: 0, top: 10, bottom: 10),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(
-            color: Colors.black,
-            width: 5,
-          )),
-      child: Row(children: [
-        Expanded(
-          flex: 20,
-          child: Column(
-            children: [
-              Text(
-                'Ritebrand Salad Cream brand Salad Cream',
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w300,
-                    fontFamily: "Montserrat",
-                    decoration: TextDecoration.none,
-                    fontSize: screenWidth10p * 2),
-              ),
-              SizedBox(
-                height: screenHeight10p,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Quantity',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: "Montserrat",
-                        decoration: TextDecoration.none,
-                        fontSize: screenWidth10p * 2),
-                  ),
-                  Text(
-                    '2',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: "Montserrat",
-                        fontSize: screenWidth10p * 2,
-                        decoration: TextDecoration.none),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Total',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: "Montserrat",
-                        fontSize: screenWidth10p * 2,
-                        decoration: TextDecoration.none),
-                  ),
-                  Text(
-                    'R30',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: "Montserrat",
-                        fontSize: screenWidth10p * 2,
-                        decoration: TextDecoration.none),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: screenHeight10p,
-              ),
-              Container(
-                width: double.infinity,
-                color: Colors.red,
-                child: Text(
-                  "Shoprite",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "Montserrat",
-                      fontSize: screenWidth10p * 2,
-                      decoration: TextDecoration.none),
-                ),
-              )
-            ],
-          ),
-        ),
-        Expanded(
-            flex: 6,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: kTextFieldBgGrey,
-                  borderRadius: BorderRadius.circular(screenWidth10p * 1)),
-              margin: EdgeInsets.symmetric(horizontal: screenHeight10p),
-              padding: EdgeInsets.symmetric(horizontal: screenWidth10p),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Expanded(
-                    child: Icon(
-                      Icons.add,
-                      size: screenWidth10p * 2,
-                      color: kTextColor,
-                    ),
-                  ),
-                  Expanded(
-                    child: Icon(
-                      Icons.remove,
-                      size: screenWidth10p * 2,
-                      color: kTextColor,
-                    ),
-                  ),
-                  Expanded(
-                    child: Icon(
-                      Icons.delete,
-                      size: screenWidth10p * 2,
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
-              ),
-            ))
-      ]),
-    );
-  }
-}

@@ -1,5 +1,5 @@
 import 'package:e_grocery/src/components/welcome_screen_components.dart';
-import 'package:e_grocery/src/pages/shoprite_home_screen.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_home_screens/shoprite_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';

@@ -6,7 +6,7 @@ import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/components/woolies/woolies_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/pages/woolies_product_graph.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/woolies_product_graph.dart';
 import 'package:e_grocery/src/providers/woolies_product_name_provider.dart';
 import 'package:e_grocery/src/providers/woolies_product_provider.dart';
 import "package:flutter/material.dart";
@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 
 class WooliesHomeScreen extends StatefulWidget {
   static const id = "/wooliesHomeScreen";
+
   @override
   _WooliesHomeScreenState createState() => _WooliesHomeScreenState();
 }
@@ -96,7 +97,6 @@ class _WooliesHomeScreenState extends State<WooliesHomeScreen> {
     }
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -111,18 +111,17 @@ class _WooliesHomeScreenState extends State<WooliesHomeScreen> {
     super.dispose();
   }
 
-  void _loadData(BuildContext context){
+  void _loadData(BuildContext context) {
     if (data != null && !_isDataLoaded) {
 //        print("in if statement");
       _cleanCheap(jsonDecode(data["cheap"]));
       _cleanExpensive(jsonDecode(data["expensive"]));
 
-      setState(()=> _isLoading=false);
-      setState(()=> _isDataLoaded=true);
-
-    }else{
+      setState(() => _isLoading = false);
+      setState(() => _isDataLoaded = true);
+    } else {
 //      print("in else statement");
-      setState(() => _isLoading=true);
+      setState(() => _isLoading = true);
     }
   }
 
@@ -173,17 +172,18 @@ class _WooliesHomeScreenState extends State<WooliesHomeScreen> {
     setState(() {});
   }
 
-  Future<void> _getDataOnRefresh()async{
-    if (await TestConnection.checkForConnection()){
+  Future<void> _getDataOnRefresh() async {
+    if (await TestConnection.checkForConnection()) {
       print('refreshing');
       setState(() => _isLoading = true);
-      setState(()=> _isDataLoaded=false);
+      setState(() => _isDataLoaded = false);
 
-      await Provider.of<WooliesAllProductList>(context,listen:false).getItems();
+      await Provider.of<WooliesAllProductList>(context, listen: false)
+          .getItems();
 
-      _cheap=[];
-      _expensive=[];
-      _allProducts= [];
+      _cheap = [];
+      _expensive = [];
+      _allProducts = [];
 
       data = Provider.of<WooliesAllProductList>(context, listen: false).data;
 
@@ -193,18 +193,13 @@ class _WooliesHomeScreenState extends State<WooliesHomeScreen> {
       _cleanCheap(jsonDecode(data["cheap"]));
       _cleanExpensive(jsonDecode(data["expensive"]));
 
-      setState(()=> _isLoading=false);
+      setState(() => _isLoading = false);
 
-
-      setState(()=> _isDataLoaded=true);
-
-
-    } else  {
+      setState(() => _isDataLoaded = true);
+    } else {
       _showNetworkDialog(context);
     }
-
   }
-
 
   final double _horizontalPadding = 20.0;
   bool _isGrid = false;
@@ -221,16 +216,15 @@ class _WooliesHomeScreenState extends State<WooliesHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-     data =
-        Provider.of<WooliesAllProductList>(context, listen: true).data;
+    data = Provider.of<WooliesAllProductList>(context, listen: true).data;
 
-     if (!_isDataLoaded ) {
-       _loadData(context);
-     }
+    if (!_isDataLoaded) {
+      _loadData(context);
+    }
 
-     if (_cheap.isNotEmpty && _expensive.isNotEmpty) {
-       setState(() => _isLoading=false);
-     }
+    if (_cheap.isNotEmpty && _expensive.isNotEmpty) {
+      setState(() => _isLoading = false);
+    }
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -255,10 +249,8 @@ class _WooliesHomeScreenState extends State<WooliesHomeScreen> {
               children: [
                 Positioned(
                   child: CustomPaint(
-                    size: Size(
-                        screenWidth,
-                        screenHeight *
-                            .37), //You can Replace this with your desired WIDTH and HEIGHT
+                    size: Size(screenWidth, screenHeight * .37),
+                    //You can Replace this with your desired WIDTH and HEIGHT
                     painter: HomeBGCustomPaint(color: kBgWoolies),
                   ),
                 ),
@@ -299,7 +291,7 @@ class _WooliesHomeScreenState extends State<WooliesHomeScreen> {
                                     .getProductNameList(data, context);
                                 final result = await showSearch(
                                     context: context,
-                                    delegate: ProductSearch());
+                                    delegate: WooliesProductSearch());
                                 print(result);
                               } else {
                                 await TestConnection.showNetworkDialog(context);
@@ -347,48 +339,7 @@ class _WooliesHomeScreenState extends State<WooliesHomeScreen> {
                 )
               ],
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: _horizontalPadding),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: kBgWoolies.withOpacity(.1),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: Text(
-                              "Best Buys",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: "Montserrat",
-                                decoration: TextDecoration.none,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      ...bestBuys
-                          .map((e) => BestChoiceProduct(title: e.title))
-                          .toList(),
-                      SizedBox(height: 20)
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            BestBuys(bestBuys: bestBuys),
             SizedBox(
               height: 40,
             ),
@@ -505,7 +456,6 @@ class _WooliesHomeScreenState extends State<WooliesHomeScreen> {
                 fontFamily: "Montserrat",
                 fontWeight: FontWeight.w600,
                 color: Colors.black),
-
             showBottomBorder: false,
             sortAscending: true,
             sortColumnIndex: 1,

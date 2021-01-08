@@ -11,13 +11,12 @@ class WooliesData {
 
   Future<dynamic> getData ()async {
     try {
-      print("getting data......................");
-      http.Response response =
-      await http.get('$url/woolies-client');
+      print("getting data.......Woolies...............");
+      http.Response response = await http.get('$url/woolies-client');
 
       String data = response.body;
 
-      print("returning data................");
+      print("returning data.....Woolies...........");
       return jsonDecode(data);
     } on SocketException catch (_) {
       print("not connected");
@@ -26,14 +25,15 @@ class WooliesData {
 
   Future<dynamic> getSingleProductData(String title) async {
     try {
-      print("getting single product data......................");
-      http.Response response = await http.get('$url/woolies-get-product-data/$title');
+      print("getting single product data.........Woolies.............");
+      http.Response response = await http.get(
+          '$url/woolies-get-product-data/$title');
 
       String data = response.body;
 
       print(data);
 
-      print("returning single product data................");
+      print("returning single product data.......Woolies.........");
       return jsonDecode(data);
     } on SocketException catch (_) {
       print(" error, not connected to the internet");

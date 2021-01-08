@@ -2,15 +2,13 @@ import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import "package:flutter/material.dart";
 
-class ProductCard extends StatelessWidget {
-  List<ProductItem> cheap;
-  String shopriteNullImageUrl;
-  int index;
-  ProductItem product;
+class ProductCardRed extends StatelessWidget {
+  final String shopriteNullImageUrl;
 
+//final   int index;
+  final ProductItem product;
 
-  ProductCard(
-      {this.cheap, this.shopriteNullImageUrl, this.index, this.product});
+  ProductCardRed({this.shopriteNullImageUrl, this.product});
 
   final double gridCardBorderRadius = 25;
 
@@ -18,8 +16,10 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenHeight10p = screenHeight*(10/MediaQuery.of(context).size.height);
-    final screenWidth10p =screenWidth* (10/MediaQuery.of(context).size.width);
+    final screenHeight10p =
+        screenHeight * (10 / MediaQuery.of(context).size.height);
+    final screenWidth10p =
+        screenWidth * (10 / MediaQuery.of(context).size.width);
 
     return Card(
       elevation: 0,
@@ -40,12 +40,12 @@ class ProductCard extends StatelessWidget {
                       flex: 10,
                       child: Container(
                         decoration: BoxDecoration(
-                            color: kBgShoprite.withOpacity(1),
-                            borderRadius: BorderRadius.only(
-                                bottomRight:
-                                    Radius.circular(gridCardBorderRadius),
-                                topLeft:
-                                    Radius.circular(gridCardBorderRadius))),
+                          color: kBgShoprite,
+                          borderRadius: BorderRadius.only(
+                            bottomRight:
+                            Radius.circular(gridCardBorderRadius),
+                            topLeft:
+                            Radius.circular(gridCardBorderRadius),),),
                       ),
                     ),
                     Expanded(
@@ -65,8 +65,8 @@ class ProductCard extends StatelessWidget {
 
                 Center(
                   child: Image.network(
-                    cheap[index].imageUrl ?? shopriteNullImageUrl,
-                    height:  screenHeight*.35,
+                    product.imageUrl ?? shopriteNullImageUrl,
+                    height: screenHeight * .3,
                   ),
                 ),
               ],
@@ -81,12 +81,12 @@ class ProductCard extends StatelessWidget {
                 ),
                 FittedBox(
                   child: Text(
-                    "Price:  R${cheap[index].prices[cheap[index].prices.length - 1]}",
+                    "Price:  R${product.prices.last}",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: "Montserrat",
                       fontWeight: FontWeight.w700,
-                      fontSize: screenWidth10p*1.5,
+                      fontSize: screenWidth10p * 1.5,
                     ),
                   ),
                 ),
@@ -96,14 +96,14 @@ class ProductCard extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal:  screenWidth10p*1),
                   child: Text(
-                    "${cheap[index].title}",
+                    "${product.title}",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: "Montserrat",
                       fontWeight: FontWeight.w400,
-                      fontSize: screenWidth10p*1.2,
+                      fontSize: screenWidth10p * 1.2,
                     ),
                   ),
                 ),

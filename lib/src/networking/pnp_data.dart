@@ -10,14 +10,18 @@ const url  = 'http://ec2-3-12-76-166.us-east-2.compute.amazonaws.com:4000';
 class PnPData {
 
   Future<dynamic> getData ()async {
+    Map<String, String> headers = {
+      "Connection": "Keep-Alive",
+      "Keep-Alive": "timeout=20, max=1000"
+    };
     try {
-      print("getting data......................");
+      print("getting data...PnP...................");
       http.Response response =
-      await http.get('$url/pnp-client');
+          await http.get('$url/pnp-client', headers: headers);
 
       String data = response.body;
 
-      print("returning data................");
+      print("returning data...PnP.............");
       return jsonDecode(data);
     } on SocketException catch (_) {
       print("not connected");
@@ -25,15 +29,20 @@ class PnPData {
   }
 
   Future<dynamic> getSingleProductData(String title) async {
+    Map<String, String> headers = {
+      "Connection": "Keep-Alive",
+      "Keep-Alive": "timeout=20, max=1000"
+    };
     try {
-      print("getting single product data......................");
-      http.Response response = await http.get('$url/pnp-get-product-data/$title');
+      print("getting single product data.......PnP...............");
+      http.Response response = await http.get(
+          '$url/pnp-get-product-data/$title', headers: headers);
 
       String data = response.body;
 
       print(data);
 
-      print("returning single product data................");
+      print("returning single product data......PnP..........");
       return jsonDecode(data);
     } on SocketException catch (_) {
       print(" error, not connected to the internet");

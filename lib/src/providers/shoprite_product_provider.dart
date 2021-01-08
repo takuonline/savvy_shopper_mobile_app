@@ -4,16 +4,15 @@ import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/networking/shoprite_data.dart';
 import 'package:flutter/material.dart';
 
-class AllProductList with ChangeNotifier {
-  dynamic _data ;
+class ShopriteAllProductList with ChangeNotifier {
+  dynamic _data;
 
   dynamic get data {
     return _data;
   }
 
-
-  Future<void> getItems () async {
-    if(await TestConnection.checkForConnection()){
+  Future<void> getItems() async {
+    if (await TestConnection.checkForConnection()) {
       ShopriteData _shopritedata = ShopriteData();
       dynamic data = await _shopritedata.getData();
 

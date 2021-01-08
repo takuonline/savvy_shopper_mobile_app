@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/homescreen_components.dart';
-import 'package:e_grocery/src/components/pnp/pnp_product_card.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/components/grid_homescreen_product_card/product_card_white.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/components/pnp/pnp_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/pages/pnp_product_graph.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/pnp_product_graph.dart';
 import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
 import 'package:e_grocery/src/providers/pnp_product_provider.dart';
 import "package:flutter/material.dart";
@@ -361,56 +361,14 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
                               ),
                             ),
                           ),
-                        )
-
-                    ),
+                        )),
                   ],
                 )
               ],
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: _horizontalPadding),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: kBgPnP.withOpacity(.1),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: Text(
-                              "Best Buys",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: "Montserrat",
-                                decoration: TextDecoration.none,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-
-                      ...bestBuys
-                          .map((e) => BestChoiceProduct(title: e.title))
-                          .toList(),
-                      SizedBox(height: 20)
-                    ],
-                  ),
-                ),
-              ),
+            BestBuys(
+              bestBuys: bestBuys,
+              color: kBgPnP.withOpacity(.1),
             ),
             SizedBox(
               height: 40,
@@ -666,7 +624,7 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
                           ),
                         )
                         ,
-                    child: ProductCard(
+                    child: ProductCardWhite(
                       index: index,
 
                       cheap: itemList,
@@ -688,7 +646,7 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
                             ),
                           )
                       ,
-                      child: ProductCard(
+                      child: ProductCardWhite(
                         index: index,
 
                         cheap: itemList,

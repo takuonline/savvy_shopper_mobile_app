@@ -14,10 +14,9 @@ class PnPAllProductList with ChangeNotifier {
 
 
   Future<void> getItems () async {
-    if(await TestConnection.checkForConnection()){
-
-      PnPData _pnpdata = PnPData();
-      dynamic data = await _pnpdata.getData();
+    if (await TestConnection.checkForConnection()) {
+      PnPData _pnpData = PnPData();
+      dynamic data = await _pnpData.getData();
 
       _data = data;
       notifyListeners();

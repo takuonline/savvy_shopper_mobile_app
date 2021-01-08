@@ -1,0 +1,505 @@
+import 'dart:math';
+import 'package:e_grocery/src/components/graph_page_components.dart';
+import 'package:e_grocery/src/components/product_item.dart';
+import 'package:e_grocery/src/constants/constants.dart';
+import 'package:e_grocery/src/networking/shoprite_data.dart';
+import 'package:e_grocery/src/networking/woolies_data.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/shoprite_product_graph.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
+import 'package:e_grocery/src/providers/all_grocery_store_data_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:provider/provider.dart';
+import 'package:string_similarity/string_similarity.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+class PnPProductGraph extends StatefulWidget {
+  static const id = "pnp-product-graph";
+
+  ProductItem productItem;
+
+  PnPProductGraph({this.productItem});
+
+  @override
+  _PnPProductGraphState createState() => _PnPProductGraphState();
+}
+
+class _PnPProductGraphState extends State<PnPProductGraph> {
+  List<String> finalShopriteProducts = [];
+  List finalShopriteProductItems = [];
+
+  List<String> finalWooliesProducts = [];
+  List finalWooliesProductItems = [];
+
+  bool _isLoadingRecommendations = false;
+
+  final _badImageUrl =
+      "/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_140x140.jpg";
+  final _nullImageUrl =
+      'https://www.pnp.co.za//pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_400x400.jpg';
+
+  List<ProductData> _getData() {
+    List<ProductData> temp = [];
+    for (int i = 0; i < widget.productItem.prices.length; i++) {
+      temp.add(ProductData(
+          widget.productItem.dates[i], widget.productItem.prices[i]));
+    }
+    return temp;
+  }
+
+  @override
+  void initState() {
+    if (Provider.of<AllGroceryStoresData>(context, listen: false).data ==
+        null) {
+      Provider.of<AllGroceryStoresData>(context, listen: false)
+          .getAllStoresData();
+    }
+
+    getRecommendations();
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final screenHeight10p =
+        screenHeight * (10 / MediaQuery.of(context).size.height);
+    final screenWidth10p =
+        screenWidth * (10 / MediaQuery.of(context).size.width);
+    ;
+    return Container(
+        child: Scaffold(
+
+          body: Container(
+
+              color: Colors.white,
+              child: ListView(
+                children: [
+                  SizedBox(
+                    height: screenHeight10p*4,
+                  ),
+                  Stack(
+
+                    children: [
+
+                      Center(
+                        child: Container(
+                          width: screenWidth*.8,
+                          height: screenHeight*.35,
+                          child: Padding(
+                            padding:  EdgeInsets.symmetric(horizontal: screenHeight10p*1.5 ),
+                            child:
+                            widget.productItem.imageUrl == _badImageUrl ? Image
+                                .network(_nullImageUrl) :
+                            Image.network(
+                              widget.productItem.imageUrl ?? _nullImageUrl,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: screenWidth10p*2,
+                        top: 0,
+
+                        child: Container(
+                          decoration:BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color:kBgPnP.withOpacity(.2)
+                          ),
+
+                          width: screenWidth10p*4.5,
+
+                          height: screenHeight10p*4.5,
+
+                          child: IconButton(
+                            icon: Icon(Icons.arrow_back,color:kBgPnP,size: screenHeight10p*3,) ,
+                            onPressed: ()=> Navigator.pop(context),
+                          ),
+
+                        ),
+                      ),
+                    ],
+                  ),
+SizedBox(
+  height: 40,
+),
+//              Padding(
+//                padding:
+//                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+//                child: Row(
+//                  children: [
+//                    GestureDetector(
+//                      onTap: () => Navigator.of(context).pop(),
+//                      child: Card(
+//                        color: kBgShoprite.withOpacity(1),
+//                        shape: RoundedRectangleBorder(
+//                          borderRadius: BorderRadius.circular(5),
+//                        ),
+//                        elevation: 10,
+//                        child: Container(
+//                          height: 50,
+//                          width: 50,
+//                          child: Icon(
+//                            Icons.arrow_back,
+//                            color: Colors.white,
+//                            size: 30,
+//                          ),
+//                        ),
+//                      ),
+//                    )
+//                  ],
+//                ),
+//              ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: screenHeight10p*1.5),
+                    decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(screenHeight10p*5)),
+                    child: Material(
+                      elevation: 20,
+                      borderRadius: BorderRadius.circular(screenHeight10p*2),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: screenHeight10p, vertical: screenHeight10p*2),
+                        width: screenWidth,
+                        height: screenHeight * .55,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(screenHeight10p*2),
+                          color: kBgPnP,
+                        ),
+                        child: SfCartesianChart(
+                          plotAreaBorderWidth: 0,
+                          crosshairBehavior: CrosshairBehavior(
+                            enable: true,
+                          ),
+//borderColor: Colors.blue,
+
+                          palette: [
+//                      Colors.black,
+                            Colors.orange
+                          ],
+                          //set type for x and y axis
+                          primaryXAxis: DateTimeAxis(
+majorGridLines: MajorGridLines(
+    color: Colors.blue,
+    width: 0
+)
+                            ,labelStyle: TextStyle(
+                              color: Colors.white
+                          )
+                            ,
+                            title: AxisTitle(
+
+                                text: 'Date',
+                                textStyle:TextStyle(
+                                    color: Colors.white
+                                )
+                            ),
+                            intervalType: DateTimeIntervalType.days,
+                          ),
+                          primaryYAxis: NumericAxis(
+                            labelStyle: TextStyle(
+                                color: Colors.white
+                            ),majorGridLines: MajorGridLines(
+                              color: Colors.black.withOpacity(.5),
+                              width: 1
+                          ),
+                            title: AxisTitle(
+                                text: 'Price',
+                                textStyle:TextStyle(
+                                    color: Colors.white
+                                )
+
+                            ),
+
+//                        labelFormat: 'R{value}'
+//                    interval: 4
+                          ),
+                          //give chart title
+                          title: ChartTitle(text: widget.productItem.title,textStyle: TextStyle(
+                              color: Colors.white
+                          )),
+                          onMarkerRender: (args) {
+//                      args.
+                          },
+                          legend: Legend(overflowMode: LegendItemOverflowMode.wrap),
+                          tooltipBehavior: TooltipBehavior(enable: true),
+backgroundColor:Colors.black.withOpacity(.2),
+
+                          series: <LineSeries>[
+                            LineSeries(
+
+                                dataSource: _getData(),
+                                xValueMapper: (product, _) => product.time,
+                                yValueMapper: (product, _) => product.price,
+                                // Enable data label
+                                dataLabelSettings:
+                                DataLabelSettings(isVisible: false))
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal:20),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children : [
+
+                          GestureDetector(
+                            onTap: () => Provider.of<AllGroceryStoresData>(
+                                context, listen: false).getAllStoresData(),
+                            child: MaxMinCard(
+
+                              priceValue: widget.productItem.prices.map((e) =>
+                                  double.parse(e.toString())).toList().reduce(
+                                  max) ?? 0,
+                              title: "Max",
+                              bgColor: kBgPnP,
+                              textColor: Colors.white,
+                              headerColor: Colors.white.withOpacity(.6),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              getRecommendations();
+                            },
+                            child: MaxMinCard(
+
+                              priceValue: widget.productItem.prices.map((e) =>
+                                  double.parse(e.toString())).toList().reduce(
+                                  min) ?? 0,
+                              title: "Min",
+                              bgColor: kBgPnP,
+                              textColor: Colors.white,
+                              headerColor: Colors.white.withOpacity(.6),
+                            ),
+                          ),
+                          MaxMinCard(
+
+                            priceValue: (widget.productItem.prices.map((e) =>
+                                double.parse(e.toString())).reduce((a, b) =>
+                            a + b) / widget.productItem.prices.length)
+                                .roundToDouble() ?? 0,
+                            title: "Avg",
+                            bgColor: kBgPnP,
+                            textColor: Colors.white,
+                            headerColor: Colors.white.withOpacity(.6),
+                          ),
+
+                        ]
+                    ),
+                  ),
+                  SizedBox(
+                    height: 3 * screenHeight10p,
+                  ),
+                  CurrentPriceCard(
+
+                      bgColor: kBgPnP,
+                      textColor: Colors.white,
+                      headerColor: Colors.white.withOpacity(.6),
+                      priceValue: widget.productItem.prices.last
+
+                  ),
+
+                  SizedBox(
+                    height: 2 * screenHeight10p,
+                  ),
+
+
+                  SizedBox(
+                    height: 3 * screenHeight10p,
+                  ),
+
+                  if(_isLoadingRecommendations) Center(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: screenHeight10p * 3),
+                      child: CircularProgressIndicator(
+
+                      ),
+                    ),
+                  ),
+
+                  if (finalShopriteProductItems
+                      .isNotEmpty) RecommendationStoreName(
+                      color: kBgShoprite,
+                      title: "Shoprite"
+
+                  ),
+
+                  if (finalWooliesProductItems.isNotEmpty) Container(
+                      height: screenHeight * .35,
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemCount: finalShopriteProductItems.length,
+                        itemBuilder: (_, index) {
+                          return GestureDetector(
+                            onTap: () =>
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ShopriteProductGraph(
+                                            productItem: finalShopriteProductItems[index]),
+                                  ),
+                                ),
+                            child: RecommendationProductCard(
+                                finalPnPProductItems: finalShopriteProductItems,
+                                nullImageUrl: _nullImageUrl,
+                                index: index
+
+                            ),
+                          );
+                        },
+
+
+                      )
+
+                  ),
+
+                  if (finalShopriteProductItems.isNotEmpty) SizedBox(
+                    height: 5 * screenHeight10p,
+                  ),
+
+                  if (finalWooliesProductItems
+                      .isNotEmpty) RecommendationStoreName(
+                      color: kBgWoolies,
+                      title: "Woolworths"
+
+                  ),
+
+                  if (finalWooliesProductItems.isNotEmpty) Container(
+                      height: screenHeight * .19,
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemCount: finalWooliesProductItems.length,
+                        itemBuilder: (_, index) {
+                          return GestureDetector(
+                            onTap: () =>
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        WooliesProductGraph(
+                                            productItem: finalWooliesProductItems[index]),
+                                  ),
+                                ),
+                            child: RecommendationProductCardNoImage(
+                                finalPnPProductItems: finalWooliesProductItems,
+                                nullImageUrl: _nullImageUrl,
+                                index: index
+
+                            ),
+                          );
+                        },
+
+
+                      )
+
+                  ),
+
+                  if (finalWooliesProductItems.isNotEmpty) SizedBox(
+                    height: 5 * screenHeight10p,
+                  ),
+
+
+                ],
+              )),
+        ));
+  }
+
+
+  Future<void> getRecommendations() async {
+    setState(() {
+      _isLoadingRecommendations = true;
+    });
+
+    Map<String, dynamic> data = Provider
+        .of<AllGroceryStoresData>(context, listen: false)
+        .data;
+    List<String> shopriteList = Provider.of<AllGroceryStoresData>(
+        context, listen: false).getStoreProductNameList(
+        data['shoprite'], context);
+    List<String> wooliesList = Provider.of<AllGroceryStoresData>(
+        context, listen: false).getStoreProductNameList(
+        data['woolies'], context);
+
+    finalShopriteProductItems = [];
+    finalWooliesProducts = [];
+    try {
+      runBestMatch(
+          shopriteList, finalShopriteProducts, 3, widget.productItem.title);
+      ShopriteData _shopriteNetworkData = ShopriteData();
+
+      for (String i in finalShopriteProducts) {
+        ProductItem result = await RecommendationDataGetProduct.getProduct(
+            i, context, _shopriteNetworkData);
+        setState(() {
+          finalShopriteProductItems.add(result);
+        });
+      }
+      print(finalShopriteProductItems);
+      setState(() {});
+
+
+      ////////////////////////////// woolies  ////////////////////////////////
+
+      runBestMatch(
+          wooliesList, finalWooliesProducts, 3, widget.productItem.title);
+      WooliesData _wooliesNetworkData = WooliesData();
+
+      for (String i in finalWooliesProducts) {
+        WooliesProductItem resultWoolies = await RecommendationDataGetProduct
+            .getProductNoImage(i, context, _wooliesNetworkData);
+        setState(() {
+          finalWooliesProductItems.add(resultWoolies);
+        });
+      }
+      print(finalWooliesProductItems);
+      setState(() {});
+
+      setState(() {
+        _isLoadingRecommendations = false;
+      });
+    } on NoSuchMethodError {
+      setState(() {
+        _isLoadingRecommendations = false;
+      });
+      print("noooooooooooo such  methoddddddddddddddddd  ");
+//      Provider.of<AllGroceryStoresData>(context,listen:false).getAllStoresData();
+
+    } catch (e) {
+      print(e);
+
+      setState(() => _isLoadingRecommendations = false);
+    }
+  }
+
+
+  static void runBestMatch(List<String> storeList, List<String> resultsList,
+      int num, String title) {
+    for (int i = 0; i < num; i++) {
+      BestMatch results = title.bestMatch(storeList);
+      resultsList.add((results.bestMatch.target));
+      storeList.removeAt(results.bestMatchIndex);
+    }
+
+    print(resultsList);
+  }
+
+
+}
+
+
+

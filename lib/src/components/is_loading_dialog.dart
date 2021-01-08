@@ -7,7 +7,6 @@ class IsLoading{
 
 
   static Future<void> showIsLoadingDialog(BuildContext context) async {
-
     return showDialog<void>(
       barrierDismissible: false,
       context: context,
@@ -18,8 +17,6 @@ class IsLoading{
           height: double.infinity,
           child: Center(
             child: CircularProgressIndicator(
-//              backgroundColor: Colors.red,
-
             ),
           ),
         );

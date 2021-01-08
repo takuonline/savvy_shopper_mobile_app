@@ -1,15 +1,22 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:e_grocery/src/components/is_loading_dialog.dart';
 import 'package:e_grocery/src/components/product_item.dart';
+import 'package:e_grocery/src/networking/clothing/foschini_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/networking/shoprite_data.dart';
-import 'package:e_grocery/src/pages/shoprite_product_graph.dart';
-import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
+import 'package:e_grocery/src/pages/clothing/foschini_product_graph.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/pnp_product_graph.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/clothing/foschini/foschini_product_name_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
-class GroceryShoppingListSearch extends SearchDelegate {
+class FoschiniGroupProductSearch extends SearchDelegate {
+  List items;
+  final networkData;
+
+  FoschiniGroupProductSearch({this.items, this.networkData});
+
   @override
   TextStyle get searchFieldStyle => TextStyle(
         color: Colors.white,
@@ -21,19 +28,18 @@ class GroceryShoppingListSearch extends SearchDelegate {
   @override
   ThemeData appBarTheme(BuildContext context) {
     Map<int, Color> color = {
-      50: Color.fromRGBO(207, 15, 20, .1),
-      100: Color.fromRGBO(207, 15, 20, .2),
-      200: Color.fromRGBO(207, 15, 20, .3),
-      300: Color.fromRGBO(207, 15, 20, .4),
-      400: Color.fromRGBO(207, 15, 20, .5),
-      500: Color.fromRGBO(207, 15, 20, .6),
-      600: Color.fromRGBO(207, 15, 20, .7),
-      700: Color.fromRGBO(207, 15, 20, .8),
-      800: Color.fromRGBO(207, 15, 20, .9),
-      900: Color.fromRGBO(207, 15, 20, 1),
+      50: Color.fromRGBO(0, 0, 0, .1),
+      100: Color.fromRGBO(0, 0, 0, .2),
+      200: Color.fromRGBO(0, 0, 0, .3),
+      300: Color.fromRGBO(0, 0, 0, .4),
+      400: Color.fromRGBO(0, 0, 0, .5),
+      500: Color.fromRGBO(0, 0, 0, .6),
+      600: Color.fromRGBO(0, 0, 0, .7),
+      700: Color.fromRGBO(0, 0, 0, .8),
+      800: Color.fromRGBO(0, 0, 0, .9),
+      900: Color.fromRGBO(0, 0, 0, 1),
     };
-
-    MaterialColor colorCustom = MaterialColor(0xffcf0f14, color);
+    MaterialColor colorCustom = MaterialColor(0xff000000, color);
 
     return ThemeData(
       primarySwatch: colorCustom,
@@ -78,8 +84,8 @@ class GroceryShoppingListSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var _providerData = Provider.of<ProductNameList>(context);
-    final results = _providerData.items
+    List<String> _providerData = items;
+    final results = _providerData
         .where(
           (product) => product.toLowerCase().contains(
                 query.toLowerCase(),
@@ -91,29 +97,36 @@ class GroceryShoppingListSearch extends SearchDelegate {
         ? Container()
         : ListView.builder(
             itemCount: results.length,
-            itemBuilder: (context, index) => CheckboxListTile(
-                  onChanged: (bool value) => print(" item $value"),
-                  title: GestureDetector(
-                    onTap: () {
-                      getProduct(results[index], context);
-                    },
-                    child: Text(
-                      results[index],
-                      style: TextStyle(color: Colors.black87),
-                    ),
+            itemBuilder: (context, index) => ListTile(
+                  title: Text(
+                    results[index],
+                    style: TextStyle(color: Colors.black87),
                   ),
-                  value: false,
+                  onTap: () {
+                    try {
+                      getProduct(results[index], context, networkData);
+                    } on SocketException {
+                      print(" error, not connected to the internet");
+                      TestConnection.showNetworkDialog(context);
+                    } on NoSuchMethodError {
+                      print("is no such methodddddd");
+                      TestConnection.showOtherErrorDialog(context);
+                    } catch (error) {
+                      print(error);
+                      print("unkown errrrrrrror");
+                      TestConnection.showProductErrorDialog(context);
+                    }
+                  },
+                  focusColor: Colors.red,
                 )));
   }
 
-  void getProduct(dynamic result, BuildContext context) async {
-    ShopriteData _shopriteData = ShopriteData();
-
+  void getProduct(dynamic result, BuildContext context, _networkData) async {
     if (result != null) {
       if (await TestConnection.checkForConnection()) {
         IsLoading.showIsLoadingDialog(context);
 
-        dynamic response = await _shopriteData.getSingleProductData(result);
+        dynamic response = await _networkData.getSingleProductData(result);
         dynamic parsedResponse = jsonDecode(response);
 
         List<DateTime> tempDateList = [];
@@ -121,6 +134,7 @@ class GroceryShoppingListSearch extends SearchDelegate {
         List<dynamic> datesList =
             parsedResponse[parsedResponse.keys.elementAt(0).toString()]
                 ['dates'];
+
         for (var dateString in datesList) {
           tempDateList.add((DateTime.parse(dateString)));
         }
@@ -141,7 +155,7 @@ class GroceryShoppingListSearch extends SearchDelegate {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                ShopriteProductGraph(productItem: _parsedProductItem),
+                FoschiniProductGraph(productItem: _parsedProductItem),
           ),
         );
       } else {
