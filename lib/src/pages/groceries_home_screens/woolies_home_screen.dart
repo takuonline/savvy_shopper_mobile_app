@@ -79,7 +79,7 @@ class _WooliesHomeScreenState extends State<WooliesHomeScreen> {
 
   void _testWooliesConnection() async {
     if (await TestConnection.checkForConnection()) {
-      await Future.delayed(Duration(seconds: 15));
+      await Future.delayed(Duration(seconds: 7));
       if (Provider.of<WooliesAllProductList>(context, listen: false).data ==
           null) {
         setState(() {
@@ -294,7 +294,8 @@ class _WooliesHomeScreenState extends State<WooliesHomeScreen> {
                                     delegate: WooliesProductSearch());
                                 print(result);
                               } else {
-                                await TestConnection.showNetworkDialog(context);
+                                await TestConnection.showNoNetworkDialog(
+                                    context);
                               }
                             },
                             child: Container(

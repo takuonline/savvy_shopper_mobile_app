@@ -81,13 +81,12 @@ class ProductSearch extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     var _providerData = Provider.of<ShopriteProductNameList>(context);
-    final results = _providerData.items
+    final results = _providerData.titles
         .where(
-          (product) =>
-          product.toLowerCase().contains(
-            query.toLowerCase(),
-          ),
-    )
+          (product) => product.toLowerCase().contains(
+                query.toLowerCase(),
+              ),
+        )
         .toList();
 
     return ((query == '')
@@ -110,7 +109,7 @@ class ProductSearch extends SearchDelegate {
                   print("is no such methodddddd");
                 } on SocketException catch (_) {
                   Navigator.pop(context);
-                  TestConnection.showNetworkDialog(context);
+                  TestConnection.showNoNetworkDialog(context);
                 } catch (error) {
                   print(error);
                   Navigator.pop(context);
@@ -203,7 +202,7 @@ class ProductSearch extends SearchDelegate {
           ),
         );
       } else{
-       await  TestConnection.showNetworkDialog(context);
+        await TestConnection.showNoNetworkDialog(context);
       }
 
 

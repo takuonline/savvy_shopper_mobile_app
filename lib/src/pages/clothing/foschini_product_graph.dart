@@ -8,7 +8,6 @@ import 'package:e_grocery/src/networking/clothing/sportscene_data.dart';
 import 'package:e_grocery/src/networking/clothing/superbalist_data.dart';
 import 'package:e_grocery/src/networking/clothing/woolworths_clothing_data.dart';
 import 'package:e_grocery/src/pages/clothing/woolworths_clothing_product_graph.dart';
-import 'package:e_grocery/src/providers/all_grocery_store_data_provider.dart';
 import 'package:e_grocery/src/providers/clothing/foschini/foschini_product_name_provider.dart';
 import 'package:e_grocery/src/providers/clothing/foschini/foschini_product_provider.dart';
 import 'package:e_grocery/src/providers/clothing/markham/markham_product_name_provider.dart';
@@ -55,7 +54,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
   bool _isLoadingRecommendations = false;
 
   final _nullImageUrl =
-      'https://image.tfgmedia.co.za/image/1/process/452x57?source=http://cdn.tfgmedia.co.za/00/BrandImage/foschini.png';
+      'https://play-lh.googleusercontent.com/tTcm_kToEtUvXdVGytgjB2Lc-qQiNo5fxcagB7c7MX_UJsO43OFKkeOJOZZiOL1VO6c=s180-rw';
 
   List<ProductData> _getData() {
     List<ProductData> temp = [];
@@ -68,14 +67,69 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
 
   @override
   void initState() {
-//    if(Provider.of<AllGroceryStoresData>(context,listen:false).data ==null ){
-//      Provider.of<AllGroceryStoresData>(context,listen:false).getAllStoresData();
-//
-//    }
-
-    getRecommendations();
-
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getRecommendations();
+    });
+  }
+
+  Future<void> _getProductData() async {
+    await Provider.of<FoschiniAllProductList>(context, listen: false)
+        .getItems();
+    await Provider.of<MarkhamAllProductList>(context, listen: false).getItems();
+    await Provider.of<SportsceneAllProductList>(context, listen: false)
+        .getItems();
+    await Provider.of<SuperbalistAllProductList>(context, listen: false)
+        .getItems();
+    await Provider.of<WoolworthsClothingAllProductList>(context, listen: false)
+        .getItems();
+  }
+
+  Future<void> _onRefresh() async {
+    print("is refreshing");
+    setState(() {
+      _isLoadingRecommendations = true;
+    });
+    try {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        getRecommendations();
+      });
+      setState(() {
+        _isLoadingRecommendations = false;
+      });
+    } on NoSuchMethodError {
+      print("noooooooooooo such  methoddddddddddddddddd  ");
+
+      setState(() {
+        _isLoadingRecommendations = true;
+      });
+      _getProductData();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        getRecommendations();
+      });
+      setState(() {
+        _isLoadingRecommendations = false;
+      });
+    } on RangeError {
+      print("range errrrrrrrrrrrrrrrrrrrror ");
+      setState(() {
+        _isLoadingRecommendations = true;
+      });
+
+      _getProductData();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        getRecommendations();
+      });
+      setState(() {
+        _isLoadingRecommendations = false;
+      });
+    } catch (e) {
+      print(e);
+    }
+    setState(() {
+      _isLoadingRecommendations = false;
+    });
   }
 
   @override
@@ -90,53 +144,55 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
 
     return Container(
         child: Scaffold(
-      body: Container(
-          color: Colors.white,
-          child: ListView(
-            children: [
-              SizedBox(
-                height: screenHeight10p * 4,
-              ),
-              Stack(
-                children: [
-                  Center(
-                    child: Container(
-                      width: screenWidth * .8,
-                      height: screenHeight * .35,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: screenHeight10p * 1.5),
-                        child: Image.network(
-                          widget.productItem.imageUrl ?? _nullImageUrl,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+          body: RefreshIndicator(
+            onRefresh: () => _onRefresh(),
+            child: Container(
+                color: Colors.white,
+                child: ListView(
+                  children: [
+                    SizedBox(
+                      height: screenHeight10p * 4,
                     ),
-                  ),
-                  Positioned(
-                    left: screenWidth10p * 2,
-                    top: 0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: kBgPnP.withOpacity(.2)),
-                      width: screenWidth10p * 4.5,
-                      height: screenHeight10p * 4.5,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: kBgPnP,
-                          size: screenHeight10p * 3,
+                    Stack(
+                      children: [
+                        Center(
+                          child: Container(
+                            width: screenWidth * .8,
+                            height: screenHeight * .35,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: screenHeight10p * 1.5),
+                              child: Image.network(
+                                widget.productItem.imageUrl ?? _nullImageUrl,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
                         ),
-                        onPressed: () => Navigator.pop(context),
-                      ),
+                        Positioned(
+                          left: screenWidth10p * 2,
+                          top: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: kBgPnP.withOpacity(.2)),
+                            width: screenWidth10p * 4.5,
+                            height: screenHeight10p * 4.5,
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.arrow_back,
+                                color: kBgPnP,
+                                size: screenHeight10p * 3,
+                              ),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 40,
-              ),
+                    SizedBox(
+                      height: 40,
+                    ),
 //              Padding(
 //                padding:
 //                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -164,270 +220,267 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
 //                  ],
 //                ),
 //              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: screenHeight10p * 1.5),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(screenHeight10p * 5)),
-                child: Material(
-                  elevation: 20,
-                  borderRadius: BorderRadius.circular(screenHeight10p * 2),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: screenHeight10p,
-                        vertical: screenHeight10p * 2),
-                    width: screenWidth,
-                    height: screenHeight * .55,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(screenHeight10p * 2),
-                      color: kBgWoolies,
-                    ),
-                    child: SfCartesianChart(
-                      plotAreaBorderWidth: 0,
-                      crosshairBehavior: CrosshairBehavior(
-                        enable: true,
-                      ),
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: screenHeight10p * 1.5),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                              screenHeight10p * 5)),
+                      child: Material(
+                        elevation: 20,
+                        borderRadius: BorderRadius.circular(
+                            screenHeight10p * 2),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: screenHeight10p,
+                              vertical: screenHeight10p * 2),
+                          width: screenWidth,
+                          height: screenHeight * .55,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                screenHeight10p * 2),
+                            color: kBgWoolies,
+                          ),
+                          child: SfCartesianChart(
+                            plotAreaBorderWidth: 0,
+                            crosshairBehavior: CrosshairBehavior(
+                              enable: true,
+                            ),
 //borderColor: Colors.blue,
 
-                      palette: [
+                            palette: [
 //                      Colors.black,
-                        kWooliesSecondary
-                      ],
-                      //set type for x and y axis
-                      primaryXAxis: DateTimeAxis(
-                        majorGridLines:
-                            MajorGridLines(color: Colors.blue, width: 0),
-                        labelStyle: TextStyle(color: Colors.white),
-                        title: AxisTitle(
-                            text: 'Date',
-                            textStyle: TextStyle(color: Colors.white)),
-                        intervalType: DateTimeIntervalType.days,
-                      ),
-                      primaryYAxis: NumericAxis(
-                        labelStyle: TextStyle(color: Colors.white),
-                        majorGridLines: MajorGridLines(
-                            color: Colors.white.withOpacity(.1), width: .5),
-                        title: AxisTitle(
-                            text: 'Price',
-                            textStyle: TextStyle(color: Colors.white)),
+                              kWooliesSecondary
+                            ],
+                            //set type for x and y axis
+                            primaryXAxis: DateTimeAxis(
+                              majorGridLines:
+                              MajorGridLines(color: Colors.blue, width: 0),
+                              labelStyle: TextStyle(color: Colors.white),
+                              title: AxisTitle(
+                                  text: 'Date',
+                                  textStyle: TextStyle(color: Colors.white)),
+                              intervalType: DateTimeIntervalType.days,
+                            ),
+                            primaryYAxis: NumericAxis(
+                              labelStyle: TextStyle(color: Colors.white),
+                              majorGridLines: MajorGridLines(
+                                  color: Colors.white.withOpacity(.1),
+                                  width: .5),
+                              title: AxisTitle(
+                                  text: 'Price',
+                                  textStyle: TextStyle(color: Colors.white)),
 
 //                        labelFormat: 'R{value}'
 //                    interval: 4
-                      ),
-                      //give chart title
-                      title: ChartTitle(
-                          text: widget.productItem.title,
-                          textStyle: TextStyle(color: Colors.white)),
-                      onMarkerRender: (args) {
+                            ),
+                            //give chart title
+                            title: ChartTitle(
+                                text: widget.productItem.title,
+                                textStyle: TextStyle(color: Colors.white)),
+                            onMarkerRender: (args) {
 //                      args.
-                      },
-                      legend: Legend(overflowMode: LegendItemOverflowMode.wrap),
-                      tooltipBehavior: TooltipBehavior(enable: true),
-                      backgroundColor: Colors.black.withOpacity(1),
+                            },
+                            legend: Legend(overflowMode: LegendItemOverflowMode
+                                .wrap),
+                            tooltipBehavior: TooltipBehavior(enable: true),
+                            backgroundColor: Colors.black.withOpacity(1),
 
-                      series: <LineSeries>[
-                        LineSeries(
-                            dataSource: _getData(),
-                            xValueMapper: (product, _) => product.time,
-                            yValueMapper: (product, _) => product.price,
-                            // Enable data label
-                            dataLabelSettings:
-                                DataLabelSettings(isVisible: false))
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 50,
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          await Provider.of<FoschiniAllProductList>(context,
-                                  listen: false)
-                              .getItems();
-                          await Provider.of<MarkhamAllProductList>(context,
-                                  listen: false)
-                              .getItems();
-                          await Provider.of<SportsceneAllProductList>(context,
-                                  listen: false)
-                              .getItems();
-                          await Provider.of<SuperbalistAllProductList>(context,
-                                  listen: false)
-                              .getItems();
-                          await Provider.of<WoolworthsClothingAllProductList>(
-                                  context,
-                                  listen: false)
-                              .getItems();
-                        },
-                        child: MaxMinCard(
-                          priceValue: widget.productItem.prices
-                                  .map((e) => double.parse(e.toString()))
-                                  .toList()
-                                  .reduce(max) ??
-                              0,
-                          title: "Max",
-                          bgColor: kBgFoschini,
-                          textColor: Colors.white,
-                          headerColor: Colors.white.withOpacity(.6),
+                            series: <LineSeries>[
+                              LineSeries(
+                                  dataSource: _getData(),
+                                  xValueMapper: (product, _) => product.time,
+                                  yValueMapper: (product, _) => product.price,
+                                  // Enable data label
+                                  dataLabelSettings:
+                                  DataLabelSettings(isVisible: false))
+                            ],
+                          ),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () async {
-                          getRecommendations();
-                        },
-                        child: MaxMinCard(
-                          priceValue: widget.productItem.prices
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+
+                              onLongPress: () async {
+                                await Provider.of<FoschiniAllProductList>(
+                                    context,
+                                    listen: false)
+                                    .getItems();
+                                await Provider.of<MarkhamAllProductList>(
+                                    context,
+                                    listen: false)
+                                    .getItems();
+                                await Provider.of<SportsceneAllProductList>(
+                                    context,
+                                    listen: false)
+                                    .getItems();
+                                await Provider.of<SuperbalistAllProductList>(
+                                    context,
+                                    listen: false)
+                                    .getItems();
+                                await Provider.of<
+                                    WoolworthsClothingAllProductList>(
+                                    context,
+                                    listen: false)
+                                    .getItems();
+                              },
+                              child: MaxMinCard(
+                                priceValue: widget.productItem.prices
+                                    .map((e) => double.parse(e.toString()))
+                                    .toList()
+                                    .reduce(max) ??
+                                    0,
+                                title: "Max",
+                                bgColor: kBgFoschini,
+                                textColor: Colors.white,
+                                headerColor: Colors.white.withOpacity(.6),
+                              ),
+                            ),
+                            MaxMinCard(
+                              priceValue: widget.productItem.prices
                                   .map((e) => double.parse(e.toString()))
                                   .toList()
                                   .reduce(min) ??
-                              0,
-                          title: "Min",
-                          bgColor: kBgFoschini,
-                          textColor: Colors.white,
-                          headerColor: Colors.white.withOpacity(.6),
-                        ),
-                      ),
-                      MaxMinCard(
-                        priceValue: (widget.productItem.prices
-                                        .map((e) => double.parse(e.toString()))
-                                        .reduce((a, b) => a + b) /
-                                    widget.productItem.prices.length)
-                                .roundToDouble() ??
-                            0,
-                        title: "Avg",
+                                  0,
+                              title: "Min",
+                              bgColor: kBgFoschini,
+                              textColor: Colors.white,
+                              headerColor: Colors.white.withOpacity(.6),
+                            ),
+                            MaxMinCard(
+                              priceValue: (widget.productItem.prices
+                                  .map((e) => double.parse(e.toString()))
+                                  .reduce((a, b) => a + b) /
+                                  widget.productItem.prices.length)
+                                  .roundToDouble() ??
+                                  0,
+                              title: "Avg",
+                              bgColor: kBgFoschini,
+                              textColor: Colors.white,
+                              headerColor: Colors.white.withOpacity(.6),
+                            ),
+                          ]),
+                    ),
+
+                    SizedBox(
+                      height: 3 * screenHeight10p,
+                    ),
+
+                    CurrentPriceCard(
                         bgColor: kBgFoschini,
                         textColor: Colors.white,
                         headerColor: Colors.white.withOpacity(.6),
+                        priceValue: widget.productItem.prices.last),
+
+                    SizedBox(
+                      height: 2 * screenHeight10p,
+                    ),
+
+                    SizedBox(
+                      height: 3 * screenHeight10p,
+                    ),
+
+                    if (_isLoadingRecommendations)
+                      Center(
+                        child: Container(
+                          padding:
+                          EdgeInsets.symmetric(vertical: screenHeight10p * 3),
+                          child: CircularProgressIndicator(),
+                        ),
                       ),
-                    ]),
-              ),
 
-              SizedBox(
-                height: 3 * screenHeight10p,
-              ),
+                    if (finalFoschiniProductItems.isNotEmpty)
+                      RecommendationStoreName(
+                          color: kBgFoschini, title: "Foschini"),
 
-              CurrentPriceCard(
-                  bgColor: kBgFoschini,
-                  textColor: Colors.white,
-                  headerColor: Colors.white.withOpacity(.6),
-                  priceValue: widget.productItem.prices.last),
+                    if (finalFoschiniProductItems.isNotEmpty)
+                      Container(
+                          height: screenHeight * .35,
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            itemCount: finalFoschiniProductItems.length,
+                            itemBuilder: (_, index) {
+                              return GestureDetector(
+                                onTap: () =>
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            FoschiniProductGraph(
+                                                productItem:
+                                                finalFoschiniProductItems[index]),
+                                      ),
+                                    ),
+                                child: RecommendationProductCard(
+                                    finalPnPProductItems: finalFoschiniProductItems,
+                                    nullImageUrl: _nullImageUrl,
+                                    index: index),
+                              );
+                            },
+                          )),
 
-              SizedBox(
-                height: 2 * screenHeight10p,
-              ),
 
-              SizedBox(
-                height: 3 * screenHeight10p,
-              ),
+                    if (finalMarkhamProductItems.isNotEmpty)
+                      RecommendationStoreName(
+                          color: kBgFoschini, title: "Markham"),
 
-              if (_isLoadingRecommendations)
-                Center(
-                  child: Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: screenHeight10p * 3),
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
+                    if (finalMarkhamProductItems.isNotEmpty)
+                      RecommendationListViewBuilder(
+                        finalStoreProductItems: finalMarkhamProductItems,
+                        nullImageUrl: _nullImageUrl,
+                      ),
 
-              if (finalFoschiniProductItems.isNotEmpty)
-                RecommendationStoreName(color: kBgFoschini, title: "Foschini"),
 
-              if (finalFoschiniProductItems.isNotEmpty)
-                Container(
-                    height: screenHeight * .35,
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemCount: finalFoschiniProductItems.length,
-                      itemBuilder: (_, index) {
-                        return GestureDetector(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => FoschiniProductGraph(
-                                  productItem:
-                                      finalFoschiniProductItems[index]),
-                            ),
-                          ),
-                          child: RecommendationProductCard(
-                              finalPnPProductItems: finalFoschiniProductItems,
-                              nullImageUrl: _nullImageUrl,
-                              index: index),
-                        );
-                      },
-                    )),
+                    if (finalSportsceneProductItems.isNotEmpty)
+                      RecommendationStoreName(
+                          color: kBgFoschini, title: "Sportscene"),
 
-              if (finalFoschiniProductItems.isNotEmpty)
-                SizedBox(
-                  height: 5 * screenHeight10p,
-                ),
+                    if (finalSportsceneProductItems.isNotEmpty)
+                      RecommendationListViewBuilder(
+                        finalStoreProductItems: finalSportsceneProductItems,
+                        nullImageUrl: _nullImageUrl,
+                      ),
 
-              if (finalMarkhamProductItems.isNotEmpty)
-                RecommendationStoreName(color: kBgFoschini, title: "Markham"),
 
-              if (finalMarkhamProductItems.isNotEmpty)
-                RecommendationListViewBuilder(
-                  finalStoreProductItems: finalMarkhamProductItems,
-                  nullImageUrl: _nullImageUrl,
-                ),
+                    if (finalSuperbalistProductItems.isNotEmpty)
+                      RecommendationStoreName(
+                          color: kBgFoschini, title: "Superbalist"),
 
-              if (finalMarkhamProductItems.isNotEmpty)
-                SizedBox(
-                  height: 5 * screenHeight10p,
-                ),
+                    if (finalSuperbalistProductItems.isNotEmpty)
+                      RecommendationListViewBuilder(
+                        finalStoreProductItems: finalSuperbalistProductItems,
+                        nullImageUrl: _nullImageUrl,
+                      ),
 
-              if (finalSportsceneProductItems.isNotEmpty)
-                RecommendationStoreName(
-                    color: kBgFoschini, title: "Sportscene"),
 
-              if (finalSportsceneProductItems.isNotEmpty)
-                RecommendationListViewBuilder(
-                  finalStoreProductItems: finalSportsceneProductItems,
-                  nullImageUrl: _nullImageUrl,
-                ),
+                    if (finalWoolworthsClothingProductItems.isNotEmpty)
+                      RecommendationStoreName(
+                          color: kBgWoolies, title: "Woolworths"),
 
-              if (finalSportsceneProductItems.isNotEmpty)
-                SizedBox(
-                  height: 5 * screenHeight10p,
-                ),
+                    if (finalWoolworthsClothingProductItems.isNotEmpty)
+                      RocommendationListViewBuilderNoImage(
+                        finalStoreProductItems: finalWoolworthsClothingProductItems,
+                        nullImageUrl: _nullImageUrl,
+                      ),
 
-              if (finalSuperbalistProductItems.isNotEmpty)
-                RecommendationStoreName(
-                    color: kBgFoschini, title: "Superbalist"),
-
-              if (finalSuperbalistProductItems.isNotEmpty)
-                RecommendationListViewBuilder(
-                  finalStoreProductItems: finalSuperbalistProductItems,
-                  nullImageUrl: _nullImageUrl,
-                ),
-
-              if (finalSuperbalistProductItems.isNotEmpty)
-                SizedBox(
-                  height: 5 * screenHeight10p,
-                ),
-
-              if (finalWoolworthsClothingProductItems.isNotEmpty)
-                RecommendationStoreName(color: kBgWoolies, title: "Woolworths"),
-
-              if (finalWoolworthsClothingProductItems.isNotEmpty)
-                RocommendationListViewBuilderNoImage(
-                  finalStoreProductItems: finalWoolworthsClothingProductItems,
-                  nullImageUrl: _nullImageUrl,
-                ),
-
-              if (finalWoolworthsClothingProductItems.isNotEmpty)
-                SizedBox(
-                  height: 5 * screenHeight10p,
-                ),
-            ],
-          )),
+                    if (finalWoolworthsClothingProductItems.isNotEmpty)
+                      SizedBox(
+                        height: 5 * screenHeight10p,
+                      ),
+                  ],
+                )),
+          ),
     ));
   }
 
@@ -509,7 +562,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
 
       runBestMatchHelper(
         foschiniList,
-        4,
+        3,
         FoschiniData(),
         finalFoschiniProducts,
         finalFoschiniProductItems,
@@ -517,7 +570,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
 
       runBestMatchHelper(
         markhamList,
-        4,
+        3,
         MarkhamData(),
         finalMarkhamProducts,
         finalMarkhamProductItems,
@@ -525,7 +578,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
 
       runBestMatchHelper(
         sportsceneList,
-        4,
+        3,
         SportsceneData(),
         finalSportsceneProducts,
         finalSportsceneProductItems,
@@ -533,7 +586,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
 
       runBestMatchHelper(
         superbalistList,
-        4,
+        3,
         SuperbalistData(),
         finalSuperbalistProducts,
         finalSuperbalistProductItems,
@@ -542,7 +595,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
 
       runBestMatchHelperNoImage(
         woolworthsClothingList,
-        4,
+        3,
         WoolworthsClothingData(),
         finalWoolworthsClothingProducts,
         finalWoolworthsClothingProductItems,

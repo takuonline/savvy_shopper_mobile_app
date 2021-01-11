@@ -1,8 +1,9 @@
+import 'package:e_grocery/src/components/grocery_stores_provider_aggregate_methods.dart';
 import 'package:e_grocery/src/constants/constants.dart';
+import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/pages/clothing_home.dart';
 import 'package:e_grocery/src/pages/groceries_home.dart';
 import 'package:e_grocery/src/pages/shopping_list.dart';
-import 'package:e_grocery/src/providers/all_grocery_store_data_provider.dart';
 import 'package:e_grocery/src/providers/clothing/foschini/foschini_product_provider.dart';
 import 'package:e_grocery/src/providers/clothing/markham/markham_product_provider.dart';
 import 'package:e_grocery/src/providers/clothing/sportscene/sportscene_product_provider.dart';
@@ -22,16 +23,136 @@ class MainMenu extends StatefulWidget {
   _MainMenuState createState() => _MainMenuState();
 }
 
-class _MainMenuState extends State<MainMenu> {
+class _MainMenuState extends State<MainMenu>
+    with SingleTickerProviderStateMixin {
   ScrollController _scrollController = ScrollController();
 
   final _borderRadius = BorderRadius.circular(15);
   final _borderRadiusSmaller = BorderRadius.circular(10);
 
+  AnimationController _aController;
+
+  Animation<Offset> _textHeader1Slide;
+  Animation<double> _textHeader1Fade;
+
+  Animation<Offset> _textHeader2Slide;
+  Animation<double> _textHeader2Fade;
+
+  Animation<Offset> _groceriesSlide;
+  Animation<Offset> _clothingSlide;
+
+  Animation<double> _accessoriesPop;
+  Animation<double> _shoppingListPop;
+  Animation<double> _aboutPop;
+
+  @override
+  void initState() {
+    _aController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 3),
+    );
+
+    /////////hi /////////////
+
+    _textHeader1Slide = Tween<Offset>(
+      begin: Offset(0, .4),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _aController,
+      curve: Interval(.1, .3, curve: Curves.easeOut),
+    ));
+
+    _textHeader1Fade = CurvedAnimation(
+      parent: _aController,
+      curve: Interval(
+        .1,
+        .5,
+        curve: Curves.easeOut,
+      ),
+    );
+
+/////// welcome //////////
+    _textHeader2Slide = Tween<Offset>(
+      begin: Offset(0, .4),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _aController,
+      curve: Interval(.3, .5, curve: Curves.easeOut),
+    ));
+
+    _textHeader2Fade = CurvedAnimation(
+      parent: _aController,
+      curve: Interval(
+        0.3,
+        .7,
+        curve: Curves.easeOut,
+      ),
+    );
+
+////////// groceries card  ////////////
+
+    _groceriesSlide = Tween<Offset>(
+      begin: Offset(1, 0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _aController,
+      curve: Interval(.6, .7, curve: Curves.easeOut),
+    ));
+
+////////// clothing card  ///////////
+
+    _clothingSlide = Tween<Offset>(
+      begin: Offset(-1, 0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _aController,
+      curve: Interval(.6, .7, curve: Curves.easeOut),
+    ));
+
+////////// PoPs  ///////////
+
+    //  accessories
+    _accessoriesPop = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
+      parent: _aController,
+      curve: Interval(
+        0.7,
+        .8,
+        curve: Curves.easeIn,
+      ),
+    ));
+
+    //  shoppingList
+    _shoppingListPop = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
+      parent: _aController,
+      curve: Interval(
+        0.8,
+        .9,
+        curve: Curves.easeIn,
+      ),
+    ));
+
+    //  about
+    _aboutPop = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
+      parent: _aController,
+      curve: Interval(
+        0.9,
+        1,
+        curve: Curves.easeIn,
+      ),
+    ));
+
+    _aController.forward();
+
+    _aController.addListener(() => setState(() {}));
+
+    super.initState();
+  }
+
   @override
   void dispose() {
     super.dispose();
     _scrollController.dispose();
+    _aController.dispose();
   }
 
   @override
@@ -44,7 +165,6 @@ class _MainMenuState extends State<MainMenu> {
         screenWidth * (10 / MediaQuery.of(context).size.width);
 
     final topBottomMargin = screenHeight10p * 2;
-
     final _extraSpace = SizedBox(
       height: screenHeight10p * 4,
     );
@@ -66,7 +186,7 @@ class _MainMenuState extends State<MainMenu> {
             TextSpan(
                 style: textStyle,
                 text:
-                    'Welcome to Savvy Shopper, a smart app that\'s going to help you save.'
+                'Welcome to Savvy Shopper, a smart app that\'s going to help you save.'
                     ' \nThis application helps you find the best deals '
                     'on products from stores all around South Africa \n\n'),
             TextSpan(
@@ -75,7 +195,12 @@ class _MainMenuState extends State<MainMenu> {
                     'Email: takuonline365@gmail.com\n'),
             TextSpan(
                 style: textStyle,
-                text: 'Artwork by: Brgfx and Macrovector on freepik.\n'),
+                text: 'Artwork by: Brgfx and Macrovector on freepik.\n'
+                    'Images by unsplash.com: Judeus Samson, Alex Iby,'
+                    ' Joseph Barrientos, Irene Kredenets and ruthson-zimmerman'
+
+
+            ),
           ],
         ),
       ),
@@ -88,6 +213,9 @@ class _MainMenuState extends State<MainMenu> {
         shrinkWrap: true,
         controller: _scrollController,
         children: [
+          SizedBox(
+            height: screenHeight10p * 1,
+          ),
           Container(
             width: double.infinity,
             height: screenHeight * .2,
@@ -96,8 +224,23 @@ class _MainMenuState extends State<MainMenu> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Hi,", style: _mainTextStyle),
-                Text("Welcome", style: _mainTextStyle),
+
+                FadeTransition(
+                  opacity: _textHeader1Fade,
+                  child: SlideTransition(
+                      position: _textHeader1Slide
+                      ,
+                      child: Text("Hello,", style: _mainTextStyle)
+                  ),
+                ),
+                FadeTransition(
+                  opacity: _textHeader2Fade,
+                  child: SlideTransition(
+                      position: _textHeader2Slide
+                      ,
+                      child: Text("Welcome", style: _mainTextStyle)
+                  ),
+                ),
 
 //                Transform.translate(
 //                  offset: Offset(0, -2),
@@ -120,73 +263,96 @@ class _MainMenuState extends State<MainMenu> {
             height: screenHeight10p * 2,
           ),
           GestureDetector(
-            onTap: () {
-              Provider.of<WooliesAllProductList>(context, listen: false)
-                  .getItems();
-              Provider.of<PnPAllProductList>(context, listen: false).getItems();
-              Provider.of<ShopriteAllProductList>(context, listen: false)
-                  .getItems();
+              onTap: () async {
+                if (await TestConnection.checkForConnection()) {
+                  GroceryStoresProviderMethods.checkNullAndGetAllProductData(
+                      context);
+//              if(Provider.of<ShopriteAllProductList>(context, listen: false).data==null){
+//                Provider.of<ShopriteAllProductList>(context, listen: false)
+//                    .getItems();
+//              }
+//
+//              if(Provider.of<PnPAllProductList>(context, listen: false).data==null){
+//                Provider.of<PnPAllProductList>(context, listen: false).getItems();
+//              }
+//
+//              if(Provider.of<WooliesAllProductList>(context, listen: false).data==null){
+//                Provider.of<WooliesAllProductList>(context, listen: false).getItems();
+//              }
 
-              Provider.of<AllGroceryStoresData>(context, listen: false)
-                  .getAllStoresData();
-              Navigator.of(context).pushNamed(GroceriesHomePage.id);
-            },
-            child: Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
-              decoration:
+                }
+
+                else {
+                  TestConnection.showNoNetworkDialog(context);
+                }
+
+                Navigator.of(context).pushNamed(GroceriesHomePage.id);
+              },
+              child:
+              SlideTransition(
+                position: _groceriesSlide,
+                child:
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10),
+                  decoration:
                   BoxDecoration(color: kHomeBg, borderRadius: _borderRadius),
-              height: screenHeight * .35,
-              width: screenWidth * 1,
-              child: ClipRRect(
-                borderRadius: _borderRadius,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      right: screenWidth10p * 0,
-                      bottom: screenHeight10p * .2,
-                      child: SvgPicture.asset(
-                        "assets/main_menu/grocery_shoppinglist_bg.svg",
-                        width: screenWidth * 1.3,
+                  height: screenHeight * .35,
+                  width: screenWidth * 1,
+                  child: ClipRRect(
+                    borderRadius: _borderRadius,
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+//                      right: screenWidth10p * 0,
+//                      bottom: screenHeight10p * .2,
+                          child: SvgPicture.asset(
+                            "assets/main_menu/grocery_shoppinglist_bg.svg",
+                            width: screenWidth * 1.3,
+                            fit: BoxFit.cover,
 
 //                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Container(
-                      height: double.infinity,
-                      width: double.infinity,
-                      color: Colors.black.withOpacity(.1),
-                    ),
-                    Positioned(
-                      bottom: screenHeight10p * 3,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth10p * 3,
-                            vertical: screenHeight10p),
-                        child: Text(
-                          "Groceries",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: screenWidth10p * 4,
-                            fontWeight: FontWeight.w700,
-                            decoration: TextDecoration.none,
-                            fontFamily: "Montserrat",
                           ),
                         ),
-                      ),
+                        Container(
+                          height: double.infinity,
+                          width: double.infinity,
+                          color: Colors.black.withOpacity(.1),
+                        ),
+                        Positioned(
+                          bottom: screenHeight10p * 3,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: screenWidth10p * 3,
+                                vertical: screenHeight10p),
+                            child: Text(
+                              "Groceries",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: screenWidth10p * 4,
+                                fontWeight: FontWeight.w700,
+                                decoration: TextDecoration.none,
+                                fontFamily: "Montserrat",
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            ),
+                  ),
+                ),)
           ),
           SizedBox(
             height: screenHeight10p * 3,
           ),
-          Container(
-            margin: EdgeInsets.only(top: topBottomMargin, left: 10, right: 10),
+          SlideTransition(
+            position: _clothingSlide,
+            child:
+            Container(
+              margin: EdgeInsets.only(
+                  top: topBottomMargin, left: 10, right: 10),
 //            color: kHomeBg,
-            height: screenHeight * .25,
-            width: screenWidth,
+              height: screenHeight * .25,
+              width: screenWidth,
 //            decoration: BoxDecoration(
 //                borderRadius: _borderRadius,
 //                image: DecorationImage(
@@ -199,76 +365,115 @@ class _MainMenuState extends State<MainMenu> {
 //                        Alignment.topLeft, Alignment.bottomLeft, .1),)
 
 //              ),
-            child: ClipRRect(
-              borderRadius: _borderRadius,
-              child: GestureDetector(
-                onTap: () {
-                  Provider.of<FoschiniAllProductList>(context, listen: false)
-                      .getItems();
-                  Provider.of<MarkhamAllProductList>(context, listen: false)
-                      .getItems();
-                  Provider.of<SportsceneAllProductList>(context, listen: false)
-                      .getItems();
-                  Provider.of<SuperbalistAllProductList>(context, listen: false)
-                      .getItems();
-                  Provider.of<WoolworthsClothingAllProductList>(context,
+              child: ClipRRect(
+                borderRadius: _borderRadius,
+                child: GestureDetector(
+                  onTap: () async {
+                    if (await TestConnection.checkForConnection()) {
+                      if (Provider
+                          .of<FoschiniAllProductList>(context, listen: false)
+                          .data == null) {
+                        Provider.of<FoschiniAllProductList>(
+                            context, listen: false)
+                            .getItems();
+                      }
+
+
+                      if (Provider
+                          .of<MarkhamAllProductList>(context, listen: false)
+                          .data == null) {
+                        Provider.of<MarkhamAllProductList>(
+                            context, listen: false)
+                            .getItems();
+                      }
+
+
+                      if (Provider
+                          .of<SportsceneAllProductList>(context, listen: false)
+                          .data == null) {
+                        Provider.of<SportsceneAllProductList>(
+                            context, listen: false)
+                            .getItems();
+                      }
+
+
+                      if (Provider
+                          .of<SuperbalistAllProductList>(context, listen: false)
+                          .data == null) {
+                        Provider.of<SuperbalistAllProductList>(
+                            context, listen: false)
+                            .getItems();
+                      }
+
+
+                      if (Provider
+                          .of<WoolworthsClothingAllProductList>(context,
                           listen: false)
-                      .getItems();
-                  Navigator.pushNamed(context, ClothingHome.id);
+                          .data == null) {
+                        Provider.of<WoolworthsClothingAllProductList>(context,
+                            listen: false)
+                            .getItems();
+                      }
+                    }
+                    else {
+                      TestConnection.showNoNetworkDialog(context);
+                    }
 
-                  print("clothing");
-                },
-                child: Stack(
-                  children: [
-//Image.asset("assets/images/atikh.jpg",fit: BoxFit.fill,width: screenHeight*.5),
-                    Positioned(
-//                  bottom: screenHeight10p * 0,
-//                  right: screenWidth10p * 0,
-                      child: SvgPicture.asset(
-                        "assets/main_menu/clothing_bg.svg",
-                        width: screenWidth * 4,
+                    Navigator.pushNamed(context, ClothingHome.id);
 
-                        fit: BoxFit.cover,
-// color: Colors.black.withOpacity(.2),
+                    print("clothing");
+                  },
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
 
-//                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Container(
-                      height: double.infinity,
-                      width: double.infinity,
-                      color: Colors.black.withOpacity(.1),
-                    ),
-                    Positioned(
-                      bottom: screenHeight10p * 3,
-                      right: screenWidth10p * 2,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth10p * 3,
+                        child: SvgPicture.asset(
+                          "assets/main_menu/clothing_bg.svg",
+                          width: screenWidth * 4,
+
+                          fit: BoxFit.cover,
+
                         ),
-                        child: Text(
-                          "Clothing",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: screenWidth10p * 3.5,
-                            fontWeight: FontWeight.w700,
-                            decoration: TextDecoration.none,
-                            fontFamily: "Montserrat",
+                      ),
+                      Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        color: Colors.black.withOpacity(.1),
+                      ),
+                      Positioned(
+                        bottom: screenHeight10p * 3,
+                        right: screenWidth10p * 2,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth10p * 3,
+                          ),
+                          child: Text(
+                            "Clothing",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: screenWidth10p * 3.5,
+                              fontWeight: FontWeight.w700,
+                              decoration: TextDecoration.none,
+                              fontFamily: "Montserrat",
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ),
+            ),),
+
           _extraSpace,
           SizedBox(
             height: topBottomMargin - 10,
           ),
+
+
           Container(
             width: screenWidth,
+            margin: EdgeInsets.only(right: screenWidth10p * 1),
             height: screenHeight * .33,
             child: Row(
               children: [
@@ -281,112 +486,163 @@ class _MainMenuState extends State<MainMenu> {
                         Flexible(
                           flex: 5,
                           child: GestureDetector(
-                            onTap: () =>
-                                Navigator.pushNamed(context, ShoppingList.id),
-                            child: Container(
-                                width: double.infinity,
-                                margin:
-                                    EdgeInsets.only(bottom: topBottomMargin),
-                                decoration: BoxDecoration(
+                            onTap: () async {
+//                                 if(await TestConnection.checkForConnection() )  {
+//
+//
+//                                   Provider.of<WooliesAllProductList>(context, listen: false)
+//                                       .getItems();
+//                                   Provider.of<PnPAllProductList>(context, listen: false).getItems();
+//                                   Provider.of<ShopriteAllProductList>(context, listen: false)
+//                                       .getItems();
+                              Navigator.pushNamed(context, ShoppingList.id);
+//                                 }else{
+//                                   TestConnection.showNoNetworkDialog(context);
+//                                 }
+                            },
+                            child:
+                            Transform.scale(
+                              scale: _shoppingListPop.value,
+                              child:
+                              LayoutBuilder(
+                                builder: (_, constraints) {
+                                  final headerStyle = TextStyle(
+                                      color: Colors.white,
+                                      fontSize: constraints.maxWidth * .08,
+                                      decoration: TextDecoration.none);
+
+
+                                  return Container(
+                                      width: double.infinity,
+                                      margin:
+                                      EdgeInsets.only(bottom: topBottomMargin),
+                                      decoration: BoxDecoration(
 //                                    color: Colors.blue,
-                                    gradient: LinearGradient(
-                                      colors: [Colors.blue, Colors.lightBlue],
-                                    ),
-                                    borderRadius: _borderRadiusSmaller),
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      flex: 4,
-                                      child: Container(
-                                        margin: EdgeInsets.symmetric(
-                                            vertical: screenHeight10p * 2),
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Colors.blue,
+                                              Colors.lightBlue
+                                            ],
+                                          ),
+                                          borderRadius: _borderRadiusSmaller),
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                            flex: 4,
+                                            child: Container(
+                                              margin: EdgeInsets.symmetric(
+                                                  vertical: screenHeight10p *
+                                                      2),
 //                                    padding: EdgeInsets.all(screenWidth10p*.7),
-                                        decoration: BoxDecoration(
+                                              decoration: BoxDecoration(
 
 //                                        color: Colors.white.withOpacity(.1),
 //                                        borderRadius: _borderRadiusSmaller
-                                        ),
+                                              ),
 
+                                              child: Icon(
+                                                Icons.shopping_cart,
+                                                color: Colors.white,
+                                                size: constraints.maxWidth *
+                                                    .19,
+                                              ),
+                                            ),
+                                          ),
 
-                                        child: Icon(
-                                          Icons.shopping_cart,
-                                          color: Colors.white,
-                                          size: screenWidth10p * 3.3,
-                                        ),
-                                      ),
-                                    ),
+                                          Flexible(
+                                            flex: 1,
+                                            child: SizedBox(
+                                              height: constraints.maxHeight *
+                                                  .1,
+                                            ),),
+                                          Flexible(
+                                            flex: 2,
+                                            child: Text(
+                                              "Groceries",
+                                              style: headerStyle,
+                                            ),
+                                          ),
+                                          Flexible(
+                                            flex: 2,
+                                            child: Text(
+                                              "Shopping List",
+                                              style: headerStyle,
+                                            ),
+                                          )
+                                        ],
+                                      ));
+                                },
 
-                                    Flexible(
-                                        flex: 2,
-                                        child: SizedBox(
-                                          height: screenHeight10p * 1.7,
-                                        )),
-                                    Expanded(
-                                      flex: 4,
-                                      child: Text(
-                                        "Shopping List",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: screenWidth10p * 1.6,
-                                            decoration: TextDecoration.none),
-                                      ),
-                                    )
-                                  ],
-                                )),
+                              ),),
                           ),
                         ),
                         Expanded(
                           flex: 3,
                           child: GestureDetector(
-                            onTap: () {
-                              showAboutDialog(
-                                context: context,
-                                applicationIcon: FlutterLogo(),
-                                applicationName: 'Savvy Shopper',
-                                applicationVersion: 'January 2021',
-                                applicationLegalese: '\u{a9} 2021 Takuonline',
-                                children: aboutBoxChildren,
-                              );
-                            },
-                            child: Container(
+                              onTap: () {
+                                showAboutDialog(
+                                  context: context,
+                                  applicationIcon: Center(
+                                    child: SvgPicture.asset(
+                                      "assets/logo_bg.svg",
+                                      width: screenWidth * .09,
+                                      fit: BoxFit.cover,
+
+                                    ),
+                                  ),
+                                  applicationName: 'Savvy Shopper',
+                                  applicationVersion: 'January 2021',
+                                  applicationLegalese: '\u{a9} 2021 Takuonline',
+                                  children: aboutBoxChildren,
+                                );
+                              },
+                              child:
+
+                              Transform.scale(
+                                scale: _aboutPop.value,
+                                child:
+                                Container(
 //                            height:30,
 //                            margin: EdgeInsets.symmetric(vertical: 10),
-                              padding: EdgeInsets.only(
-                                  left: screenWidth10p * 2,
-                                  right: screenWidth10p * 2,
-                                  top: topBottomMargin,
-                                  bottom: screenHeight10p * 2),
-                              decoration: BoxDecoration(
+                                  padding: EdgeInsets.only(
+                                      left: screenWidth10p * 2,
+                                      right: screenWidth10p * 2,
+                                      top: topBottomMargin,
+                                      bottom: screenHeight10p * 2),
+                                  decoration: BoxDecoration(
 //                                  color:Colors.blue,
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Colors.blue,
-                                      Colors.lightBlue
-                                    ],
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Colors.blue,
+                                          Colors.lightBlue
+                                        ],
 
+                                      ),
+                                      borderRadius: _borderRadiusSmaller),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.info,
+                                        color: Colors.white,
+                                        size: screenWidth10p * 3,
+                                      ),
+                                      Flexible(
+                                        child: SizedBox(
+                                          width: screenWidth10p,
+                                        ),
+                                      ),
+                                      Text(
+                                        'About',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          decoration: TextDecoration.none,
+                                          fontSize: screenWidth10p * 1.7,
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  borderRadius: _borderRadiusSmaller),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.info,
-                                    color: Colors.white,
-                                    size: screenWidth10p * 3,
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text(
-                                    'About',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      decoration: TextDecoration.none,
-                                      fontSize: screenWidth10p * 1.8,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                                ),)
                           ),
                         )
                       ],
@@ -397,60 +653,66 @@ class _MainMenuState extends State<MainMenu> {
                   width: topBottomMargin - 10,
                 ),
                 Flexible(
-                  child: Container(
+                  child: GestureDetector(
+                      onTap: () => showIsComingDialog(context),
+                      child: Transform.scale(
+                        scale: _accessoriesPop.value,
+                        child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.blue,
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.blue,
+                                    Colors.lightBlue
+                                  ],
 
-                    decoration: BoxDecoration(
-                        color: Colors.blue,
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.blue,
-                            Colors.lightBlue
-                          ],
+                                ),
+                                borderRadius: _borderRadius),
+                            child: Stack(
+                              children: [
+                                Positioned(
 
-                        ),
-                        borderRadius: _borderRadius),
-                    child: Stack(
-                      children: [
-                        Positioned(
+                                  left: screenWidth10p * 4,
+                                  top: screenHeight10p * 2,
+                                  child: Transform.rotate(
+                                    angle: 57,
+                                    child: Container(
 
-                          left: screenWidth10p * 4,
-                          top: screenHeight10p * 2,
-                          child: Transform.rotate(
-                            angle: 57,
-                            child: Container(
-
-                              child: SvgPicture.asset(
-                                "assets/headphone_bg.svg",
-                                width: screenWidth * .27,
+                                      child: SvgPicture.asset(
+                                        "assets/headphone_bg.svg",
+                                        width: screenWidth * .27,
 
 
 //                        fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
 
-                        Positioned(
-                          bottom: 0,
-                          child: Container(
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  left: 0,
+                                  child: Container(
 
 //                          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 25),
-                            child: FittedBox(
-                              child: Text(
-                                "Pc Accessories",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: screenWidth10p * 2,
-                                    decoration: TextDecoration.none),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 25),
+                                    child: FittedBox(
+                                      child: Text(
+                                        "Accessories",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: screenWidth10p * 1.5,
+                                            decoration: TextDecoration.none),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                        ),)
                   ),
                 ),
               ],
@@ -463,4 +725,25 @@ class _MainMenuState extends State<MainMenu> {
       ),
     );
   }
+
+
+  Future<void> showIsComingDialog(BuildContext context) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            child: Center(child: Text('Coming soon...',
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.white,
+                  decoration: TextDecoration.none,
+
+                )
+
+            )),
+          );
+        });
+  }
+
+
 }

@@ -2,15 +2,252 @@ import 'dart:convert';
 
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
+import 'package:e_grocery/src/networking/pnp_data.dart';
+import 'package:e_grocery/src/networking/shoprite_data.dart';
+import 'package:e_grocery/src/networking/woolies_data.dart';
 import 'package:e_grocery/src/pages/clothing/foschini_product_graph.dart';
 import 'package:e_grocery/src/pages/clothing/woolworths_clothing_product_graph.dart';
+import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
+import 'package:e_grocery/src/providers/pnp_product_provider.dart';
+import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
+import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
+import 'package:e_grocery/src/providers/woolies_product_name_provider.dart';
+import 'package:e_grocery/src/providers/woolies_product_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:string_similarity/string_similarity.dart';
 
-class ProductData {
-  DateTime time;
-  double price;
+class GraphGetRecommendation {
+  static Future<Map> getRecommendations(
+      BuildContext context,
 
-  ProductData(this.time, this.price);
+// List<String>  finalPnPProducts ,
+//      List finalPnPProductItems ,
+//      List<String> finalShopriteProducts ,
+//      List finalShopriteProductItems ,
+//      List<String> finalWooliesProducts ,
+//      List finalWooliesProductItems ,
+      String productTitle) async {
+//    finalPnPProductItems = [];
+//    finalPnPProducts = [];
+//
+//    finalWooliesProducts = [];
+//    finalWooliesProductItems = [];
+//
+//    finalShopriteProducts = [];
+//    finalShopriteProductItems = [];
+
+    var dataPnP = Provider.of<PnPAllProductList>(context, listen: false).data;
+    Provider.of<PnPProductNameList>(context, listen: false)
+        .getProductNameList(dataPnP, context);
+    List<String> pnpList =
+        Provider.of<PnPProductNameList>(context, listen: false).titles;
+
+    var dataShoprite =
+        Provider.of<ShopriteAllProductList>(context, listen: false).data;
+    Provider.of<ShopriteProductNameList>(context, listen: false)
+        .getProductNameList(dataShoprite, context);
+    List<String> shopriteList =
+        Provider.of<ShopriteProductNameList>(context, listen: false).titles;
+
+    var dataWoolies =
+        Provider.of<WooliesAllProductList>(context, listen: false).data;
+    Provider.of<WooliesProductNameList>(context, listen: false)
+        .getProductNameList(dataWoolies, context);
+    List<String> wooliesList =
+        Provider.of<WooliesProductNameList>(context, listen: false).titles;
+
+/////////
+
+//    var dataWoolies =
+//        Provider.of<WooliesAllProductList>(context, listen: false).data;
+//    List<String> wooliesList = Provider.of<PnPProductNameList>(
+//        context, listen: false).getProductNameList(
+//        data['woolies'], context);
+//    List<String> shopriteList = Provider.of<AllGroceryStoresData>(
+//        context, listen: false).getStoreProductNameList(
+//        data['shoprite'], context);
+
+    try {
+      ////////////////////////////// shoprite  ////////////////////////////////
+//      runBestMatch(shopriteList, finalShopriteProducts, 3, widget.productItem.title);
+//      ShopriteData _pnpNetworkData = ShopriteData();
+//
+//      for (String i in finalShopriteProducts) {
+//        ProductItem result = await RecommendationDataGetProduct.getProduct(
+//            i, context, _pnpNetworkData);
+//        setState(() {
+//          finalShopriteProductItems.add(result);
+//        });
+//      }
+
+      Future<List<ProductItem>> resultShoprite = runBestMatchHelper(
+        shopriteList,
+        3,
+        ShopriteData(),
+        context,
+        productTitle,
+      );
+
+      ////////////////////////////// pnp  ////////////////////////////////
+
+//      runBestMatch(pnpList, finalPnPProducts, 3, widget.productItem.title);
+//      PnPData _pnpNetworkData = PnPData();
+//
+//      for (String i in finalPnPProducts) {
+//        ProductItem result = await RecommendationDataGetProduct.getProduct(
+//            i, context, _pnpNetworkData);
+//        setState(() {
+//          finalPnPProductItems.add(result);
+//        });
+//      }
+//      print(finalPnPProductItems);
+//      setState(() {});
+
+      Future<List<ProductItem>> resultPnP = runBestMatchHelper(
+        pnpList,
+        3,
+        PnPData(),
+        context,
+        productTitle,
+      );
+
+      ////////////////////////////// woolies  ////////////////////////////////
+
+//      runBestMatch(
+//          wooliesList, finalWooliesProducts, 3, widget.productItem.title);
+//      WooliesData _wooliesNetworkData = WooliesData();
+//
+//      for (String i in finalWooliesProducts) {
+//        WooliesProductItem resultWoolies = await RecommendationDataGetProduct
+//            .getProductNoImage(i, context, _wooliesNetworkData);
+//        setState(() {
+//          finalWooliesProductItems.add(resultWoolies);
+//        });
+//      }
+//      print(finalWooliesProductItems);
+//      setState(() {});
+
+      Future<List<WooliesProductItem>> resultWoolies =
+          runBestMatchHelperNoImage(
+              wooliesList, 3, WooliesData(), context, productTitle);
+
+//
+//    } on NoSuchMethodError {
+//      setState(() {
+//        _isLoadingRecommendations = false;
+//      });
+//      print("noooooooooooo such  methoddddddddddddddddd in get recommendations ");
+//
+//    } catch (e) {
+//      print(e);
+//      setState(() => _isLoadingRecommendations = false);
+
+      return {
+        "shoprite": resultShoprite,
+        "pnp": resultPnP,
+        "woolies": resultWoolies,
+      };
+    } catch (e) {
+      print(e);
+    }
+  }
+
+//  static  Future<List<ProductItem>> runAll(
+//      List<String> listOfProducts,
+//      int num,
+//      networkData,
+//      BuildContext context,
+//     String productTitle)async{
+//
+//  return await runBestMatchHelper(
+//        listOfProducts,
+//        num,
+//        networkData,
+//        context,
+//        productTitle);
+//
+//  }
+
+//  static Future<List<WooliesProductItem>> runAllNoImage(
+//      List<String> listOfProducts,
+//      int num,
+//      networkData,
+//      BuildContext context,
+//      String productTitle)async{
+//
+//    return await runBestMatchHelperNoImage(
+//        listOfProducts,
+//        num,
+//        networkData,
+//        context,
+//        productTitle);
+//
+//  }
+
+  static Future<List<ProductItem>> runBestMatchHelper(
+      List<String> listOfProducts,
+      int num,
+      networkData,
+      context,
+      productTitle) async {
+    List<ProductItem> finalStoreProductItems = [];
+    List<String> bestMatchResults =
+        runBestMatch(listOfProducts, num, productTitle);
+
+    try {
+      for (String i in bestMatchResults) {
+        ProductItem result = await RecommendationDataGetProduct.getProduct(
+            i, context, networkData);
+        finalStoreProductItems.add(result);
+      }
+      return finalStoreProductItems;
+    } catch (e) {
+      print(e);
+      print(
+          "error above is in run best mathcer $networkData ---  ${listOfProducts.length}   ");
+      return finalStoreProductItems;
+    }
+  }
+
+  static Future<List<WooliesProductItem>> runBestMatchHelperNoImage(
+      List<String> listOfProducts,
+      int num,
+      networkData,
+      context,
+      productTitle) async {
+    List<WooliesProductItem> finalStoreProductItems = [];
+    List<String> bestMatchResults =
+        runBestMatch(listOfProducts, num, productTitle);
+
+    try {
+      for (String i in bestMatchResults) {
+        WooliesProductItem result =
+            await RecommendationDataGetProduct.getProductNoImage(
+                i, context, networkData);
+        finalStoreProductItems.add(result);
+      }
+
+      return finalStoreProductItems;
+    } catch (e) {
+      print(e);
+      print('above error found in run best match no image');
+      return finalStoreProductItems;
+    }
+  }
+
+  static List<String> runBestMatch(
+      List<String> storeList, int num, String title) {
+    List<String> resultsList = [];
+
+    for (int i = 0; i < num; i++) {
+      BestMatch results = title.bestMatch(storeList);
+      resultsList.add((results.bestMatch.target));
+      storeList.removeAt(results.bestMatchIndex);
+    }
+
+    return resultsList;
+  }
 }
 
 class RecommendationListViewBuilderNoImage extends StatelessWidget {
@@ -69,8 +306,6 @@ class RecommendationListViewBuilder extends StatelessWidget {
 
   final List finalStoreProductItems;
   final String _nullImageUrl;
-
-//  final graphPage;
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +381,7 @@ class RecommendationDataGetProduct {
 //          ),
 //        );
       } else {
-        await TestConnection.showNetworkDialog(context);
+        await TestConnection.showNoNetworkDialog(context);
       }
     }
   }
@@ -190,7 +425,7 @@ class RecommendationDataGetProduct {
 //          ),
 //        );
       } else {
-        await TestConnection.showNetworkDialog(context);
+        await TestConnection.showNoNetworkDialog(context);
       }
     }
   }
@@ -546,4 +781,12 @@ class RecommendationStoreName extends StatelessWidget {
       ),
     );
   }
+}
+
+
+class ProductData {
+  DateTime time;
+  double price;
+
+  ProductData(this.time, this.price);
 }

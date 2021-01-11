@@ -4,7 +4,9 @@ import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/networking/pnp_data.dart';
 import 'package:e_grocery/src/networking/shoprite_data.dart';
 import 'package:e_grocery/src/networking/woolies_data.dart';
+import 'package:e_grocery/src/providers/pnp_product_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AllGroceryStoresData with ChangeNotifier {
   dynamic _dataShoprite;
@@ -18,17 +20,19 @@ class AllGroceryStoresData with ChangeNotifier {
 
   Future<void> getAllStoresData() async {
     if (await TestConnection.checkForConnection()) {
-      ShopriteData _shopriteData = ShopriteData();
-      dynamic dataShoprite = await _shopriteData.getData();
-      _dataShoprite = dataShoprite;
-
-      PnPData _pnpData = PnPData();
-      dynamic dataPnP = await _pnpData.getData();
-      _dataPnP = dataPnP;
-
-      WooliesData _wooliesData = WooliesData();
-      dynamic dataWoolies = await _wooliesData.getData();
-      _dataWoolies = dataWoolies;
+//      ShopriteData _shopriteData = ShopriteData();
+//      dynamic dataShoprite = await _shopriteData.getData();
+//      Provider.of<PnPAllProductList>( context, listen: false).addData(_dataShoprite);
+//      _dataShoprite = dataShoprite;
+//
+//      PnPData _pnpData = PnPData();
+//      dynamic dataPnP = await _pnpData.getData();
+//      Provider.of<PnPAllProductList>( context, listen: false).addData(_dataShoprite);
+//      _dataPnP = dataPnP;
+//
+//      WooliesData _wooliesData = WooliesData();
+//      dynamic dataWoolies = await _wooliesData.getData();
+//      _dataWoolies = dataWoolies;
     }
     notifyListeners();
   }

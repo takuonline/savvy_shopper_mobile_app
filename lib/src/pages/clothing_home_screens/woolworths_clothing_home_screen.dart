@@ -324,7 +324,8 @@ class _WoolworthsClothingHomeScreenState
                                     ));
                                 print(result);
                               } else {
-                                await TestConnection.showNetworkDialog(context);
+                                await TestConnection.showNoNetworkDialog(
+                                    context);
                               }
                             },
                             child: Container(

@@ -11,10 +11,8 @@ class WooliesAllProductList with ChangeNotifier {
     return _data;
   }
 
-
-  Future<void> getItems () async {
-    if(await TestConnection.checkForConnection()){
-
+  Future<void> getItems() async {
+    if (await TestConnection.checkForConnection()) {
       WooliesData _wooliesdata = WooliesData();
       dynamic data = await _wooliesdata.getData();
 
@@ -23,6 +21,9 @@ class WooliesAllProductList with ChangeNotifier {
     }
   }
 
+  void addData(dynamic value) {
+    value == null ? print("values is null : $value") : _data = value;
+  }
 }
 
 

@@ -107,7 +107,7 @@ class FoschiniGroupProductSearch extends SearchDelegate {
                       getProduct(results[index], context, networkData);
                     } on SocketException {
                       print(" error, not connected to the internet");
-                      TestConnection.showNetworkDialog(context);
+                      TestConnection.showNoNetworkDialog(context);
                     } on NoSuchMethodError {
                       print("is no such methodddddd");
                       TestConnection.showOtherErrorDialog(context);
@@ -159,7 +159,7 @@ class FoschiniGroupProductSearch extends SearchDelegate {
           ),
         );
       } else {
-        await TestConnection.showNetworkDialog(context);
+        await TestConnection.showNoNetworkDialog(context);
       }
     } else {
       close(context, result);

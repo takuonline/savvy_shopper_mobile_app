@@ -34,8 +34,9 @@ class FoschiniData {
     };
     try {
       print("getting single product data.......foschini...............");
-      http.Response response = await http
-          .get('$url/foschini-get-product-data/$title', headers: headers);
+      http.Response response = await http.get(
+          '$url/foschini-get-product-data/${title.replaceAll("/", "@forwardslash@")}',
+          headers: headers);
 
       String data = response.body;
 

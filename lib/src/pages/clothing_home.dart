@@ -118,11 +118,8 @@ class _ClothingHomeState extends State<ClothingHome>
   }
 
   Future<void> _whenCardIsClicked() async {
-    _aController.reverse();
-    await Future.delayed(
-      Duration(milliseconds: 3000),
-    );
-    _aController.animateTo(1, duration: Duration(milliseconds: 500));
+     _aController.reverse();
+    await Future.delayed(Duration(milliseconds: 2500));
   }
 
   @override
@@ -467,9 +464,18 @@ class _ClothingHomeState extends State<ClothingHome>
                       ),
                     ),
                     Positioned.fill(
-                        child: Container(
-                      color: Colors.black.withOpacity(.5),
-                    )),
+                      child: Container(
+//                      color: Colors.black.withOpacity(.5),
+                          decoration: BoxDecoration(
+                            gradient: RadialGradient(
+                              radius: .8,
+                              colors: [
+                                Colors.transparent,
+                                Colors.black.withOpacity(.3),
+                              ],
+                            ),)
+                      ),
+                    ),
                     Positioned(
                       bottom: screenHeight10p * 1,
                       child: FadeTransition(
@@ -519,6 +525,9 @@ class _ClothingHomeState extends State<ClothingHome>
                           builder: (context) => WelcomeScreen(_item),
                         ),
                       );
+                      _aController.animateTo(
+                          1, duration: Duration(milliseconds: 4000),
+                          curve: Curves.easeIn);
                     },
                     child: Padding(
                       padding: cardPadding,
@@ -590,13 +599,15 @@ class _ClothingHomeState extends State<ClothingHome>
 
                       final _item = welcomeScreenItems['sportscene'];
                       await _whenCardIsClicked();
-
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => WelcomeScreen(_item),
                         ),
                       );
+                      _aController.animateTo(
+                          1, duration: Duration(milliseconds: 4000),
+                          curve: Curves.easeIn);
                     },
                     child: Padding(
                       padding: cardPadding,
@@ -665,12 +676,17 @@ class _ClothingHomeState extends State<ClothingHome>
 
                       final _item = welcomeScreenItems['markham'];
                       await _whenCardIsClicked();
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => WelcomeScreen(_item),
                         ),
                       );
+
+                      _aController.animateTo(
+                          1, duration: Duration(milliseconds: 4000),
+                          curve: Curves.easeIn);
                     },
                     child: Padding(
                       padding: cardPadding,
@@ -740,12 +756,16 @@ class _ClothingHomeState extends State<ClothingHome>
 
                       final _item = welcomeScreenItems['superbalist'];
                       await _whenCardIsClicked();
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => WelcomeScreen(_item),
                         ),
                       );
+                      _aController.animateTo(
+                          1, duration: Duration(milliseconds: 4000),
+                          curve: Curves.easeIn);
                     },
                     child: Padding(
                       padding: cardPadding,
@@ -824,6 +844,9 @@ class _ClothingHomeState extends State<ClothingHome>
                           builder: (context) => WelcomeScreen(_item),
                         ),
                       );
+                      _aController.animateTo(
+                          1, duration: Duration(milliseconds: 4000),
+                          curve: Curves.easeIn);
                     },
                     child: Padding(
                       padding: cardPadding,

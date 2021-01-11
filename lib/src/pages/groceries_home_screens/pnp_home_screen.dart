@@ -83,20 +83,20 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
 
     if (await TestConnection.checkForConnection()){
 
-      await Future.delayed(Duration(seconds: 15));
-      if (Provider.of<PnPAllProductList>(context,listen: false).data == null){
+      await Future.delayed(Duration(seconds: 7));
+      if (Provider.of<PnPAllProductList>(context, listen: false).data == null) {
         setState(() {
           _isLoading = true;
         });
-        await Provider.of<PnPAllProductList>(context,listen:false).getItems();
+
+        await Provider.of<PnPAllProductList>(context, listen: false).getItems();
+
         setState(() {
           _isLoading = false;
         });
       }
     }else{
-
-//      TestConnection.showNetworkDialog(context);
-      await  _showNetworkDialog( context);
+      await _showNetworkDialog(context);
     }
   }
 
@@ -321,7 +321,8 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
                                     context: context, delegate: ProductSearch());
                                 print(result);
                               } else{
-                                await TestConnection.showNetworkDialog(context);
+                                await TestConnection.showNoNetworkDialog(
+                                    context);
                               }
 
                             },

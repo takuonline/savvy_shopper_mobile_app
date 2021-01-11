@@ -15,22 +15,20 @@ class TestConnection {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-
         isConnected = true;
-         print('connected');
+        print('connected');
       }
-    } on SocketException catch (_) {
-
+    } on SocketException {
       isConnected = false;
       print('not connected');
+    } catch (_) {
+      print('error conencting -- other error than network');
     }
 
-
     return isConnected;
-
-
   }
-  static Future<void> showNetworkDialog(BuildContext context) async {
+
+  static Future<void> showNoNetworkDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,

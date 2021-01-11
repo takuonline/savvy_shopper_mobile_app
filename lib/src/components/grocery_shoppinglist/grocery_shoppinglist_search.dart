@@ -9,9 +9,8 @@ import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/networking/pnp_data.dart';
 import 'package:e_grocery/src/networking/shoprite_data.dart';
 import 'package:e_grocery/src/networking/woolies_data.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/pnp_product_graph.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/shoprite_product_graph.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/woolies_product_graph.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
 import 'package:e_grocery/src/providers/grocery_shopping_list.dart';
 import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
@@ -75,6 +74,7 @@ class GroceryShoppingListSearch
       child: IconButton(
         icon: Icon(Icons.arrow_back),
         onPressed: () {
+
           close(context, _resultsList);
         },
       ),
@@ -91,8 +91,13 @@ class GroceryShoppingListSearch
     close(context, _resultsList);
   }
 
+
   @override
   Widget buildSuggestions(BuildContext context) {
+    bool onWillPop() {
+      close(context, _resultsList);
+      return false;
+    }
     List <StoreAndTitle> _combinedList = getCombinedList(context);
 
 
@@ -106,60 +111,90 @@ class GroceryShoppingListSearch
         .toList();
 
 
+//    someObjects.sort((a, b) => a.someProperty.compareTo(b.someProperty));
+//    BestMatch bestMatches = query.bestMatch(_combinedList.map((e) => e.title).toList());
+//
+//    bestMatches.ratings.sort((a,b)=> a.rating.toString().compareTo(b.rating.toString()));
+//
+//
+//    final results = bestMatches.ratings.getRange(0, 50).toList();
+
+
     return query == ''
         ? Container()
         : StatefulBuilder(
 
       builder: (BuildContext context, StateSetter setState) {
-        return ListView.builder(
-          itemCount: results == null ? 0 : results.length,
-          itemBuilder: (context, index) =>
-              ListTile(
-                onTap: () {
-                  getProduct(results[index], context);
-                },
-                subtitle: Text(results[index].store,
-                    style: TextStyle(color: Colors.black54,
-                      fontFamily: "Montserrat",
-                      fontStyle: FontStyle.italic,
-
-                    )
-
-                ),
-                trailing: GestureDetector(
-                  onTap: () async {
-                    try {
-                      _resultsList.add(
-                          await addToShoppingList(results[index], context));
-                      _showSnackBar(context,
-                          " Added ${results[index].title} to shopping list");
-                    } on NoSuchMethodError {
-                      Navigator.pop(context);
-                      TestConnection.showProductErrorDialog(context);
-                      print("is no such methodddddd");
-                    } on SocketException catch (_) {
-                      Navigator.pop(context);
-                      TestConnection.showNetworkDialog(context);
-                    } catch (error) {
-                      print(error);
-                      Navigator.pop(context);
-                      TestConnection.showProductErrorDialog(context);
-                    }
+        return WillPopScope(
+          onWillPop: () => Future.sync(onWillPop),
+          child: ListView.builder(
+            itemCount: results == null ? 0 : results.length,
+            itemBuilder: (context, index) =>
+                ListTile(
+                  onTap: () {
+                    getProduct(results[index], context);
                   },
-                  child: Text(
-                    "add", style: TextStyle(
-                      color: Colors.red,
-                      fontFamily: "Montserrat",
-                      fontSize: 15
-                  ),
-                  ),
-                ),
-                title: Text(
-                  results[index].title,
-                  style: TextStyle(color: Colors.black87),
-                ),
+                  subtitle: Text(results[index].store,
+                      style: TextStyle(color: Colors.black54,
+                        fontFamily: "Montserrat",
+                        fontStyle: FontStyle.italic,
 
-              ),
+                      )
+
+                  ),
+                  trailing: FlatButton(
+//                    color: ,
+                    onPressed: () async {
+                      try {
+// keeps adding two items to provider.
+
+//                        _resultsList.add(await addToShoppingList(results[index], context));
+
+                        Provider
+                            .of<GroceryShoppingList>(context,
+                            listen: false).addToGroceryShoppingList(
+                            await addToShoppingList(results[index], context));
+
+                        print(
+                            Provider
+                                .of<GroceryShoppingList>(context,
+                                listen: false)
+                                .items
+                                .length
+                        );
+
+
+//                        _resultsList.add();
+                        _showSnackBar(context,
+                            " Added ${results[index].title} to shopping list");
+                      } on NoSuchMethodError {
+                        Navigator.pop(context);
+                        TestConnection.showProductErrorDialog(context);
+                        print("is no such methodddddd");
+                      } on SocketException catch (_) {
+                        Navigator.pop(context);
+                        TestConnection.showNoNetworkDialog(context);
+                      } catch (error) {
+                        print(error);
+                        Navigator.pop(context);
+                        TestConnection.showProductErrorDialog(context);
+                      }
+                    },
+                    child: Text(
+                      "add", style: TextStyle(
+                        color: Colors.red,
+                        fontFamily: "Montserrat",
+                        fontSize: 15
+                    ),
+                    ),
+                  ),
+                  title: Text(
+                    results[index].title,
+                    style: TextStyle(color: Colors.black87),
+                  ),
+
+                ),
+          ),
         );
       },
     )
@@ -171,16 +206,19 @@ class GroceryShoppingListSearch
     var _shopriteProviderData = Provider.of<ShopriteProductNameList>(context);
     var _wooliesProviderData = Provider.of<WooliesProductNameList>(context);
 
-
-    List<StoreAndTitle> _pnpTitles = _pnpProviderData.items.map((e) =>
+    List<StoreAndTitle> _pnpTitles = _pnpProviderData.titles.map((e) =>
         StoreAndTitle("Pick n Pay", e)).toList();
-    List<StoreAndTitle> _shopriteTitles = _shopriteProviderData.items.map((e) =>
+    List<StoreAndTitle> _shopriteTitles = _shopriteProviderData.titles.map((
+        e) =>
         StoreAndTitle("Shoprite", e)).toList();
-    List<StoreAndTitle> _wooliesTitles = _wooliesProviderData.items.map((e) =>
+    List<StoreAndTitle> _wooliesTitles = _wooliesProviderData.titles.map((e) =>
         StoreAndTitle("Woolworths", e)).toList();
 
+    final shuffledList = (_pnpTitles + _shopriteTitles + _wooliesTitles);
 
-    return _pnpTitles + _shopriteTitles + _wooliesTitles;
+//    shuffledList.shuffle();
+
+    return shuffledList;
   }
 
   void openGraph(BuildContext context, _networkData,
@@ -271,7 +309,7 @@ class GroceryShoppingListSearch
           return openGraphNoImage(context, _networkData, result);
         }
       } else {
-        await TestConnection.showNetworkDialog(context);
+        await TestConnection.showNoNetworkDialog(context);
       }
     } else {
       close(context, _resultsList);
@@ -300,7 +338,7 @@ class GroceryShoppingListSearch
           print(result.store);
         }
       } else {
-        await TestConnection.showNetworkDialog(context);
+        await TestConnection.showNoNetworkDialog(context);
       }
     } else {
       close(context, _resultsList);
@@ -394,16 +432,19 @@ class GroceryShoppingListSearch
 
   void _showSnackBar(BuildContext context, String text) {
     Scaffold.of(context).showSnackBar(new SnackBar(
+      duration: Duration(milliseconds: 2000),
+
       content: new Text(
         text,
         textAlign: TextAlign.center,
         style: TextStyle(
-            color: Colors.black87
+            color: Colors.white
 
 
         ),
       ),
-      backgroundColor: Colors.orange,
+      backgroundColor: kBgPnP,
+
     ));
   }
 

@@ -76,14 +76,14 @@ class ProductSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var _providerData = Provider.of<PnPProductNameList>(context).items;
+    var _providerData = Provider.of<PnPProductNameList>(context).titles;
     final results = _providerData
-                                  .where(
-                                    (product) => product.toLowerCase().contains(
-                                  query.toLowerCase(),
-                                ),
-                              )
-                                  .toList();
+        .where(
+          (product) => product.toLowerCase().contains(
+                query.toLowerCase(),
+              ),
+        )
+        .toList();
 
     return ((query == '')
         ? Container()
@@ -147,7 +147,7 @@ class ProductSearch extends SearchDelegate {
           ),
         );
       } else{
-       await  TestConnection.showNetworkDialog(context);
+        await TestConnection.showNoNetworkDialog(context);
       }
 
 

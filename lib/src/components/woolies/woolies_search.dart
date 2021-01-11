@@ -149,7 +149,7 @@ class WooliesProductSearch extends SearchDelegate {
           ),
         );
       } else{
-       await  TestConnection.showNetworkDialog(context);
+       await TestConnection.showNoNetworkDialog(context);
       }
 
     } else {

@@ -305,7 +305,8 @@ class _MarkhamHomeScreenState extends State<MarkhamHomeScreen>
                                         networkData: _networkData));
                                 print(result);
                               } else {
-                                await TestConnection.showNetworkDialog(context);
+                                await TestConnection.showNoNetworkDialog(
+                                    context);
                               }
                             },
                             child: Container(

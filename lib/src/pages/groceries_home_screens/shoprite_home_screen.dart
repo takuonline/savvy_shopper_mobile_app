@@ -137,8 +137,9 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                                       context: context, delegate: ProductSearch());
                                   print(result);
                                 } else{
-                                 await TestConnection.showNetworkDialog(context);
-                                }
+                                 await TestConnection.showNoNetworkDialog(
+                                    context);
+                              }
 
                               },
                               child: Container(
@@ -345,8 +346,7 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
   void _testShopriteConnection() async{
 
     if (await TestConnection.checkForConnection()){
-
-      await Future.delayed(Duration(seconds: 15));
+      await Future.delayed(Duration(seconds: 7));
       if (Provider
           .of<ShopriteAllProductList>(context, listen: false)
           .data == null) {
@@ -460,8 +460,6 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
           tempDateList,
           i.keys.elementAt(0).toString(),
           i[i.keys.elementAt(0).toString()]['change']);
-
-      ;
 
       _cheap.add(_productItem);
     }
@@ -673,15 +671,17 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                 itemBuilder: (_, index) {
                   return  index==itemList.length-1 ?  Container()   :
                   ( index.isEven ?  GestureDetector(
-                    onTap: () =>
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ShopriteProductGraph(
-                                    productItem: itemList[index]),
-                          ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ShopriteProductGraph(
+                                  productItem: itemList[index]),
                         ),
+                      );
+                    }
+                    ,
                     child: ProductCardRed(
 //                      index: index,
                       shopriteNullImageUrl: _shopriteNullImageUrl,

@@ -34,8 +34,9 @@ class SportsceneData {
     };
     try {
       print("getting single product data.......Sportscene...............");
-      http.Response response = await http
-          .get('$url/sportscene-get-product-data/$title', headers: headers);
+      http.Response response = await http.get(
+          '$url/sportscene-get-product-data/${title.replaceAll("/", "@forwardslash@")}',
+          headers: headers);
 
       String data = response.body;
 

@@ -34,8 +34,9 @@ class SuperbalistData {
     };
     try {
       print("getting single product data.......Superbalist...............");
-      http.Response response = await http
-          .get('$url/superbalist-get-product-data/$title', headers: headers);
+      http.Response response = await http.get(
+          '$url/superbalist-get-product-data/${title.replaceAll("/", "@forwardslash@")}',
+          headers: headers);
 
       String data = response.body;
 

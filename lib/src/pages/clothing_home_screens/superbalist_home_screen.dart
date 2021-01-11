@@ -309,7 +309,8 @@ class _SuperbalistHomeScreenState extends State<SuperbalistHomeScreen>
                                         networkData: _networkData));
                                 print(result);
                               } else {
-                                await TestConnection.showNetworkDialog(context);
+                                await TestConnection.showNoNetworkDialog(
+                                    context);
                               }
                             },
                             child: Container(

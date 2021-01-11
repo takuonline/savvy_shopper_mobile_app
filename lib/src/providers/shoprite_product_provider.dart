@@ -21,10 +21,12 @@ class ShopriteAllProductList with ChangeNotifier {
     }
   }
 
+  void addData(dynamic value) {
+    value == null ? print("values is null : $value") : _data = value;
+  }
+
 //  void addToWishList(String value) {
 //    _items.add(value);
 //    notifyListeners();
 //  }
 }
-
-

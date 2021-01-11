@@ -8,9 +8,6 @@ import 'package:e_grocery/src/networking/clothing/markham_data.dart';
 import 'package:e_grocery/src/networking/clothing/sportscene_data.dart';
 import 'package:e_grocery/src/networking/clothing/superbalist_data.dart';
 import 'package:e_grocery/src/pages/clothing/foschini_product_graph.dart';
-import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
-import 'package:e_grocery/src/pages/groceries_product_graph/shoprite_product_graph.dart';
-import 'package:e_grocery/src/providers/all_grocery_store_data_provider.dart';
 import 'package:e_grocery/src/providers/clothing/foschini/foschini_product_name_provider.dart';
 import 'package:e_grocery/src/providers/clothing/foschini/foschini_product_provider.dart';
 import 'package:e_grocery/src/providers/clothing/markham/markham_product_name_provider.dart';
@@ -26,7 +23,6 @@ import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
 import 'package:string_similarity/string_similarity.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:e_grocery/src/components/graph_page_components.dart';
 
 class WoolworthsClothingProductGraph extends StatefulWidget {
   static const id = "/woolworthsClothingProductGraph";
@@ -57,7 +53,7 @@ class _WoolworthsClothingProductGraphState
   bool _isLoadingRecommendations = false;
 
   final _nullImageUrl =
-      'https://play-lh.googleusercontent.com/Yax2t5F5M_G2C8mE2GbMR40WqFjNeA1_hTp6Cc2jeTCvqWVdwwr31GSmGjyFPOqxmSQ=s180-rw';
+      'https://play-lh.googleusercontent.com/tTcm_kToEtUvXdVGytgjB2Lc-qQiNo5fxcagB7c7MX_UJsO43OFKkeOJOZZiOL1VO6c=s180-rw';
 
   List<ProductData> _getData() {
     List<ProductData> temp = [];
@@ -70,28 +66,83 @@ class _WoolworthsClothingProductGraphState
 
   @override
   void initState() {
-    if (Provider.of<AllGroceryStoresData>(context, listen: false).data ==
-        null) {
-      Provider.of<AllGroceryStoresData>(context, listen: false)
-          .getAllStoresData();
-    }
-
-    getRecommendations();
-
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getRecommendations();
+    });
+  }
+
+  Future<void> _getProductData() async {
+    await Provider.of<FoschiniAllProductList>(context, listen: false)
+        .getItems();
+    await Provider.of<MarkhamAllProductList>(context, listen: false).getItems();
+    await Provider.of<SportsceneAllProductList>(context, listen: false)
+        .getItems();
+    await Provider.of<SuperbalistAllProductList>(context, listen: false)
+        .getItems();
+    await Provider.of<WoolworthsClothingAllProductList>(context, listen: false)
+        .getItems();
+  }
+
+  Future<void> _onRefresh() async {
+    print("is refreshing");
+    setState(() {
+      _isLoadingRecommendations = true;
+    });
+    try {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        getRecommendations();
+      });
+      setState(() {
+        _isLoadingRecommendations = false;
+      });
+    } on NoSuchMethodError {
+      print("noooooooooooo such  methoddddddddddddddddd  ");
+
+      setState(() {
+        _isLoadingRecommendations = true;
+      });
+      _getProductData();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        getRecommendations();
+      });
+      setState(() {
+        _isLoadingRecommendations = false;
+      });
+    } on RangeError {
+      print("range errrrrrrrrrrrrrrrrrrrror ");
+      setState(() {
+        _isLoadingRecommendations = true;
+      });
+
+      _getProductData();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        getRecommendations();
+      });
+
+      setState(() {
+        _isLoadingRecommendations = false;
+      });
+    } catch (e) {
+      print(e);
+    }
+    setState(() {
+      _isLoadingRecommendations = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
     final screenHeight10p =
         screenHeight * (10 / MediaQuery.of(context).size.height);
     final screenWidth10p =
         screenWidth * (10 / MediaQuery.of(context).size.width);
-    ;
-    return Container(
+
+    return RefreshIndicator(
+      onRefresh: () => _onRefresh(),
       child: Scaffold(
         body: Container(
           color: kWooliesSecondary.withOpacity(.3),
@@ -190,10 +241,9 @@ class _WoolworthsClothingProductGraphState
                       crosshairBehavior: CrosshairBehavior(
                         enable: true,
                       ),
-//borderColor: Colors.blue,
+
 
                       palette: [
-//                      Colors.black,
                         kWooliesSecondary
                       ],
                       //set type for x and y axis
@@ -251,15 +301,15 @@ class _WoolworthsClothingProductGraphState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () => Provider.of<AllGroceryStoresData>(context,
-                                listen: false)
-                            .getAllStoresData(),
+                        onLongPress: () {
+                          _getProductData();
+                        },
                         child: MaxMinCard(
 //                        widget: widget,
                           priceValue: widget.productItem.prices
-                                  .map((e) => double.parse(e.toString()))
-                                  .toList()
-                                  .reduce(max) ??
+                              .map((e) => double.parse(e.toString()))
+                              .toList()
+                              .reduce(max) ??
                               0,
                           title: "Max",
                           bgColor: kBgWoolies,
@@ -267,20 +317,17 @@ class _WoolworthsClothingProductGraphState
                           headerColor: Colors.white.withOpacity(.6),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () => getRecommendations(),
-                        child: MaxMinCard(
+                      MaxMinCard(
 //                        widget: widget,
-                          priceValue: widget.productItem.prices
-                                  .map((e) => double.parse(e.toString()))
-                                  .toList()
-                                  .reduce(min) ??
-                              0,
-                          title: "Min",
-                          bgColor: kBgWoolies,
-                          textColor: Colors.white,
-                          headerColor: Colors.white.withOpacity(.6),
-                        ),
+                        priceValue: widget.productItem.prices
+                            .map((e) => double.parse(e.toString()))
+                            .toList()
+                            .reduce(min) ??
+                            0,
+                        title: "Min",
+                        bgColor: kBgWoolies,
+                        textColor: Colors.white,
+                        headerColor: Colors.white.withOpacity(.6),
                       ),
                       MaxMinCard(
 //                        widget: widget,
