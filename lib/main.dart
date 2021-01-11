@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:e_grocery/src/pages/clothing/foschini_product_graph.dart';
 import 'package:e_grocery/src/pages/clothing/woolworths_clothing_product_graph.dart';
 import 'package:e_grocery/src/pages/clothing_home.dart';
@@ -8,12 +9,12 @@ import 'package:e_grocery/src/pages/clothing_home_screens/superbalist_home_scree
 import 'package:e_grocery/src/pages/clothing_home_screens/woolworths_clothing_home_screen.dart';
 import 'package:e_grocery/src/pages/main_menu.dart';
 import 'package:e_grocery/src/pages/groceries_home_screens/pnp_home_screen.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/pnp_product_graph.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
 import 'package:e_grocery/src/pages/shopping_list.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/shoprite_product_graph.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/shoprite_product_graph.dart';
 import 'package:e_grocery/src/pages/groceries_home_screens/woolies_home_screen.dart';
 import 'package:e_grocery/src/providers/all_grocery_store_data_provider.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/woolies_product_graph.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
 import 'package:e_grocery/src/providers/clothing/markham/markham_product_name_provider.dart';
 import 'package:e_grocery/src/providers/clothing/markham/markham_product_provider.dart';
 import 'package:e_grocery/src/providers/clothing/sportscene/sportscene_product_name_provider.dart';
@@ -28,6 +29,7 @@ import 'package:e_grocery/src/providers/got_data_provider.dart';
 import 'package:e_grocery/src/providers/grocery_shopping_list.dart';
 import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
 import 'package:e_grocery/src/providers/pnp_product_provider.dart';
+import 'package:e_grocery/src/providers/shoppinglist_filter.dart';
 import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
 import 'package:e_grocery/src/providers/woolies_product_name_provider.dart';
@@ -42,14 +44,14 @@ void main() => runApp(
 //    SystemChrome.setEnabledSystemUIOverlays ([SystemUiOverlay.top]);
 
 // to hide only status bar:
-//    SystemChrome.setEnabledSystemUIOverlays ([SystemUiOverlay.bottom]);
 
 // to hide both:
 
+//for preview there are two parts---first uncomment here below including the last parentheses
 //  DevicePreview(
 //    enabled: true,
 //    builder: (context) =>
-        MyApp(), // Wrap your app
+  MyApp(), // Wrap your app
 //  ),
 );
 
@@ -64,43 +66,48 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+//    SystemChrome.setEnabledSystemUIOverlays ([SystemUiOverlay.bottom]);
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: GotData())
-        ,
-        ChangeNotifierProvider.value(value: ShopriteProductNameList(),),
-        ChangeNotifierProvider.value(value: ShopriteAllProductList(),),
+        ChangeNotifierProvider(create: (_) => GotData()),
 
-        ChangeNotifierProvider.value(value: PnPAllProductList()),
-        ChangeNotifierProvider.value(value: PnPProductNameList()),
+        ChangeNotifierProvider(
+            create: (_) => ShopriteProductNameList()
+        ),
 
-        ChangeNotifierProvider.value(value: WooliesAllProductList()),
-        ChangeNotifierProvider.value(value: WooliesProductNameList()),
+        ChangeNotifierProvider(create: (_) => ShopriteAllProductList(),),
 
-        ChangeNotifierProvider.value(value: GroceryShoppingList()),
-        ChangeNotifierProvider.value(value: AllGroceryStoresData()),
+        ChangeNotifierProvider(create: (_) => PnPAllProductList()),
+        ChangeNotifierProvider(create: (_) => PnPProductNameList()),
 
+        ChangeNotifierProvider(create: (_) => WooliesAllProductList()),
+        ChangeNotifierProvider(create: (_) => WooliesProductNameList()),
 
-        ChangeNotifierProvider.value(value: FoschiniAllProductList()),
-        ChangeNotifierProvider.value(value: FoschiniProductNameList()),
+        ChangeNotifierProvider(create: (_) => GroceryShoppingList()),
+        ChangeNotifierProvider(create: (_) => AllGroceryStoresData()),
 
-        ChangeNotifierProvider.value(value: SportsceneAllProductList()),
-        ChangeNotifierProvider.value(value: SportsceneProductNameList()),
+        ChangeNotifierProvider(create: (_) => FoschiniAllProductList()),
+        ChangeNotifierProvider(create: (_) => FoschiniProductNameList()),
 
-        ChangeNotifierProvider.value(value: SuperbalistAllProductList()),
-        ChangeNotifierProvider.value(value: SuperbalistProductNameList()),
+        ChangeNotifierProvider(create: (_) => SportsceneAllProductList()),
+        ChangeNotifierProvider(create: (_) => SportsceneProductNameList()),
 
-        ChangeNotifierProvider.value(value: MarkhamAllProductList()),
-        ChangeNotifierProvider.value(value: MarkhamProductNameList()),
+        ChangeNotifierProvider(create: (_) => SuperbalistAllProductList()),
+        ChangeNotifierProvider(create: (_) => SuperbalistProductNameList()),
 
-        ChangeNotifierProvider.value(value: WoolworthsClothingAllProductList()),
-        ChangeNotifierProvider.value(
-            value: WoolworthsClothingProductNameList()),
+        ChangeNotifierProvider(create: (_) => MarkhamAllProductList()),
+        ChangeNotifierProvider(create: (_) => MarkhamProductNameList()),
+
+        ChangeNotifierProvider(
+            create: (_) => WoolworthsClothingAllProductList()),
+        ChangeNotifierProvider(
+            create: (_) => WoolworthsClothingProductNameList()),
+        ChangeNotifierProvider(create: (_) => GroceryShoppingListFilter()),
       ],
       child: MaterialApp(
+//          ---second part here uncomment here
 //        locale: DevicePreview.locale(context), // Add the locale here
 //        builder: DevicePreview.appBuilder,
-//        title: 'Flutter Demo',
         theme: ThemeData(
           bottomSheetTheme: BottomSheetThemeData(
               backgroundColor: Colors.transparent),
@@ -133,15 +140,19 @@ class MyApp extends StatelessWidget {
           WooliesProductGraph.id: (context) => WooliesProductGraph(),
 
           MainMenu.id: (context) => MainMenu(),
+
           ShoppingList.id: (context) => ShoppingList(),
 
           ClothingHome.id: (context) => ClothingHome(),
+
           FoschiniHomeScreen.id: (context) => FoschiniHomeScreen(),
           FoschiniProductGraph.id: (context) => FoschiniProductGraph(),
 
           SportsceneHomeScreen.id: (context) => SportsceneHomeScreen(),
           SuperbalistHomeScreen.id: (context) => SuperbalistHomeScreen(),
+
           MarkhamHomeScreen.id: (context) => MarkhamHomeScreen(),
+
           WoolworthsClothingHomeScreen.id: (context) =>
               WoolworthsClothingHomeScreen(),
           WoolworthsClothingProductGraph.id: (context) =>

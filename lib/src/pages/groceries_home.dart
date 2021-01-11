@@ -338,15 +338,12 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                           decoration: BoxDecoration(
 //                              color: kBgShoprite,
                             gradient: RadialGradient(
-                              radius: .8,
-                              colors: [
-                                Colors.transparent,
-
-                                Colors.black.withOpacity(.3),
-
-                              ],
-
-                            ),
+                              radius: .5,
+                          colors: [
+                            Colors.transparent,
+                            Colors.black.withOpacity(.3),
+                          ],
+                        ),
                           ),
                         )),
                     Positioned(
@@ -416,7 +413,7 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
 
                                         colors: [
                                           kBgShoprite,
-                                          kBgShoprite.withRed(120),
+                                          kBgShoprite.withRed(160),
                                         ],
 
                                       ),

@@ -12,6 +12,7 @@ import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
 
 import 'package:provider/provider.dart';
@@ -39,16 +40,19 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
 
 @override
   void initState() {
+//  SystemChrome.setEnabledSystemUIOverlays ([SystemUiOverlay.bottom]);
+
     super.initState();
     _testShopriteConnection();
-
-}
+  }
 
   @override
   void dispose() {
     _textController.dispose();
     _gridScrollController.dispose();
     _scrollController.dispose();
+    SystemChrome.setEnabledSystemUIOverlays(
+        [SystemUiOverlay.top, SystemUiOverlay.bottom]);
     super.dispose();
   }
 
@@ -518,19 +522,32 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                               color: Colors.black,
                               fontFamily: "Montserrat",
                               fontWeight: FontWeight.w500,
-                              fontSize: screenWidth10p* 1.8,
+                              fontSize: screenWidth10p * 1.8,
                               decoration: TextDecoration.none),
                         )),
                   ),
                 ],
-              );
+    );
   }
 
-  ListView productTabBarView(BuildContext context, List<ProductItem> itemList) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenHeight10p = screenHeight*(10/MediaQuery.of(context).size.height);
-    final screenWidth10p =screenWidth* (10/MediaQuery.of(context).size.width);
+  ListView productTabBarView(BuildContext context,
+      List<ProductItem> itemList) {
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final screenHeight10p = screenHeight * (10 / MediaQuery
+        .of(context)
+        .size
+        .height);
+    final screenWidth10p = screenWidth * (10 / MediaQuery
+        .of(context)
+        .size
+        .width);
 
     return ListView(
       controller: _scrollController,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:e_grocery/src/components/grocery_stores_provider_aggregate_methods.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
@@ -9,9 +11,9 @@ import 'package:e_grocery/src/providers/clothing/markham/markham_product_provide
 import 'package:e_grocery/src/providers/clothing/sportscene/sportscene_product_provider.dart';
 import 'package:e_grocery/src/providers/clothing/superbalist/superbalist_product_provider.dart';
 import 'package:e_grocery/src/providers/clothing/woolworths_clothing/woolworths_clothing_product_provider.dart';
-import 'package:e_grocery/src/providers/pnp_product_provider.dart';
-import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
-import 'package:e_grocery/src/providers/woolies_product_provider.dart';
+import 'package:e_grocery/src/services/push_notification_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +29,8 @@ class _MainMenuState extends State<MainMenu>
     with SingleTickerProviderStateMixin {
   ScrollController _scrollController = ScrollController();
 
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+
   final _borderRadius = BorderRadius.circular(15);
   final _borderRadiusSmaller = BorderRadius.circular(10);
 
@@ -39,14 +43,22 @@ class _MainMenuState extends State<MainMenu>
   Animation<double> _textHeader2Fade;
 
   Animation<Offset> _groceriesSlide;
+  Animation<double> _groceriesFade;
+
   Animation<Offset> _clothingSlide;
+  Animation<double> _clothingFade;
 
   Animation<double> _accessoriesPop;
   Animation<double> _shoppingListPop;
   Animation<double> _aboutPop;
 
+
   @override
   void initState() {
+    super.initState();
+//    PushNotificationService _pushNotification = PushNotificationService();
+//    _pushNotification.init(context);
+
     _aController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 3),
@@ -96,8 +108,17 @@ class _MainMenuState extends State<MainMenu>
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _aController,
-      curve: Interval(.6, .7, curve: Curves.easeOut),
+      curve: Interval(.6, .8, curve: Curves.easeOut),
     ));
+
+    _groceriesFade = CurvedAnimation(
+      parent: _aController,
+      curve: Interval(
+        .6,
+        .9,
+        curve: Curves.easeOut,
+      ),
+    );
 
 ////////// clothing card  ///////////
 
@@ -106,8 +127,17 @@ class _MainMenuState extends State<MainMenu>
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _aController,
-      curve: Interval(.6, .7, curve: Curves.easeOut),
+      curve: Interval(.6, .8, curve: Curves.easeOut),
     ));
+
+    _clothingFade = CurvedAnimation(
+      parent: _aController,
+      curve: Interval(
+        .6,
+        .9,
+        curve: Curves.easeOut,
+      ),
+    );
 
 ////////// PoPs  ///////////
 
@@ -142,10 +172,7 @@ class _MainMenuState extends State<MainMenu>
     ));
 
     _aController.forward();
-
     _aController.addListener(() => setState(() {}));
-
-    super.initState();
   }
 
   @override
@@ -157,19 +184,30 @@ class _MainMenuState extends State<MainMenu>
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenHeight10p =
-        screenHeight * (10 / MediaQuery.of(context).size.height);
-    final screenWidth10p =
-        screenWidth * (10 / MediaQuery.of(context).size.width);
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final screenHeight10p = screenHeight * (10 / MediaQuery
+        .of(context)
+        .size
+        .height);
+    final screenWidth10p = screenWidth * (10 / MediaQuery
+        .of(context)
+        .size
+        .width);
 
     final topBottomMargin = screenHeight10p * 2;
-    final _extraSpace = SizedBox(
-      height: screenHeight10p * 4,
-    );
+    final _extraSpace = SizedBox(height: screenHeight10p * 4,);
 
-    final TextStyle textStyle = Theme.of(context).textTheme.bodyText2;
+    final TextStyle textStyle = Theme
+        .of(context)
+        .textTheme
+        .bodyText2;
 
     final _mainTextStyle = TextStyle(
         color: kTextColor,
@@ -218,7 +256,7 @@ class _MainMenuState extends State<MainMenu>
           ),
           Container(
             width: double.infinity,
-            height: screenHeight * .2,
+            height: screenHeight * .215,
             padding: EdgeInsets.symmetric(
                 vertical: screenHeight10p * 2, horizontal: screenWidth10p * 1),
             child: Column(
@@ -259,9 +297,9 @@ class _MainMenuState extends State<MainMenu>
             ),
           ),
 //          _extraSpace,
-          SizedBox(
-            height: screenHeight10p * 2,
-          ),
+//          SizedBox(
+//            height: screenHeight10p * 1,
+//          ),
           GestureDetector(
               onTap: () async {
                 if (await TestConnection.checkForConnection()) {
@@ -279,80 +317,86 @@ class _MainMenuState extends State<MainMenu>
 //              if(Provider.of<WooliesAllProductList>(context, listen: false).data==null){
 //                Provider.of<WooliesAllProductList>(context, listen: false).getItems();
 //              }
-
+                  Navigator.of(context).pushNamed(GroceriesHomePage.id);
                 }
 
                 else {
                   TestConnection.showNoNetworkDialog(context);
                 }
-
-                Navigator.of(context).pushNamed(GroceriesHomePage.id);
               },
               child:
-              SlideTransition(
-                position: _groceriesSlide,
-                child:
-                Container(
-                  margin: EdgeInsets.only(left: 10, right: 10),
-                  decoration:
-                  BoxDecoration(color: kHomeBg, borderRadius: _borderRadius),
-                  height: screenHeight * .35,
-                  width: screenWidth * 1,
-                  child: ClipRRect(
-                    borderRadius: _borderRadius,
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
+              FadeTransition(
+                opacity: _groceriesFade,
+                child: SlideTransition(
+                  position: _groceriesSlide,
+                  child:
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: screenWidth10p, right: screenWidth10p),
+                    decoration:
+                    BoxDecoration(color: kHomeBg, borderRadius: _borderRadius),
+                    height: screenHeight * .35,
+                    width: screenWidth * 1,
+                    child: ClipRRect(
+                      borderRadius: _borderRadius,
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
 //                      right: screenWidth10p * 0,
 //                      bottom: screenHeight10p * .2,
-                          child: SvgPicture.asset(
-                            "assets/main_menu/grocery_shoppinglist_bg.svg",
-                            width: screenWidth * 1.3,
-                            fit: BoxFit.cover,
+                            child: SvgPicture.asset(
+                              "assets/main_menu/grocery_shoppinglist_bg.svg",
+                              width: screenWidth * 1.3,
+                              fit: BoxFit.cover,
 
 //                        fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: double.infinity,
-                          width: double.infinity,
-                          color: Colors.black.withOpacity(.1),
-                        ),
-                        Positioned(
-                          bottom: screenHeight10p * 3,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: screenWidth10p * 3,
-                                vertical: screenHeight10p),
-                            child: Text(
-                              "Groceries",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: screenWidth10p * 4,
-                                fontWeight: FontWeight.w700,
-                                decoration: TextDecoration.none,
-                                fontFamily: "Montserrat",
+                          Container(
+                            height: double.infinity,
+                            width: double.infinity,
+                            color: Colors.black.withOpacity(.4),
+                          ),
+                          Positioned(
+                            bottom: screenHeight10p * 3,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: screenWidth10p * 3,
+                                  vertical: screenHeight10p),
+                              child: Text(
+                                "Groceries",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: screenWidth10p * 4,
+                                  fontWeight: FontWeight.w700,
+                                  decoration: TextDecoration.none,
+                                  fontFamily: "Montserrat",
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ),)
+                  ),),
+              )
           ),
           SizedBox(
             height: screenHeight10p * 3,
           ),
-          SlideTransition(
-            position: _clothingSlide,
-            child:
-            Container(
-              margin: EdgeInsets.only(
-                  top: topBottomMargin, left: 10, right: 10),
+          FadeTransition(
+            opacity: _clothingFade,
+            child: SlideTransition(
+              position: _clothingSlide,
+              child:
+              Container(
+                margin: EdgeInsets.only(
+                    top: topBottomMargin,
+                    left: screenWidth10p,
+                    right: screenWidth10p),
 //            color: kHomeBg,
-              height: screenHeight * .25,
-              width: screenWidth,
+                height: screenHeight * .25,
+                width: screenWidth,
 //            decoration: BoxDecoration(
 //                borderRadius: _borderRadius,
 //                image: DecorationImage(
@@ -365,105 +409,104 @@ class _MainMenuState extends State<MainMenu>
 //                        Alignment.topLeft, Alignment.bottomLeft, .1),)
 
 //              ),
-              child: ClipRRect(
-                borderRadius: _borderRadius,
-                child: GestureDetector(
-                  onTap: () async {
-                    if (await TestConnection.checkForConnection()) {
-                      if (Provider
-                          .of<FoschiniAllProductList>(context, listen: false)
-                          .data == null) {
-                        Provider.of<FoschiniAllProductList>(
-                            context, listen: false)
-                            .getItems();
-                      }
+                child: ClipRRect(
+                  borderRadius: _borderRadius,
+                  child: GestureDetector(
+                    onTap: () async {
+                      if (await TestConnection.checkForConnection()) {
+                        if (Provider
+                            .of<FoschiniAllProductList>(context, listen: false)
+                            .data == null) {
+                          Provider.of<FoschiniAllProductList>(
+                              context, listen: false)
+                              .getItems();
+                        }
+
+                        if (Provider
+                            .of<MarkhamAllProductList>(context, listen: false)
+                            .data == null) {
+                          Provider.of<MarkhamAllProductList>(
+                              context, listen: false)
+                              .getItems();
+                        }
+
+                        if (Provider
+                            .of<SportsceneAllProductList>(context, listen: false)
+                            .data == null) {
+                          Provider.of<SportsceneAllProductList>(
+                              context, listen: false)
+                              .getItems();
+                        }
 
 
-                      if (Provider
-                          .of<MarkhamAllProductList>(context, listen: false)
-                          .data == null) {
-                        Provider.of<MarkhamAllProductList>(
-                            context, listen: false)
-                            .getItems();
-                      }
+                        if (Provider
+                            .of<SuperbalistAllProductList>(context, listen: false)
+                            .data == null) {
+                          Provider.of<SuperbalistAllProductList>(
+                              context, listen: false)
+                              .getItems();
+                        }
 
 
-                      if (Provider
-                          .of<SportsceneAllProductList>(context, listen: false)
-                          .data == null) {
-                        Provider.of<SportsceneAllProductList>(
-                            context, listen: false)
-                            .getItems();
-                      }
-
-
-                      if (Provider
-                          .of<SuperbalistAllProductList>(context, listen: false)
-                          .data == null) {
-                        Provider.of<SuperbalistAllProductList>(
-                            context, listen: false)
-                            .getItems();
-                      }
-
-
-                      if (Provider
-                          .of<WoolworthsClothingAllProductList>(context,
-                          listen: false)
-                          .data == null) {
-                        Provider.of<WoolworthsClothingAllProductList>(context,
+                        if (Provider
+                            .of<WoolworthsClothingAllProductList>(context,
                             listen: false)
-                            .getItems();
+                            .data == null) {
+                          Provider.of<WoolworthsClothingAllProductList>(context,
+                              listen: false)
+                              .getItems();
+
+                          Navigator.pushNamed(context, ClothingHome.id);
+                        }
                       }
-                    }
-                    else {
-                      TestConnection.showNoNetworkDialog(context);
-                    }
+                      else {
+                        TestConnection.showNoNetworkDialog(context);
+                      }
 
-                    Navigator.pushNamed(context, ClothingHome.id);
 
-                    print("clothing");
-                  },
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
+                      print("clothing");
+                    },
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
 
-                        child: SvgPicture.asset(
-                          "assets/main_menu/clothing_bg.svg",
-                          width: screenWidth * 4,
+                          child: SvgPicture.asset(
+                            "assets/main_menu/clothing_bg.svg",
+                            width: screenWidth * 4,
 
-                          fit: BoxFit.cover,
+                            fit: BoxFit.cover,
 
-                        ),
-                      ),
-                      Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.black.withOpacity(.1),
-                      ),
-                      Positioned(
-                        bottom: screenHeight10p * 3,
-                        right: screenWidth10p * 2,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth10p * 3,
                           ),
-                          child: Text(
-                            "Clothing",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: screenWidth10p * 3.5,
-                              fontWeight: FontWeight.w700,
-                              decoration: TextDecoration.none,
-                              fontFamily: "Montserrat",
+                        ),
+                        Container(
+                          height: double.infinity,
+                          width: double.infinity,
+                          color: Colors.black.withOpacity(.4),
+                        ),
+                        Positioned(
+                          bottom: screenHeight10p * 3,
+                          right: screenWidth10p * 2,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth10p * 3,
+                            ),
+                            child: Text(
+                              "Clothing",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: screenWidth10p * 3.5,
+                                fontWeight: FontWeight.w700,
+                                decoration: TextDecoration.none,
+                                fontFamily: "Montserrat",
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ),),
+              ),),),
 
           _extraSpace,
           SizedBox(

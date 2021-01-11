@@ -116,9 +116,13 @@ class _ShoppingListCardState extends State<ShoppingListCard> {
       ),
       child: Container(
         width: screenWidth * 1,
-        height: screenHeight * .2,
+        height: screenHeight * .22,
         margin: EdgeInsets.only(bottom: screenHeight10p * 2),
-        padding: EdgeInsets.only(left: 10, right: 0, top: 10, bottom: 10),
+        padding: EdgeInsets.only(
+            left: screenWidth10p,
+            right: 0,
+            top: screenHeight10p,
+            bottom: screenHeight10p),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
@@ -175,6 +179,9 @@ class _ShoppingListCardState extends State<ShoppingListCard> {
                   SizedBox(
                     height: screenHeight10p,
                   ),
+                  Spacer(
+                    flex: 2,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -198,6 +205,9 @@ class _ShoppingListCardState extends State<ShoppingListCard> {
                       ),
                     ],
                   ),
+                  Spacer(
+                    flex: 1,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -211,7 +221,9 @@ class _ShoppingListCardState extends State<ShoppingListCard> {
                             decoration: TextDecoration.none),
                       ),
                       Text(
-                        'R${(widget.productItem.quantity * widget.productItem.prices.last).toStringAsFixed(2)}',
+                        'R${(widget.productItem.quantity *
+                            widget.productItem.prices.last).toStringAsFixed(
+                            2)}',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w500,
@@ -220,6 +232,9 @@ class _ShoppingListCardState extends State<ShoppingListCard> {
                             decoration: TextDecoration.none),
                       ),
                     ],
+                  ),
+                  Spacer(
+                    flex: 4,
                   ),
                   Flexible(
                     child: SizedBox(
@@ -245,6 +260,7 @@ class _ShoppingListCardState extends State<ShoppingListCard> {
               ),
             ),
           ),
+          Spacer(),
           Flexible(
               flex: 5,
               child: Container(

@@ -5,8 +5,6 @@ import "package:flutter/material.dart";
 
 class ProductCardRed extends StatelessWidget {
   final String shopriteNullImageUrl;
-
-//final   int index;
   final ProductItem product;
 
   ProductCardRed({this.shopriteNullImageUrl, this.product});
@@ -61,14 +59,10 @@ class ProductCardRed extends StatelessWidget {
                         )
                       ],
                     ),
-                    Positioned(
-                      left: 20,
-                      child: Container(
-                        height: 1,
-                        child: Image.network(
-                          product.imageUrl ?? shopriteNullImageUrl,
-                          height: constraints.maxHeight * .43,
-                        ),
+                    Center(
+                      child: Image.network(
+                        product.imageUrl ?? shopriteNullImageUrl,
+                        height: screenHeight * .3,
                       ),
                     ),
                   ],

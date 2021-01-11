@@ -13,6 +13,7 @@ import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.da
 import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
 import 'package:e_grocery/src/providers/grocery_shopping_list.dart';
 import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
+import 'package:e_grocery/src/providers/shoppinglist_filter.dart';
 import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
 import 'package:e_grocery/src/providers/woolies_product_name_provider.dart';
 import "package:flutter/material.dart";
@@ -98,18 +99,17 @@ class GroceryShoppingListSearch
       close(context, _resultsList);
       return false;
     }
-    List <StoreAndTitle> _combinedList = getCombinedList(context);
 
+    List<StoreAndTitle> _combinedList =
+        Provider.of<GroceryShoppingListFilter>(context).getStoreTitlesList;
 
     final results = _combinedList
         .where(
-          (storeAndTitle) =>
-          storeAndTitle.title.toLowerCase().contains(
-            query.toLowerCase(),
-          ),
-    )
+          (storeAndTitle) => storeAndTitle.title.toLowerCase().contains(
+                query.toLowerCase(),
+              ),
+        )
         .toList();
-
 
 //    someObjects.sort((a, b) => a.someProperty.compareTo(b.someProperty));
 //    BestMatch bestMatches = query.bestMatch(_combinedList.map((e) => e.title).toList());
@@ -201,25 +201,7 @@ class GroceryShoppingListSearch
     ;
   }
 
-  List<StoreAndTitle> getCombinedList(BuildContext context) {
-    var _pnpProviderData = Provider.of<PnPProductNameList>(context);
-    var _shopriteProviderData = Provider.of<ShopriteProductNameList>(context);
-    var _wooliesProviderData = Provider.of<WooliesProductNameList>(context);
 
-    List<StoreAndTitle> _pnpTitles = _pnpProviderData.titles.map((e) =>
-        StoreAndTitle("Pick n Pay", e)).toList();
-    List<StoreAndTitle> _shopriteTitles = _shopriteProviderData.titles.map((
-        e) =>
-        StoreAndTitle("Shoprite", e)).toList();
-    List<StoreAndTitle> _wooliesTitles = _wooliesProviderData.titles.map((e) =>
-        StoreAndTitle("Woolworths", e)).toList();
-
-    final shuffledList = (_pnpTitles + _shopriteTitles + _wooliesTitles);
-
-//    shuffledList.shuffle();
-
-    return shuffledList;
-  }
 
   void openGraph(BuildContext context, _networkData,
       StoreAndTitle result) async {
