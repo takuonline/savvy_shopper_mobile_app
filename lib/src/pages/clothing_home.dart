@@ -6,6 +6,7 @@ import 'package:e_grocery/src/pages/clothing_home_screens/superbalist_home_scree
 import 'package:e_grocery/src/pages/clothing_home_screens/woolworths_clothing_home_screen.dart';
 import 'package:e_grocery/src/pages/welcome_screen.dart';
 import 'package:e_grocery/src/pages/clothing_home_screens/sportscene_home_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -23,9 +24,11 @@ class _ClothingHomeState extends State<ClothingHome>
   Animation<double> _textFadeAnimation;
   Animation<Offset> _textSlide;
 
-  Animation<Offset> _shopriteSlide;
-  Animation<Offset> _pnpSlide;
-  Animation<Offset> _woolworthsSlide;
+  Animation<Offset> _foschiniSlide;
+  Animation<Offset> _sportsceneSlide;
+  Animation<Offset> _superbalistSlide;
+  Animation<Offset> _woolworthsClothingSlide;
+  Animation<Offset> _markhamSlide;
 
   bool _isFoschiniInit = false;
   bool _isSportsceneInit = false;
@@ -70,7 +73,7 @@ class _ClothingHomeState extends State<ClothingHome>
       parent: _aController,
       curve: Interval(
         0,
-        .4,
+        .5,
         curve: Curves.easeOut,
       ),
     );
@@ -80,10 +83,26 @@ class _ClothingHomeState extends State<ClothingHome>
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _aController,
-      curve: Interval(0, .5, curve: Curves.easeOut),
+      curve: Interval(0, .4, curve: Curves.easeOut),
     ));
 
-    _shopriteSlide = Tween<Offset>(
+    _foschiniSlide = Tween<Offset>(
+      begin: Offset(1, 0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _aController,
+      curve: Interval(.4, .6, curve: Curves.easeOut),
+    ));
+
+    _sportsceneSlide = Tween<Offset>(
+      begin: Offset(1, 0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _aController,
+      curve: Interval(.5, .7, curve: Curves.easeOut),
+    ));
+
+    _markhamSlide = Tween<Offset>(
       begin: Offset(2, 0),
       end: Offset.zero,
     ).animate(CurvedAnimation(
@@ -91,7 +110,7 @@ class _ClothingHomeState extends State<ClothingHome>
       curve: Interval(.6, .8, curve: Curves.easeOut),
     ));
 
-    _pnpSlide = Tween<Offset>(
+    _superbalistSlide = Tween<Offset>(
       begin: Offset(2, 0),
       end: Offset.zero,
     ).animate(CurvedAnimation(
@@ -99,7 +118,7 @@ class _ClothingHomeState extends State<ClothingHome>
       curve: Interval(.7, .9, curve: Curves.easeOut),
     ));
 
-    _woolworthsSlide = Tween<Offset>(
+    _woolworthsClothingSlide = Tween<Offset>(
       begin: Offset(2, 0),
       end: Offset.zero,
     ).animate(CurvedAnimation(
@@ -132,7 +151,7 @@ class _ClothingHomeState extends State<ClothingHome>
         screenWidth * (10 / MediaQuery.of(context).size.width);
 
     final cardHeight = screenHeight * .25;
-    final cardWidth = screenWidth * .8;
+    final cardWidth = screenWidth * .9;
     final cardBorderRadius = BorderRadius.circular(10);
     final cardPadding = EdgeInsets.symmetric(
         horizontal: screenWidth10p * 2, vertical: screenHeight10p);
@@ -401,114 +420,77 @@ class _ClothingHomeState extends State<ClothingHome>
     return Scaffold(
       body: Container(
         color: kTextFieldBgGrey,
-        child: Stack(
+        child: ListView(
           children: [
-//            Positioned(
-//              right: 50,
-//              top: -250,
-//              child: SvgPicture.asset(
-//                "assets/blob-1.svg",
-//                height: screenHeight * 1,
-//                color: Colors.black.withOpacity(.1),
-//              ),
-//            ),
-//            Positioned(
-//              left: 50,
-//              bottom: -370,
-//              child: SvgPicture.asset(
-//                "assets/blob-1.svg",
-//                height: screenHeight * 1,
-//                color: Colors.black.withOpacity(.1),
-//              ),
-//            ),Cont
-            Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: kTextFieldBgGrey,
-//            gradient:  LinearGradient(
-//              begin: Alignment.topRight,
-//              end: Alignment.bottomLeft,
-////              stops: [0.1, 1],
-//              colors: [
-////                Colors.brown.withOpacity(.3),
-////kShopriteSecondary.withOpacity(.5),
-////                kShopriteSecondary.withOpacity(.3),
-//
-//
-////                 kTextFieldBgGrey ,
-////                kTextFieldBgGrey.withOpacity(.7),
-////              Colors.black,
-////                Colors.black87
-//
-//              ],
-//            ),
-                )),
-            ListView(
+            Stack(
               children: [
-                Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: screenHeight * .35,
-                      decoration: BoxDecoration(),
-                      child: SvgPicture.asset(
-                        "assets/main_menu/clothing_bg.svg",
-                        width: screenWidth * 4,
-                        fit: BoxFit.cover,
-// colorBlendMode:BlendMode.multiply,
+                Container(
+                  width: double.infinity,
+                  height: screenHeight * .35,
+                  decoration: BoxDecoration(),
+                  child: SvgPicture.asset(
+                    "assets/main_menu/clothing_bg.svg",
+                    width: screenWidth * 4,
+                    fit: BoxFit.cover,
 
-// color: Colors.black.withOpacity(.2),
-
-//                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned.fill(
-                      child: Container(
+                  ),
+                ),
+                Positioned.fill(
+                  child: Container(
 //                      color: Colors.black.withOpacity(.5),
-                          decoration: BoxDecoration(
-                            gradient: RadialGradient(
-                              radius: .8,
-                              colors: [
-                                Colors.transparent,
-                                Colors.black.withOpacity(.3),
-                              ],
-                            ),)
-                      ),
-                    ),
-                    Positioned(
-                      bottom: screenHeight10p * 1,
-                      child: FadeTransition(
-                        opacity: _textFadeAnimation,
-                        child: SlideTransition(
-                          position: _textSlide,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: screenWidth10p * 2,
-                                vertical: screenHeight10p * 3),
-                            child: Text(
-                              "Clothing",
-                              style: TextStyle(
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.white,
-                                  fontSize: screenWidth10p * 4),
-                            ),
-                          ),
+                      decoration: BoxDecoration(
+                        gradient: RadialGradient(
+                          radius: .8,
+                          colors: [
+                            Colors.transparent,
+                            Colors.black.withOpacity(.3),
+                          ],
+                        ),)
+                  ),
+                ),
+                Positioned(
+                  bottom: screenHeight10p * 3.5,
+                  child: FadeTransition(
+                    opacity: _textFadeAnimation,
+                    child: SlideTransition(
+                      position: _textSlide,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth10p * 2,
+                            vertical: screenHeight10p * 3),
+                        child: Text(
+                          "Clothing",
+                          style: TextStyle(
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                              fontSize: screenWidth10p * 4),
                         ),
                       ),
                     ),
-                  ],
+                  ),
+                ),
+              ],
+            ),
+
+
+            Transform.translate(
+              offset: Offset(0, -screenHeight * .05),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: kTextFieldBgGrey,
+                    borderRadius: BorderRadius.circular(screenWidth10p * 4)
                 ),
 
-                SizedBox(
-                  height: screenHeight10p * 3,
-                ),
-
-                SlideTransition(
-                  position: _shopriteSlide,
-                  child: InkWell(
-                    onTap: () async {
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: screenHeight10p * 3,
+                    ),
+                    SlideTransition(
+                      position: _foschiniSlide,
+                      child: InkWell(
+                        onTap: () async {
 //                      if (!_isFoschiniInit) {
 //                        Provider.of<FoschiniAllProductList>(context,listen:false).getItems();
 //                        setState(() {
@@ -516,33 +498,33 @@ class _ClothingHomeState extends State<ClothingHome>
 //                        });
 //                      }
 
-                      final _item = welcomeScreenItems["foschini"];
-                      await _whenCardIsClicked();
+                          final _item = welcomeScreenItems["foschini"];
+                          await _whenCardIsClicked();
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WelcomeScreen(_item),
-                        ),
-                      );
-                      _aController.animateTo(
-                          1, duration: Duration(milliseconds: 4000),
-                          curve: Curves.easeIn);
-                    },
-                    child: Padding(
-                      padding: cardPadding,
-                      child: ClipRRect(
-                        borderRadius: cardBorderRadius,
-                        child: Container(
-                          width: cardHeight,
-                          height: cardHeight,
-                          decoration: BoxDecoration(
-                              boxShadow: [_cardBoxShadow],
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WelcomeScreen(_item),
+                            ),
+                          );
+                          _aController.animateTo(
+                              1, duration: Duration(milliseconds: 4000),
+                              curve: Curves.easeIn);
+                        },
+                        child: Padding(
+                          padding: cardPadding,
+                          child: ClipRRect(
+                            borderRadius: cardBorderRadius,
+                            child: Container(
+                              width: cardWidth,
+                              height: cardHeight,
+                              decoration: BoxDecoration(
+                                  boxShadow: [_cardBoxShadow],
 //                              color: kBgWoolies,
-                              image: decorationImages["foschini"],
-                              borderRadius: cardBorderRadius),
-                          child: Stack(
-                            children: [
+                                  image: decorationImages["foschini"],
+                                  borderRadius: cardBorderRadius),
+                              child: Stack(
+                                children: [
 //                              Positioned(
 //                                left: -80,
 //                                bottom: -50,
@@ -561,35 +543,35 @@ class _ClothingHomeState extends State<ClothingHome>
 //                                  color: Colors.white,
 //                                ),
 //                              ),
-                              Positioned(
-                                bottom: 20,
-                                left: 20,
-                                child: FittedBox(
-                                  child: Text(
-                                    "Foschini",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: "Montserrat",
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: screenWidth * .08,
+                                  Positioned(
+                                    bottom: 20,
+                                    left: 20,
+                                    child: FittedBox(
+                                      child: Text(
+                                        "Foschini",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: "Montserrat",
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: screenWidth * .08,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                SlideTransition(
-                  position: _pnpSlide,
-                  child: InkWell(
-                    onTap: () async {
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SlideTransition(
+                      position: _sportsceneSlide,
+                      child: InkWell(
+                        onTap: () async {
 //                      if (!_isSportsceneInit) {
 //                        Provider.of<SportsceneAllProductList>(context,listen:false).getItems();
 //                        setState(() {
@@ -597,32 +579,32 @@ class _ClothingHomeState extends State<ClothingHome>
 //                        });
 //                      }
 
-                      final _item = welcomeScreenItems['sportscene'];
-                      await _whenCardIsClicked();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WelcomeScreen(_item),
-                        ),
-                      );
-                      _aController.animateTo(
-                          1, duration: Duration(milliseconds: 4000),
-                          curve: Curves.easeIn);
-                    },
-                    child: Padding(
-                      padding: cardPadding,
-                      child: ClipRRect(
-                        borderRadius: cardBorderRadius,
-                        child: Container(
-                          width: cardWidth,
-                          height: cardHeight,
-                          decoration: BoxDecoration(
-                              boxShadow: [_cardBoxShadow],
-                              color: kBgWoolies,
-                              image: decorationImages['sportscene'],
-                              borderRadius: cardBorderRadius),
-                          child: Stack(
-                            children: [
+                          final _item = welcomeScreenItems['sportscene'];
+                          await _whenCardIsClicked();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WelcomeScreen(_item),
+                            ),
+                          );
+                          _aController.animateTo(
+                              1, duration: Duration(milliseconds: 4000),
+                              curve: Curves.easeIn);
+                        },
+                        child: Padding(
+                          padding: cardPadding,
+                          child: ClipRRect(
+                            borderRadius: cardBorderRadius,
+                            child: Container(
+                              width: cardWidth,
+                              height: cardHeight,
+                              decoration: BoxDecoration(
+                                  boxShadow: [_cardBoxShadow],
+                                  color: kBgWoolies,
+                                  image: decorationImages['sportscene'],
+                                  borderRadius: cardBorderRadius),
+                              child: Stack(
+                                children: [
 //                              Positioned(
 //                                right: -120,
 //                                bottom: -80,
@@ -641,32 +623,32 @@ class _ClothingHomeState extends State<ClothingHome>
 //                                  color: Colors.white,
 //                                ),
 //                              ),
-                              Positioned(
-                                bottom: 20,
-                                right: 20,
-                                child: FittedBox(
-                                  child: Text("Sportscene",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: "Montserrat",
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: screenWidth * .08)),
-                                ),
+                                  Positioned(
+                                    bottom: 20,
+                                    right: 20,
+                                    child: FittedBox(
+                                      child: Text("Sportscene",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: "Montserrat",
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: screenWidth * .08)),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                SlideTransition(
-                  position: _woolworthsSlide,
-                  child: InkWell(
-                    onTap: () async {
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SlideTransition(
+                      position: _markhamSlide,
+                      child: InkWell(
+                        onTap: () async {
 //                      if (!_wooliesIsInit) {
 //                        Provider.of<MarkhamAllProductList>(context,listen:false).getItems();
 //                        setState(() {
@@ -674,34 +656,34 @@ class _ClothingHomeState extends State<ClothingHome>
 //                        });
 //                      }
 
-                      final _item = welcomeScreenItems['markham'];
-                      await _whenCardIsClicked();
+                          final _item = welcomeScreenItems['markham'];
+                          await _whenCardIsClicked();
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WelcomeScreen(_item),
-                        ),
-                      );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WelcomeScreen(_item),
+                            ),
+                          );
 
-                      _aController.animateTo(
-                          1, duration: Duration(milliseconds: 4000),
-                          curve: Curves.easeIn);
-                    },
-                    child: Padding(
-                      padding: cardPadding,
-                      child: ClipRRect(
-                        borderRadius: cardBorderRadius,
-                        child: Container(
-                          width: cardWidth,
-                          height: cardHeight,
-                          decoration: BoxDecoration(
-                              boxShadow: [_cardBoxShadow],
-                              color: kBgWoolies,
-                              image: decorationImages['markham'],
-                              borderRadius: cardBorderRadius),
-                          child: Stack(
-                            children: [
+                          _aController.animateTo(
+                              1, duration: Duration(milliseconds: 4000),
+                              curve: Curves.easeIn);
+                        },
+                        child: Padding(
+                          padding: cardPadding,
+                          child: ClipRRect(
+                            borderRadius: cardBorderRadius,
+                            child: Container(
+                              width: cardWidth,
+                              height: cardHeight,
+                              decoration: BoxDecoration(
+                                  boxShadow: [_cardBoxShadow],
+                                  color: kBgWoolies,
+                                  image: decorationImages['markham'],
+                                  borderRadius: cardBorderRadius),
+                              child: Stack(
+                                children: [
 //                              Positioned(
 //                                left: -80,
 //                                top: -100,
@@ -720,33 +702,32 @@ class _ClothingHomeState extends State<ClothingHome>
 //                                  color: Colors.white,
 //                                ),
 //                              ),
-                              Positioned(
-                                bottom: 20,
-                                left: 20,
-                                child: FittedBox(
-                                  child: Text("Markham",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: "Montserrat",
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: screenWidth * .08)),
-                                ),
+                                  Positioned(
+                                    bottom: 20,
+                                    left: 20,
+                                    child: FittedBox(
+                                      child: Text("Markham",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: "Montserrat",
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: screenWidth * .08)),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-
-                SlideTransition(
-                  position: _shopriteSlide,
-                  child: InkWell(
-                    onTap: () async {
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SlideTransition(
+                      position: _superbalistSlide,
+                      child: InkWell(
+                        onTap: () async {
 //                      if (!_isInit) {
 //                        Provider.of<SuperbalistAllProductList>(context,listen:false).getItems();
 //                        setState(() {
@@ -754,33 +735,33 @@ class _ClothingHomeState extends State<ClothingHome>
 //                        });
 //                      }
 
-                      final _item = welcomeScreenItems['superbalist'];
-                      await _whenCardIsClicked();
+                          final _item = welcomeScreenItems['superbalist'];
+                          await _whenCardIsClicked();
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WelcomeScreen(_item),
-                        ),
-                      );
-                      _aController.animateTo(
-                          1, duration: Duration(milliseconds: 4000),
-                          curve: Curves.easeIn);
-                    },
-                    child: Padding(
-                      padding: cardPadding,
-                      child: ClipRRect(
-                        borderRadius: cardBorderRadius,
-                        child: Container(
-                          width: cardHeight,
-                          height: cardHeight,
-                          decoration: BoxDecoration(
-                              boxShadow: [_cardBoxShadow],
-                              color: kBgWoolies,
-                              image: decorationImages['superbalist'],
-                              borderRadius: cardBorderRadius),
-                          child: Stack(
-                            children: [
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WelcomeScreen(_item),
+                            ),
+                          );
+                          _aController.animateTo(
+                              1, duration: Duration(milliseconds: 4000),
+                              curve: Curves.easeIn);
+                        },
+                        child: Padding(
+                          padding: cardPadding,
+                          child: ClipRRect(
+                            borderRadius: cardBorderRadius,
+                            child: Container(
+                              width: cardWidth,
+                              height: cardHeight,
+                              decoration: BoxDecoration(
+                                  boxShadow: [_cardBoxShadow],
+                                  color: kBgWoolies,
+                                  image: decorationImages['superbalist'],
+                                  borderRadius: cardBorderRadius),
+                              child: Stack(
+                                children: [
 //                              Positioned(
 //                                right: -20,
 //                                bottom: -50,
@@ -799,69 +780,68 @@ class _ClothingHomeState extends State<ClothingHome>
 //                                  color: Colors.white,
 //                                ),
 //                              ),
-                              Positioned(
-                                bottom: 20,
-                                right: 20,
-                                child: FittedBox(
-                                  child: Text(
-                                    "Superbalist",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: "Montserrat",
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: screenWidth * .08,
+                                  Positioned(
+                                    bottom: 20,
+                                    right: 20,
+                                    child: FittedBox(
+                                      child: Text(
+                                        "Superbalist",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: "Montserrat",
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: screenWidth * .08,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-
-                SlideTransition(
-                  position: _woolworthsSlide,
-                  child: InkWell(
-                    onTap: () async {
-                      if (!_wooliesIsInit) {
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SlideTransition(
+                      position: _woolworthsClothingSlide,
+                      child: InkWell(
+                        onTap: () async {
+                          if (!_wooliesIsInit) {
 //                        Provider.of<WoolworthsClothingAllProductList>(context,listen:false).getItems();
 //                        setState(() {
 //                          _wooliesIsInit = true;
 //                        });
-                      }
+                          }
 
-                      final _item = welcomeScreenItems['woolworths_clothing'];
-                      await _whenCardIsClicked();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WelcomeScreen(_item),
-                        ),
-                      );
-                      _aController.animateTo(
-                          1, duration: Duration(milliseconds: 4000),
-                          curve: Curves.easeIn);
-                    },
-                    child: Padding(
-                      padding: cardPadding,
-                      child: ClipRRect(
-                        borderRadius: cardBorderRadius,
-                        child: Container(
-                          width: cardWidth,
-                          height: cardHeight,
-                          decoration: BoxDecoration(
-                              boxShadow: [_cardBoxShadow],
-                              color: kBgWoolies,
-                              image: decorationImages['woolworths_clothing'],
-                              borderRadius: cardBorderRadius),
-                          child: Stack(
-                            children: [
+                          final _item = welcomeScreenItems['woolworths_clothing'];
+                          await _whenCardIsClicked();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WelcomeScreen(_item),
+                            ),
+                          );
+                          _aController.animateTo(
+                              1, duration: Duration(milliseconds: 4000),
+                              curve: Curves.easeIn);
+                        },
+                        child: Padding(
+                          padding: cardPadding,
+                          child: ClipRRect(
+                            borderRadius: cardBorderRadius,
+                            child: Container(
+                              width: cardWidth,
+                              height: cardHeight,
+                              decoration: BoxDecoration(
+                                  boxShadow: [_cardBoxShadow],
+                                  color: kBgWoolies,
+                                  image: decorationImages['woolworths_clothing'],
+                                  borderRadius: cardBorderRadius),
+                              child: Stack(
+                                children: [
 //                              Positioned(
 //                                left: -80,
 //                                top: -100,
@@ -880,28 +860,33 @@ class _ClothingHomeState extends State<ClothingHome>
 //                                  color: Colors.white,
 //                                ),
 //                              ),
-                              Positioned(
-                                bottom: 20,
-                                left: 20,
-                                child: FittedBox(
-                                  child: Text("Woolworths",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: "Montserrat",
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: screenWidth * .08)),
-                                ),
+                                  Positioned(
+                                    bottom: 20,
+                                    left: 20,
+                                    child: FittedBox(
+                                      child: Text("Woolworths",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: "Montserrat",
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: screenWidth * .08)),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
+                    SizedBox(
+                      height: screenHeight10p * 2,
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+              ),
+            ),
+
 
 //                SlideTransition(
 //                  position: _pnpSlide,
@@ -1034,8 +1019,6 @@ class _ClothingHomeState extends State<ClothingHome>
 //                SizedBox(
 //                  height: 20,
 //                ),
-              ],
-            ),
           ],
         ),
       ),

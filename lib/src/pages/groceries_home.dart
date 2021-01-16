@@ -133,7 +133,7 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
     final screenWidth10p =
         screenWidth * (10 / MediaQuery.of(context).size.width);
     final cardHeight = screenHeight * .24;
-    final cardWidth = screenWidth * .8;
+    final cardWidth = screenWidth * .9;
     final cardBorderRadius = BorderRadius.circular(20);
     final cardPadding = EdgeInsets.symmetric(horizontal: 20, vertical: 10);
     final _cardBoxShadow = BoxShadow(
@@ -141,7 +141,6 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
         spreadRadius: 10,
         blurRadius: 15,
         offset: Offset(10, 0));
-
 
     final Map<String, WelcomeScreenItem> _welcomeScreenItemMap = {
       'shoprite': WelcomeScreenItem(
@@ -297,129 +296,114 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
     return Scaffold(
       body: Container(
         color: kTextFieldBgGrey,
-        child: Stack(
+        child: ListView(
           children: [
-//            Positioned(
-//              right: 50,
-//              top: -250,
-//              child: SvgPicture.asset(
-//                "assets/blob-1.svg",
-//                height: screenHeight * 1,
-//                color: Colors.blue.withOpacity(.22),
-//              ),
-//            ),
-//            Positioned(
-//              left: 50,
-//              bottom: -370,
-//              child: SvgPicture.asset(
-//                "assets/blob-1.svg",
-//                height: screenHeight * 1,
-//                color: Colors.blue.withOpacity(.3),
-//              ),
-//            ),
-            ListView(
-              children: [
-                Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: screenHeight * .35,
-                      decoration: BoxDecoration(),
-                      child: SvgPicture.asset(
-                        "assets/main_menu/grocery_shoppinglist_bg.svg",
-                        width: screenWidth * 4,
-                        fit: BoxFit.cover,
+            Container(
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: screenHeight * .35,
+                    decoration: BoxDecoration(),
+                    child: SvgPicture.asset(
+                      "assets/main_menu/grocery_shoppinglist_bg.svg",
+                      width: screenWidth * 4,
+                      fit: BoxFit.cover,
 
-                      ),
                     ),
-                    Positioned.fill(
-                        child: Container(
+                  ),
+                  Positioned.fill(
+                      child: Container(
 //                          color: Colors.black.withOpacity(.5),
-                          decoration: BoxDecoration(
+                        decoration: BoxDecoration(
 //                              color: kBgShoprite,
-                            gradient: RadialGradient(
-                              radius: .5,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black.withOpacity(.3),
-                          ],
-                        ),
+                          gradient: RadialGradient(
+                            radius: .5,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(.3),
+                            ],
                           ),
-                        )),
-                    Positioned(
-                      bottom: screenHeight10p * 1,
-                      child: FadeTransition(
-                        opacity: _textFadeAnimation,
-                        child: SlideTransition(
-                          position: _textSlide,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: screenWidth10p * 2,
-                                vertical: screenHeight10p * 3),
-                            child: Text(
-                              "Groceries",
-                              style: TextStyle(
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.white,
-                                  fontSize: screenWidth10p * 4),
-                            ),
+                        ),
+                      )),
+                  Positioned(
+                    bottom: screenHeight10p * 4,
+                    child: FadeTransition(
+                      opacity: _textFadeAnimation,
+                      child: SlideTransition(
+                        position: _textSlide,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth10p * 2,
+                              vertical: screenHeight10p * 3),
+                          child: Text(
+                            "Groceries",
+                            style: TextStyle(
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                                fontSize: screenWidth10p * 4),
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
+            ),
 
-                SizedBox(
-                  height: screenHeight10p * 2,
+            Transform.translate(
+              offset: Offset(0, -screenHeight * .05),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: kTextFieldBgGrey,
+                    borderRadius: BorderRadius.circular(
+                        screenWidth * .07
+                    )
                 ),
-                SlideTransition(
-                  position: _shopriteSlide,
-                  child: InkWell(
-                    onTap: () async {
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: screenHeight10p * 4,
+                    ),
+                    SlideTransition(
+                      position: _shopriteSlide,
+                      child: InkWell(
+                        onTap: () async {
 //                      if (!_isInit) {
 //                      Provider.of<ShopriteAllProductList>(context,listen:false).getItems();
 //                        setState(() {
 //                          _isInit = true;
 //                        });
 //                      }
-
-                      final _item = _welcomeScreenItemMap['shoprite'];
-                      await _whenCardIsClicked();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WelcomeScreen(_item),
-                        ),
-                      );
-                      _aController.animateTo(
-                          1, duration: Duration(milliseconds: 4000));
-                    },
-                    child: Padding(
-                      padding: cardPadding,
-                      child: ClipRRect(
-                        borderRadius: cardBorderRadius,
-                        child: LayoutBuilder(
-                            builder: (_, constraints) {
-                              return
-                                Container(
-                                  width: cardHeight,
-                                  height: cardHeight,
-                                  decoration: BoxDecoration(
-                                      boxShadow: [_cardBoxShadow],
-//                              color: kBgShoprite,
-                                      gradient: LinearGradient(
-
-                                        colors: [
-                                          kBgShoprite,
-                                          kBgShoprite.withRed(160),
-                                        ],
-
-                                      ),
-                                      borderRadius: cardBorderRadius),
-                                  child: Stack(
-                                    children: [
+                          final _item = _welcomeScreenItemMap['shoprite'];
+                          await _whenCardIsClicked();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WelcomeScreen(_item),
+                            ),
+                          );
+                          _aController.animateTo(
+                              1, duration: Duration(milliseconds: 4000));
+                        },
+                        child: ClipRRect(
+                          borderRadius: cardBorderRadius,
+                          child: Container(
+                            width: cardWidth,
+                            height: cardHeight,
+                            padding: cardPadding,
+                            decoration: BoxDecoration(
+                                boxShadow: [_cardBoxShadow],
+                                gradient: LinearGradient(
+                                  colors: [
+                                    kBgShoprite,
+                                    kBgShoprite.withRed(160),
+                                  ],
+                                ),
+                                borderRadius: cardBorderRadius),
+                            child: Stack(
+                              children: [
 //                              Positioned(
 //                                left: -80,
 //                                bottom: -50,
@@ -429,47 +413,45 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
 //                                  color: Colors.black.withOpacity(.3),
 //                                ),
 //                              ),
-                                      Positioned(
-                                        right: 30,
-                                        bottom: 40,
-                                        child: SvgPicture.asset(
-                                          "assets/grocery_card_svg/trolley.svg",
-                                          height: screenWidth * .23,
 
-                                        ),
-                                      ),
-                                      Positioned(
-                                        bottom: 20,
-                                        left: 20,
-                                        child: FittedBox(
-                                          child: Text(
-                                            "Shoprite",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: "Montserrat",
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: screenWidth * .08,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                Positioned(
+                                  right: 30,
+                                  bottom: 40,
+                                  child: SvgPicture.asset(
+                                    "assets/grocery_card_svg/trolley.svg",
+                                    height: screenWidth * .23,
+
                                   ),
-                                );
-                            }
-//
+                                ),
+                                Positioned(
+                                  bottom: 20,
+                                  left: 20,
+                                  child: FittedBox(
+                                    child: Text(
+                                      "Shoprite",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: "Montserrat",
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: screenWidth * .08,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
                         ),
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                SlideTransition(
-                  position: _pnpSlide,
-                  child: InkWell(
-                    onTap: ()async {
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SlideTransition(
+                      position: _pnpSlide,
+                      child: InkWell(
+                        onTap: () async {
 //
 //                      if (!_pnpIsInit) {
 //                        Provider.of<PnPAllProductList>(context,listen:false).getItems();
@@ -479,51 +461,50 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
 //                      }
 
 
-                      final _item = _welcomeScreenItemMap['pnp'];
-                      await _whenCardIsClicked();
+                          final _item = _welcomeScreenItemMap['pnp'];
+                          await _whenCardIsClicked();
 
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WelcomeScreen(_item),
-                        ),
-                      );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WelcomeScreen(_item),
+                            ),
+                          );
 
-                      _aController.animateTo(
-                          1, duration: Duration(milliseconds: 4000));
-                    },
-                    child: Padding(
-                      padding: cardPadding,
-                      child: ClipRRect(
-                        borderRadius: cardBorderRadius,
-                        child: LayoutBuilder(
-                          builder: (_, constraints) {
-                            final _cardHeaderStyle = TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Montserrat",
-                                fontWeight: FontWeight.w700,
-                                fontSize: constraints.maxWidth * .1);
+                          _aController.animateTo(
+                              1, duration: Duration(milliseconds: 4000));
+                        },
+                        child: Padding(
+                          padding: cardPadding,
+                          child: ClipRRect(
+                            borderRadius: cardBorderRadius,
+                            child: LayoutBuilder(
+                              builder: (_, constraints) {
+                                final _cardHeaderStyle = TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Montserrat",
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: constraints.maxWidth * .1);
 
-
-                            return Container(
-                              width: cardWidth,
-                              height: cardHeight,
-                              decoration: BoxDecoration(
-                                  boxShadow: [_cardBoxShadow],
+                                return Container(
+                                  width: cardWidth,
+                                  height: cardHeight,
+                                  decoration: BoxDecoration(
+                                      boxShadow: [_cardBoxShadow],
 //                              color: kBgPnP,
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      kBgPnP.withBlue(110),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          kBgPnP.withBlue(110),
 
-                                      kBgPnP,
+                                          kBgPnP,
 
-                                    ],
+                                        ],
 
-                                  ),
-                                  borderRadius: cardBorderRadius),
-                              child: Stack(
-                                children: [
+                                      ),
+                                      borderRadius: cardBorderRadius),
+                                  child: Stack(
+                                    children: [
 //                              Positioned(
 //                                right: -120,
 //                                bottom: -80,
@@ -533,42 +514,42 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
 //                                  color: Colors.black.withOpacity(.3),
 //                                ),
 //                              ),
-                                  Positioned(
-                                    left: 30,
-                                    bottom: 60,
-                                    child: SvgPicture.asset(
-                                      "assets/grocery_card_svg/grocery_bag_2.svg",
-                                      height: constraints.maxWidth * .25,
+                                      Positioned(
+                                        left: 30,
+                                        bottom: 60,
+                                        child: SvgPicture.asset(
+                                          "assets/grocery_card_svg/grocery_bag_2.svg",
+                                          height: constraints.maxWidth * .25,
 //                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 20,
-                                    right: 20,
-                                    child: FittedBox(
-                                      child: Text("Pick n Pay",
-                                          style: _cardHeaderStyle
-
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+                                      Positioned(
+                                        bottom: 20,
+                                        right: 20,
+                                        child: FittedBox(
+                                          child: Text("Pick n Pay",
+                                              style: _cardHeaderStyle
 
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                SlideTransition(
-                  position: _woolworthsSlide,
-                  child: InkWell(
-                    onTap: () async {
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SlideTransition(
+                      position: _woolworthsSlide,
+                      child: InkWell(
+                        onTap: () async {
 //                      if (!_wooliesIsInit) {
 //                        Provider.of<WooliesAllProductList>(context,listen:false).getItems();
 //                        setState(() {
@@ -576,38 +557,37 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
 //                        });
 //                      }
 
-                      final _item = _welcomeScreenItemMap['woolies'];
-                      await _whenCardIsClicked();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WelcomeScreen(_item),
-                        ),
-                      );
-                      _aController.animateTo(
-                          1, duration: Duration(milliseconds: 4000));
-
-                    },
-                    child: Padding(
-                      padding: cardPadding,
-                      child: ClipRRect(
-                        borderRadius: cardBorderRadius,
-                        child: Container(
-                          width: cardWidth,
-                          height: cardHeight,
-                          decoration: BoxDecoration(
-                              boxShadow: [_cardBoxShadow],
+                          final _item = _welcomeScreenItemMap['woolies'];
+                          await _whenCardIsClicked();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WelcomeScreen(_item),
+                            ),
+                          );
+                          _aController.animateTo(
+                              1, duration: Duration(milliseconds: 4000));
+                        },
+                        child: Padding(
+                          padding: cardPadding,
+                          child: ClipRRect(
+                            borderRadius: cardBorderRadius,
+                            child: Container(
+                              width: cardWidth,
+                              height: cardHeight,
+                              decoration: BoxDecoration(
+                                  boxShadow: [_cardBoxShadow],
 //                              color: kBgWoolies,
-                              gradient: LinearGradient(
-                                colors: [
-                                  kBgWoolies.withOpacity(.87),
-                                  kBgWoolies,
-                                ],
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      kBgWoolies.withOpacity(.87),
+                                      kBgWoolies,
+                                    ],
 
-                              ),
-                              borderRadius: cardBorderRadius),
-                          child: Stack(
-                            children: [
+                                  ),
+                                  borderRadius: cardBorderRadius),
+                              child: Stack(
+                                children: [
 //                              Positioned(
 //                                left: -80,
 //                                top: -100,
@@ -617,38 +597,40 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
 //                                  color: Colors.white.withOpacity(.2),
 //                                ),
 //                              ),
-                              Positioned(
-                                right: 30,
-                                bottom: 60,
-                                child: SvgPicture.asset(
-                                  "assets/grocery_card_svg/plastic_bag.svg",
-                                  height: screenHeight * .12,
+                                  Positioned(
+                                    right: 30,
+                                    bottom: 60,
+                                    child: SvgPicture.asset(
+                                      "assets/grocery_card_svg/plastic_bag.svg",
+                                      height: screenHeight * .12,
 
-                                ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 20,
+                                    left: 20,
+                                    child: FittedBox(
+                                      child: Text("Woolworths",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: "Montserrat",
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: screenWidth * .08)),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Positioned(
-                                bottom: 20,
-                                left: 20,
-                                child: FittedBox(
-                                  child: Text("Woolworths",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: "Montserrat",
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: screenWidth * .08)),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
+              ),
             ),
           ],
         ),

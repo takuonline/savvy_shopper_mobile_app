@@ -7,18 +7,17 @@ import 'package:flutter/material.dart';
 
 class PushNotificationService {
   final FirebaseMessaging _fcm = FirebaseMessaging();
-  BuildContext _context;
 
   Future init(context) async {
-    _context = context;
     if (Platform.isIOS) {
       _fcm.requestNotificationPermissions(IosNotificationSettings());
     }
 
-    _fcm.configure(onMessage: (Map<String, dynamic> message) async {
-      print("onMessage $message");
-      print("onMessage ${message['notification']['title']}");
-    }, onLaunch: (Map<String, dynamic> message) async {
+    _fcm.configure(
+        onMessage: (Map<String, dynamic> message) async {
+          print("onMessage $message");
+          print("onMessage ${message['notification']['title']}");
+        }, onLaunch: (Map<String, dynamic> message) async {
       print("onMessage $message");
       _serialAndNavigate(message);
     }, onResume: (Map<String, dynamic> message) async {
@@ -27,21 +26,29 @@ class PushNotificationService {
     });
   }
 
-  void _serialAndNavigate(Map<String, dynamic> message) {
+  static void _serialAndNavigate(Map<String, dynamic> message) {
     var notificationData = message['data'];
     var view = notificationData['view'];
+
     final GlobalKey<NavigatorState> navigatorKey =
-        GlobalKey(debugLabel: "Main Navigator");
+    GlobalKey(debugLabel: "Main Navigator");
+    print("serializing");
 
     if (view != null) {
+      print("view is not null");
       if (view == 'groceries') {
+        print("view is groceries");
         GroceryStoresProviderMethods.checkNullAndGetAllProductData(
             navigatorKey.currentState.context);
         navigatorKey.currentState
             .push(MaterialPageRoute(builder: (_) => GroceriesHomePage()));
+        print(navigatorKey.currentWidget);
+
+
 //        Navigator.pushNamed(_context, GroceriesHomePage.id);
       } else if (view == 'clothing') {
         print("herrrrrrrr");
+
 //        navigatorKey.currentContext.describeElement(name)
       }
     }

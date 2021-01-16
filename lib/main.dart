@@ -105,7 +105,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => GroceryShoppingListFilter()),
       ],
       child: MaterialApp(
-//          ---second part here uncomment here
+//          ---second part here uncomment here - -two lines
 //        locale: DevicePreview.locale(context), // Add the locale here
 //        builder: DevicePreview.appBuilder,
         theme: ThemeData(

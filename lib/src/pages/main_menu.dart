@@ -355,7 +355,7 @@ class _MainMenuState extends State<MainMenu>
                           Container(
                             height: double.infinity,
                             width: double.infinity,
-                            color: Colors.black.withOpacity(.4),
+                            color: Colors.black.withOpacity(.2),
                           ),
                           Positioned(
                             bottom: screenHeight10p * 3,
@@ -414,16 +414,23 @@ class _MainMenuState extends State<MainMenu>
                   child: GestureDetector(
                     onTap: () async {
                       if (await TestConnection.checkForConnection()) {
-                        if (Provider
-                            .of<FoschiniAllProductList>(context, listen: false)
-                            .data == null) {
-                          Provider.of<FoschiniAllProductList>(
-                              context, listen: false)
+//                        final FirebaseMessaging _fcm = FirebaseMessaging();
+//                        _fcm.getToken().then((token){
+//                          print("token herrrr");
+//                          print(token);
+//                          print("token herrrr");
+//                        });
+
+                        if (Provider.of<FoschiniAllProductList>(context,
+                                    listen: false)
+                                .data ==
+                            null) {
+                          Provider.of<FoschiniAllProductList>(context,
+                                  listen: false)
                               .getItems();
                         }
 
-                        if (Provider
-                            .of<MarkhamAllProductList>(context, listen: false)
+                        if (Provider.of<MarkhamAllProductList>(context, listen: false)
                             .data == null) {
                           Provider.of<MarkhamAllProductList>(
                               context, listen: false)
@@ -455,9 +462,9 @@ class _MainMenuState extends State<MainMenu>
                           Provider.of<WoolworthsClothingAllProductList>(context,
                               listen: false)
                               .getItems();
-
-                          Navigator.pushNamed(context, ClothingHome.id);
                         }
+
+                        Navigator.pushNamed(context, ClothingHome.id);
                       }
                       else {
                         TestConnection.showNoNetworkDialog(context);
@@ -481,7 +488,7 @@ class _MainMenuState extends State<MainMenu>
                         Container(
                           height: double.infinity,
                           width: double.infinity,
-                          color: Colors.black.withOpacity(.4),
+                          color: Colors.black.withOpacity(.2),
                         ),
                         Positioned(
                           bottom: screenHeight10p * 3,

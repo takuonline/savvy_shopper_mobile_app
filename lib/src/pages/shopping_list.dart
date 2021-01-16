@@ -126,11 +126,12 @@ class _ShoppingListState extends State<ShoppingList> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Container(
-//
 //            constraints: BoxConstraints(
 //              maxHeight:  screenHeight*.3,
 //              maxWidth:screenWidth*.6,
 //            ),
+
+
           margin: EdgeInsets.symmetric(
             vertical: screenHeight * .27,
             horizontal: screenWidth * .15,
@@ -142,25 +143,36 @@ class _ShoppingListState extends State<ShoppingList> {
     ));
   }
 
+
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final screenHeight10p =
-        screenHeight * (10 / MediaQuery.of(context).size.height);
+        screenHeight * (10 / MediaQuery
+            .of(context)
+            .size
+            .height);
     final screenWidth10p =
-        screenWidth * (10 / MediaQuery.of(context).size.width);
+        screenWidth * (10 / MediaQuery
+            .of(context)
+            .size
+            .width);
 
-    _productsList = Provider.of<GroceryShoppingList>(context, listen: true)
+    _productsList = Provider
+        .of<GroceryShoppingList>(context, listen: true)
         .items
         .toSet()
         .toList();
 
-    _isShopriteChecked =
-        Provider.of<GroceryShoppingListFilter>(context).getData['shoprite'];
-    _isPnPChecked =
-        Provider.of<GroceryShoppingListFilter>(context).getData['pnp'];
-    _isWooliesChecked =
-        Provider.of<GroceryShoppingListFilter>(context).getData['woolies'];
+    _isShopriteChecked = Provider
+        .of<GroceryShoppingListFilter>(context)
+        .getData['shoprite'];
+    _isPnPChecked = Provider
+        .of<GroceryShoppingListFilter>(context)
+        .getData['pnp'];
+    _isWooliesChecked = Provider
+        .of<GroceryShoppingListFilter>(context)
+        .getData['woolies'];
 
     _calculateBalance();
 
@@ -322,7 +334,7 @@ class _ShoppingListState extends State<ShoppingList> {
 //                              });
 //                            } else {
 //                              _productsList = _productsList.toSet().toList();
-//                            }
+//
                                   } else {
                                     await TestConnection.showNoNetworkDialog(
                                         context);
@@ -330,10 +342,11 @@ class _ShoppingListState extends State<ShoppingList> {
                                 },
                                 child: Container(
                                   margin: EdgeInsets.symmetric(
-                                      horizontal: screenWidth10p * 3),
+                                      horizontal: screenWidth10p * 1.5),
                                   decoration: BoxDecoration(
                                       color: kHomeBg.withOpacity(.2),
-                                      borderRadius: BorderRadius.circular(10)),
+                                      borderRadius: BorderRadius.circular(
+                                          screenWidth10p)),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
@@ -343,12 +356,17 @@ class _ShoppingListState extends State<ShoppingList> {
                                         Icons.search,
                                         color: Colors.black,
                                       ),
-                                      SizedBox(
-                                        width: screenWidth * .05,
+
+                                      Flexible(
+                                        child: SizedBox(
+                                          width: screenWidth * .045,
+                                        ),
                                       ),
+
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 20),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: screenWidth10p * .3,
+                                            vertical: screenHeight10p * 2),
                                         child: FittedBox(
                                           child: Text(
                                             "Search Product",
@@ -358,10 +376,12 @@ class _ShoppingListState extends State<ShoppingList> {
                                                 decoration: TextDecoration.none,
                                                 color: kTextColor,
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: 18),
+                                                fontSize: screenWidth10p * 1.8),
                                           ),
                                         ),
                                       ),
+
+
                                     ],
                                   ),
                                 ),
@@ -381,7 +401,7 @@ class _ShoppingListState extends State<ShoppingList> {
                                             screenWidth10p * 1.2)),
                                     padding: EdgeInsets.symmetric(
                                         horizontal: screenWidth10p * .35,
-                                        vertical: screenHeight10p * 1.6),
+                                        vertical: screenHeight10p * 1.7),
                                     child: Center(
                                       child: Icon(
                                         Icons.filter_alt_outlined,
@@ -609,8 +629,8 @@ class _FilterDialogState extends State<FilterDialog> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(screenWidth10p * 1.5),
       child: Container(
-          height: screenHeight * .3,
-          width: screenWidth * .6,
+//          height: screenHeight * .3,
+//          width: screenWidth * .6,
           decoration: BoxDecoration(
             color: Colors.white,
           ),
@@ -620,9 +640,10 @@ class _FilterDialogState extends State<FilterDialog> {
                 Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: screenWidth10p * 1,
-                      vertical: screenHeight10p * 3),
+                      vertical: screenHeight10p * 1),
                   child: Column(
                     children: [
+                      SizedBox(height: screenHeight10p,),
                       CheckboxListTile(
                           title: Text('Shoprite'),
                           value: isShopriteChecked,
@@ -678,7 +699,7 @@ class _FilterDialogState extends State<FilterDialog> {
                   ),
                 ),
                 Spacer(
-                  flex: 1,
+                  flex: 3,
                 ),
               ],
             ),

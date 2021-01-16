@@ -6,6 +6,7 @@ import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/components/woolies/woolies_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
+import 'package:e_grocery/src/networking/woolies_data.dart';
 import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/woolies_product_graph.dart';
 import 'package:e_grocery/src/providers/woolies_product_name_provider.dart';
 import 'package:e_grocery/src/providers/woolies_product_provider.dart';
@@ -289,9 +290,17 @@ class _WooliesHomeScreenState extends State<WooliesHomeScreen> {
                                 Provider.of<WooliesProductNameList>(context,
                                         listen: false)
                                     .getProductNameList(data, context);
+
                                 final result = await showSearch(
                                     context: context,
-                                    delegate: WooliesProductSearch());
+                                    delegate: WooliesProductSearch(
+                                        networkData: WooliesData(),
+                                        items:
+                                            Provider.of<WooliesProductNameList>(
+                                                    context,
+                                                    listen: false)
+                                                .titles));
+
                                 print(result);
                               } else {
                                 await TestConnection.showNoNetworkDialog(

@@ -2,7 +2,6 @@ import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/providers/pnp_product_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
 import 'package:e_grocery/src/providers/woolies_product_provider.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class GroceryStoresProviderMethods {

@@ -3,6 +3,7 @@ import 'package:e_grocery/src/components/is_loading_dialog.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/networking/woolies_data.dart';
+import 'package:e_grocery/src/pages/clothing/woolworths_clothing_product_graph.dart';
 import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/woolies_product_graph.dart';
 import 'package:e_grocery/src/providers/woolies_product_name_provider.dart';
 import "package:flutter/material.dart";
@@ -143,7 +144,7 @@ class WooliesProductSearch extends SearchDelegate {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                WooliesProductGraph(
+                WoolworthsClothingProductGraph(
                     productItem:
                     _parsedProductItem),
           ),

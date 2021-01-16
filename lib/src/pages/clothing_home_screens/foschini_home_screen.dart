@@ -293,7 +293,6 @@ class _FoschiniHomeScreenState extends State<FoschiniHomeScreen>
                                         listen: false)
                                     .getProductNameList(data, context);
 
-                                final _networkData = FoschiniData();
                                 final result = await showSearch(
                                     context: context,
                                     delegate: FoschiniGroupProductSearch(
@@ -302,7 +301,7 @@ class _FoschiniHomeScreenState extends State<FoschiniHomeScreen>
                                                 context,
                                                 listen: false)
                                             .items,
-                                        networkData: _networkData));
+                                        networkData: FoschiniData()));
                                 print(result);
                               } else {
                                 await TestConnection.showNoNetworkDialog(

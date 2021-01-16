@@ -217,8 +217,6 @@ class _WoolworthsClothingHomeScreenState
 
   final double _horizontalPadding = 20.0;
   bool _isGrid = false;
-  final _badImageUrl =
-      "https://play-lh.googleusercontent.com/Yax2t5F5M_G2C8mE2GbMR40WqFjNeA1_hTp6Cc2jeTCvqWVdwwr31GSmGjyFPOqxmSQ=s180-rw";
 
   void toggleGrid() {
 //    setState(() {
