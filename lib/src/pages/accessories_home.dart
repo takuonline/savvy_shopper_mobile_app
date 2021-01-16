@@ -356,14 +356,14 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
                       position: _shopriteSlide,
                       child: InkWell(
                         onTap: () async {
-                          if (Provider.of<TakealotAllProductList>(context,
-                                      listen: false)
-                                  .data ==
-                              null) {
-                            await Provider.of<TakealotAllProductList>(context,
-                                    listen: false)
-                                .getItems();
-                          }
+//                          if (Provider.of<TakealotAllProductList>(context,
+//                                      listen: false)
+//                                  .data ==
+//                              null) {
+//                            await Provider.of<TakealotAllProductList>(context,
+//                                    listen: false)
+//                                .getItems();
+//                          }
 
 //                      if (!_isInit) {
 //                      Provider.of<ShopriteAllProductList>(context,listen:false).getItems();
@@ -446,14 +446,14 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
                       position: _pnpSlide,
                       child: InkWell(
                         onTap: () async {
-                          if (Provider.of<HifiAllProductList>(context,
-                                      listen: false)
-                                  .data ==
-                              null) {
-                            await Provider.of<HifiAllProductList>(context,
-                                    listen: false)
-                                .getItems();
-                          }
+//                          if (Provider.of<HifiAllProductList>(context,
+//                                      listen: false)
+//                                  .data ==
+//                              null) {
+//                            await Provider.of<HifiAllProductList>(context,
+//                                    listen: false)
+//                                .getItems();
+//                          }
 
 //                      if (!_pnpIsInit) {
 //                        Provider.of<PnPAllProductList>(context,listen:false).getItems();
@@ -545,15 +545,15 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
                       position: _woolworthsSlide,
                       child: InkWell(
                         onTap: () async {
-                          if (Provider.of<ComputermaniaAllProductList>(context,
-                                      listen: false)
-                                  .data ==
-                              null) {
-                            await Provider.of<ComputermaniaAllProductList>(
-                                    context,
-                                    listen: false)
-                                .getItems();
-                          }
+//                          if (Provider.of<ComputermaniaAllProductList>(context,
+//                                      listen: false)
+//                                  .data ==
+//                              null) {
+//                            await Provider.of<ComputermaniaAllProductList>(
+//                                    context,
+//                                    listen: false)
+//                                .getItems();
+//                          }
 //                      if (!_wooliesIsInit) {
 //                        Provider.of<WooliesAllProductList>(context,listen:false).getItems();
 //                        setState(() {
@@ -561,10 +561,10 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
 //                        });
 //                      }
 
-                          await Provider.of<ComputermaniaAllProductList>(
-                                  context,
-                                  listen: false)
-                              .getItems();
+//                          await Provider.of<ComputermaniaAllProductList>(
+//                                  context,
+//                                  listen: false)
+//                              .getItems();
 
                           final _item = _welcomeScreenItemMap['computermania'];
                           await _whenCardIsClicked();
