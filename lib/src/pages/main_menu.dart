@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:e_grocery/src/components/accessories/AccessoriesStoresProviderMethods.dart';
+import 'package:e_grocery/src/components/clothing/ClothingStoresProviderMethods.dart';
 import 'package:e_grocery/src/components/grocery_stores_provider_aggregate_methods.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
+import 'package:e_grocery/src/pages/accessories_home.dart';
 import 'package:e_grocery/src/pages/clothing_home.dart';
 import 'package:e_grocery/src/pages/groceries_home.dart';
 import 'package:e_grocery/src/pages/shopping_list.dart';
@@ -305,21 +308,8 @@ class _MainMenuState extends State<MainMenu>
                 if (await TestConnection.checkForConnection()) {
                   GroceryStoresProviderMethods.checkNullAndGetAllProductData(
                       context);
-//              if(Provider.of<ShopriteAllProductList>(context, listen: false).data==null){
-//                Provider.of<ShopriteAllProductList>(context, listen: false)
-//                    .getItems();
-//              }
-//
-//              if(Provider.of<PnPAllProductList>(context, listen: false).data==null){
-//                Provider.of<PnPAllProductList>(context, listen: false).getItems();
-//              }
-//
-//              if(Provider.of<WooliesAllProductList>(context, listen: false).data==null){
-//                Provider.of<WooliesAllProductList>(context, listen: false).getItems();
-//              }
                   Navigator.of(context).pushNamed(GroceriesHomePage.id);
                 }
-
                 else {
                   TestConnection.showNoNetworkDialog(context);
                 }
@@ -414,64 +404,15 @@ class _MainMenuState extends State<MainMenu>
                   child: GestureDetector(
                     onTap: () async {
                       if (await TestConnection.checkForConnection()) {
-//                        final FirebaseMessaging _fcm = FirebaseMessaging();
-//                        _fcm.getToken().then((token){
-//                          print("token herrrr");
-//                          print(token);
-//                          print("token herrrr");
-//                        });
-
-                        if (Provider.of<FoschiniAllProductList>(context,
-                                    listen: false)
-                                .data ==
-                            null) {
-                          Provider.of<FoschiniAllProductList>(context,
-                                  listen: false)
-                              .getItems();
-                        }
-
-                        if (Provider.of<MarkhamAllProductList>(context, listen: false)
-                            .data == null) {
-                          Provider.of<MarkhamAllProductList>(
-                              context, listen: false)
-                              .getItems();
-                        }
-
-                        if (Provider
-                            .of<SportsceneAllProductList>(context, listen: false)
-                            .data == null) {
-                          Provider.of<SportsceneAllProductList>(
-                              context, listen: false)
-                              .getItems();
-                        }
-
-
-                        if (Provider
-                            .of<SuperbalistAllProductList>(context, listen: false)
-                            .data == null) {
-                          Provider.of<SuperbalistAllProductList>(
-                              context, listen: false)
-                              .getItems();
-                        }
-
-
-                        if (Provider
-                            .of<WoolworthsClothingAllProductList>(context,
-                            listen: false)
-                            .data == null) {
-                          Provider.of<WoolworthsClothingAllProductList>(context,
-                              listen: false)
-                              .getItems();
-                        }
+                        ClothingStoresProviderMethods
+                            .checkNullAndGetAllProductData(context);
 
                         Navigator.pushNamed(context, ClothingHome.id);
-                      }
-                      else {
+                      } else {
                         TestConnection.showNoNetworkDialog(context);
                       }
 
 
-                      print("clothing");
                     },
                     child: Stack(
                       children: [
@@ -704,7 +645,17 @@ class _MainMenuState extends State<MainMenu>
                 ),
                 Flexible(
                   child: GestureDetector(
-                      onTap: () => showIsComingDialog(context),
+                      onTap: () async {
+                        if (await TestConnection.checkForConnection()) {
+                          AccessoriesStoresProviderMethods
+                              .checkNullAndGetAllProductData(
+                              context);
+
+                          Navigator.pushNamed(context, AccessoriesHome.id);
+                        } else {
+                          TestConnection.showNoNetworkDialog(context);
+                        }
+                      },
                       child: Transform.scale(
                         scale: _accessoriesPop.value,
                         child: Container(

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:e_grocery/src/components/clothing/ClothingStoresProviderMethods.dart';
 import 'package:e_grocery/src/components/graph_page_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
@@ -7,6 +8,7 @@ import 'package:e_grocery/src/networking/clothing/foschini_data.dart';
 import 'package:e_grocery/src/networking/clothing/markham_data.dart';
 import 'package:e_grocery/src/networking/clothing/sportscene_data.dart';
 import 'package:e_grocery/src/networking/clothing/superbalist_data.dart';
+import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/pages/clothing/foschini_product_graph.dart';
 import 'package:e_grocery/src/providers/clothing/foschini/foschini_product_name_provider.dart';
 import 'package:e_grocery/src/providers/clothing/foschini/foschini_product_provider.dart';
@@ -74,15 +76,21 @@ class _WoolworthsClothingProductGraphState
   }
 
   Future<void> _getProductData() async {
-    await Provider.of<FoschiniAllProductList>(context, listen: false)
-        .getItems();
-    await Provider.of<MarkhamAllProductList>(context, listen: false).getItems();
-    await Provider.of<SportsceneAllProductList>(context, listen: false)
-        .getItems();
-    await Provider.of<SuperbalistAllProductList>(context, listen: false)
-        .getItems();
-    await Provider.of<WoolworthsClothingAllProductList>(context, listen: false)
-        .getItems();
+//    await Provider.of<FoschiniAllProductList>(context, listen: false)
+//        .getItems();
+//    await Provider.of<MarkhamAllProductList>(context, listen: false).getItems();
+//    await Provider.of<SportsceneAllProductList>(context, listen: false)
+//        .getItems();
+//    await Provider.of<SuperbalistAllProductList>(context, listen: false)
+//        .getItems();
+//    await Provider.of<WoolworthsClothingAllProductList>(context, listen: false)
+//        .getItems();
+
+    if (await TestConnection.checkForConnection()) {
+      ClothingStoresProviderMethods.checkNullAndGetAllProductData(context);
+    } else {
+      TestConnection.showNoNetworkDialog(context);
+    }
   }
 
   Future<void> _onRefresh() async {
@@ -393,7 +401,7 @@ class _WoolworthsClothingProductGraphState
                             ),
                           ),
                           child: RecommendationProductCard(
-                              finalPnPProductItems: finalFoschiniProductItems,
+                              finalStoreProductItems: finalFoschiniProductItems,
                               nullImageUrl: _nullImageUrl,
                               index: index),
                         );

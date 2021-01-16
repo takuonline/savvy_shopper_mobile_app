@@ -3,18 +3,14 @@ import 'dart:math';
 import 'package:e_grocery/src/components/graph_page_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
-import 'package:e_grocery/src/networking/pnp_data.dart';
-import 'package:e_grocery/src/networking/shoprite_data.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/shoprite_product_graph.dart';
-import 'package:e_grocery/src/providers/all_grocery_store_data_provider.dart';
 import 'package:e_grocery/src/providers/pnp_product_provider.dart';
 import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
 import 'package:e_grocery/src/providers/woolies_product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
-import 'package:string_similarity/string_similarity.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class WooliesProductGraph extends StatefulWidget {
@@ -410,11 +406,9 @@ class _WooliesProductGraphState extends State<WooliesProductGraph> {
                               ),
                             ),
                         child: RecommendationProductCard(
-                            finalPnPProductItems: finalShopriteProductItems,
-                            nullImageUrl: _nullImageUrl,
-                            index: index
-
-                        ),
+                            finalStoreProductItems: finalShopriteProductItems,
+                              nullImageUrl: _nullImageUrl,
+                              index: index),
                       );
                     },
 
@@ -489,7 +483,7 @@ class _WooliesProductGraphState extends State<WooliesProductGraph> {
                               ),
                             ),
                         child: RecommendationProductCard(
-                            finalPnPProductItems: finalPnPProductItems,
+                            finalStoreProductItems: finalPnPProductItems,
                             nullImageUrl: _nullImageUrl,
                             index: index
 

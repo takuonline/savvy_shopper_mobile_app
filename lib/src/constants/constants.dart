@@ -21,3 +21,11 @@ const kHomeBg = Color(0xff0278ae);
 
 const kBgFoschini = Color(0xff000000);
 const kBgMarkham = Color(0xff000000);
+
+const kBgHifi = Color(0xffd90200);
+const kHifiSecondary = Color(0xff212121);
+
+const kBgTakealot = Color(0xff0b79bf);
+
+const kBgComputermania = Color(0xff0b3254);
+const kComputermaniaSecondary = Color(0xffe3df1c);

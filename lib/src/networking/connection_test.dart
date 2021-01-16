@@ -22,7 +22,7 @@ class TestConnection {
       isConnected = false;
       print('not connected');
     } catch (_) {
-      print('error conencting -- other error than network');
+      print('error connecting -- other error than network');
     }
 
     return isConnected;

@@ -1,4 +1,9 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:e_grocery/src/pages/accessories_home.dart';
+import 'package:e_grocery/src/pages/accessories_home_screens/computermania_home_screen.dart';
+import 'package:e_grocery/src/pages/accessories_home_screens/hifi_home_screen.dart';
+import 'package:e_grocery/src/pages/accessories_home_screens/takealot_home_screen.dart';
+import 'package:e_grocery/src/pages/accessories_product_graph/accessories_product_graph.dart';
 import 'package:e_grocery/src/pages/clothing/foschini_product_graph.dart';
 import 'package:e_grocery/src/pages/clothing/woolworths_clothing_product_graph.dart';
 import 'package:e_grocery/src/pages/clothing_home.dart';
@@ -13,6 +18,12 @@ import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.da
 import 'package:e_grocery/src/pages/shopping_list.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/shoprite_product_graph.dart';
 import 'package:e_grocery/src/pages/groceries_home_screens/woolies_home_screen.dart';
+import 'package:e_grocery/src/providers/accessories/computermania_product_name_provider.dart';
+import 'package:e_grocery/src/providers/accessories/computermania_product_provider.dart';
+import 'package:e_grocery/src/providers/accessories/hifi_product_name_provider.dart';
+import 'package:e_grocery/src/providers/accessories/hifi_product_provider.dart';
+import 'package:e_grocery/src/providers/accessories/takealot_product_name_provider.dart';
+import 'package:e_grocery/src/providers/accessories/takealot_product_provider.dart';
 import 'package:e_grocery/src/providers/all_grocery_store_data_provider.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
 import 'package:e_grocery/src/providers/clothing/markham/markham_product_name_provider.dart';
@@ -70,19 +81,15 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => GotData()),
-
+        ChangeNotifierProvider(create: (_) => ShopriteProductNameList()),
+        ChangeNotifierProvider(create: (_) => GroceryShoppingListFilter()),
         ChangeNotifierProvider(
-            create: (_) => ShopriteProductNameList()
+          create: (_) => ShopriteAllProductList(),
         ),
-
-        ChangeNotifierProvider(create: (_) => ShopriteAllProductList(),),
-
         ChangeNotifierProvider(create: (_) => PnPAllProductList()),
         ChangeNotifierProvider(create: (_) => PnPProductNameList()),
-
         ChangeNotifierProvider(create: (_) => WooliesAllProductList()),
         ChangeNotifierProvider(create: (_) => WooliesProductNameList()),
-
         ChangeNotifierProvider(create: (_) => GroceryShoppingList()),
         ChangeNotifierProvider(create: (_) => AllGroceryStoresData()),
 
@@ -102,7 +109,16 @@ class MyApp extends StatelessWidget {
             create: (_) => WoolworthsClothingAllProductList()),
         ChangeNotifierProvider(
             create: (_) => WoolworthsClothingProductNameList()),
-        ChangeNotifierProvider(create: (_) => GroceryShoppingListFilter()),
+
+        ChangeNotifierProvider(create: (_) => TakealotAllProductList()),
+        ChangeNotifierProvider(create: (_) => TakealotProductNameList()),
+
+        ChangeNotifierProvider(create: (_) => HifiAllProductList()),
+        ChangeNotifierProvider(create: (_) => HifiProductNameList()),
+
+        ChangeNotifierProvider(create: (_) => ComputermaniaAllProductList()),
+        ChangeNotifierProvider(create: (_) => ComputermaniaProductNameList()),
+
       ],
       child: MaterialApp(
 //          ---second part here uncomment here - -two lines
@@ -157,7 +173,19 @@ class MyApp extends StatelessWidget {
               WoolworthsClothingHomeScreen(),
           WoolworthsClothingProductGraph.id: (context) =>
               WoolworthsClothingProductGraph(),
+
+
+          AccessoriesHome.id: (context) => AccessoriesHome(),
+
+          TakealotHomeScreen.id: (context) => TakealotHomeScreen(),
+          AccessoriesProductGraph.id: (context) => AccessoriesProductGraph(),
+
+          HifiHomeScreen.id: (context) => HifiHomeScreen(),
+
+          ComputermaniaHomeScreen.id: (context) => ComputermaniaHomeScreen(),
+
         },
+
 
       ),
     );

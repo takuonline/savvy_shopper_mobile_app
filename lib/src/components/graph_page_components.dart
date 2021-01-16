@@ -332,7 +332,7 @@ class RecommendationListViewBuilder extends StatelessWidget {
                 ),
               ),
               child: RecommendationProductCard(
-                  finalPnPProductItems: finalStoreProductItems,
+                  finalStoreProductItems: finalStoreProductItems,
                   nullImageUrl: _nullImageUrl,
                   index: index),
             );
@@ -554,12 +554,12 @@ class CurrentPriceCard extends StatelessWidget {
 
 class RecommendationProductCard extends StatelessWidget {
   RecommendationProductCard({
-    @required this.finalPnPProductItems,
+    @required this.finalStoreProductItems,
     @required this.nullImageUrl,
     @required this.index,
   });
 
-  final List finalPnPProductItems;
+  final List finalStoreProductItems;
   final String nullImageUrl;
   final int index;
 
@@ -597,7 +597,7 @@ class RecommendationProductCard extends StatelessWidget {
                   width: screenWidth * .35,
                   child: Center(
                     child: Image.network(
-                      finalPnPProductItems[index].imageUrl ?? nullImageUrl,
+                      finalStoreProductItems[index].imageUrl ?? nullImageUrl,
                       height: screenHeight * .3,
                     ),
                   ),
@@ -613,7 +613,8 @@ class RecommendationProductCard extends StatelessWidget {
                     Flexible(
                       child: FittedBox(
                         child: Text(
-                          "Price:  R${finalPnPProductItems[index].prices.last}",
+                          "Price:  R${finalStoreProductItems[index].prices
+                              .last}",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: "Montserrat",
@@ -631,7 +632,7 @@ class RecommendationProductCard extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             horizontal: screenWidth10p * 1),
                         child: Text(
-                          "${finalPnPProductItems[index].title}",
+                          "${finalStoreProductItems[index].title}",
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
@@ -787,6 +788,5 @@ class RecommendationStoreName extends StatelessWidget {
 class ProductData {
   DateTime time;
   double price;
-
   ProductData(this.time, this.price);
 }

@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:e_grocery/src/components/clothing/ClothingStoresProviderMethods.dart';
 import 'package:e_grocery/src/components/graph_page_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
@@ -7,6 +8,7 @@ import 'package:e_grocery/src/networking/clothing/markham_data.dart';
 import 'package:e_grocery/src/networking/clothing/sportscene_data.dart';
 import 'package:e_grocery/src/networking/clothing/superbalist_data.dart';
 import 'package:e_grocery/src/networking/clothing/woolworths_clothing_data.dart';
+import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/pages/clothing/woolworths_clothing_product_graph.dart';
 import 'package:e_grocery/src/providers/clothing/foschini/foschini_product_name_provider.dart';
 import 'package:e_grocery/src/providers/clothing/foschini/foschini_product_provider.dart';
@@ -25,7 +27,7 @@ import 'package:string_similarity/string_similarity.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class FoschiniProductGraph extends StatefulWidget {
-  static const id = "foschini-product-graph";
+  static const id = "foschiniProductGraph";
 
   ProductItem productItem;
 
@@ -75,15 +77,20 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
   }
 
   Future<void> _getProductData() async {
-    await Provider.of<FoschiniAllProductList>(context, listen: false)
-        .getItems();
-    await Provider.of<MarkhamAllProductList>(context, listen: false).getItems();
-    await Provider.of<SportsceneAllProductList>(context, listen: false)
-        .getItems();
-    await Provider.of<SuperbalistAllProductList>(context, listen: false)
-        .getItems();
-    await Provider.of<WoolworthsClothingAllProductList>(context, listen: false)
-        .getItems();
+//    await Provider.of<FoschiniAllProductList>(context, listen: false)
+//        .getItems();
+//    await Provider.of<MarkhamAllProductList>(context, listen: false).getItems();
+//    await Provider.of<SportsceneAllProductList>(context, listen: false)
+//        .getItems();
+//    await Provider.of<SuperbalistAllProductList>(context, listen: false)
+//        .getItems();
+//    await Provider.of<WoolworthsClothingAllProductList>(context, listen: false)
+//        .getItems();
+    if (await TestConnection.checkForConnection()) {
+      ClothingStoresProviderMethods.checkNullAndGetAllProductData(context);
+    } else {
+      TestConnection.showNoNetworkDialog(context);
+    }
   }
 
   Future<void> _onRefresh() async {
@@ -193,33 +200,6 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
                     SizedBox(
                       height: 40,
                     ),
-//              Padding(
-//                padding:
-//                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-//                child: Row(
-//                  children: [
-//                    GestureDetector(
-//                      onTap: () => Navigator.of(context).pop(),
-//                      child: Card(
-//                        color: kBgShoprite.withOpacity(1),
-//                        shape: RoundedRectangleBorder(
-//                          borderRadius: BorderRadius.circular(5),
-//                        ),
-//                        elevation: 10,
-//                        child: Container(
-//                          height: 50,
-//                          width: 50,
-//                          child: Icon(
-//                            Icons.arrow_back,
-//                            color: Colors.white,
-//                            size: 30,
-//                          ),
-//                        ),
-//                      ),
-//                    )
-//                  ],
-//                ),
-//              ),
                     Container(
                       margin: EdgeInsets.symmetric(
                           horizontal: screenHeight10p * 1.5),
@@ -382,12 +362,9 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
                         priceValue: widget.productItem.prices.last),
 
                     SizedBox(
-                      height: 2 * screenHeight10p,
+                      height: 5 * screenHeight10p,
                     ),
 
-                    SizedBox(
-                      height: 3 * screenHeight10p,
-                    ),
 
                     if (_isLoadingRecommendations)
                       Center(
@@ -423,13 +400,12 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
                                       ),
                                     ),
                                 child: RecommendationProductCard(
-                                    finalPnPProductItems: finalFoschiniProductItems,
+                                    finalStoreProductItems: finalFoschiniProductItems,
                                     nullImageUrl: _nullImageUrl,
                                     index: index),
                               );
                             },
-                          )),
-
+                          ),),
 
                     if (finalMarkhamProductItems.isNotEmpty)
                       RecommendationStoreName(
