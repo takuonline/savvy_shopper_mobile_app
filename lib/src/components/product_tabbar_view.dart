@@ -1,7 +1,7 @@
 import 'package:e_grocery/src/components/grid_homescreen_product_card/product_card_white.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
-import 'package:e_grocery/src/pages/clothing/foschini_product_graph.dart';
+import 'package:e_grocery/src/pages/clothing_product_graph/foschini_product_graph.dart';
 import 'package:flutter/material.dart';
 
 class StoreMainMenuTabBarView {
@@ -20,7 +20,7 @@ class StoreMainMenuTabBarView {
 //  - sportscene
 
 //  the classes need to have certain characteristic:
-//  make use Prodcut card
+//  make use Product card
 //
   ) {
     final screenWidth = MediaQuery.of(context).size.width;

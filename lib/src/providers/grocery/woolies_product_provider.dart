@@ -5,18 +5,20 @@ import 'package:e_grocery/src/networking/woolies_data.dart';
 import 'package:flutter/material.dart';
 
 class WooliesAllProductList with ChangeNotifier {
-  dynamic _data ;
+  dynamic _data;
 
-  dynamic get data {
-    return _data;
-  }
+  List<String> _titles = [];
+
+  dynamic get data => _data;
+
+  List<String> get titles => [..._titles];
 
   Future<void> getItems() async {
     if (await TestConnection.checkForConnection()) {
       WooliesData _wooliesdata = WooliesData();
       dynamic data = await _wooliesdata.getData();
-
       _data = data;
+      getProductNameList();
       notifyListeners();
     }
   }
@@ -24,6 +26,12 @@ class WooliesAllProductList with ChangeNotifier {
   void addData(dynamic value) {
     value == null ? print("values is null : $value") : _data = value;
   }
+
+  void getProductNameList() {
+    if (data != null) {
+      List<dynamic> _allProducts = jsonDecode(data["all_products"]);
+      _titles = _allProducts.map((e) => e.toString()).toList();
+    }
+    notifyListeners();
+  }
 }
-
-

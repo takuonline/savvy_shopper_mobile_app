@@ -8,7 +8,7 @@ class ComputermaniaData {
   Future<dynamic> getData() async {
     Map<String, String> headers = {
       "Connection": "Keep-Alive",
-      "Keep-Alive": "timeout=20, max=1000"
+      "Keep-Alive": "timeout=5, max=1000"
     };
     try {
       print("getting data...computermania...................");

@@ -310,17 +310,14 @@ class _ComputermaniaHomeScreenState extends State<ComputermaniaHomeScreen> {
                           child: GestureDetector(
                             onTap: () async {
                               if (await TestConnection.checkForConnection()) {
-                                Provider.of<ComputermaniaProductNameList>(
-                                        context,
-                                        listen: false)
-                                    .getProductNameList(data, context);
+//
                                 final result = await showSearch(
                                     context: context,
                                     delegate: AccessoriesProductSearch(
                                       networkData: ComputermaniaData(),
                                       bgColor: kBgComputermania,
                                       items: Provider.of<
-                                                  ComputermaniaProductNameList>(
+                                                  ComputermaniaAllProductList>(
                                               context,
                                               listen: false)
                                           .titles,

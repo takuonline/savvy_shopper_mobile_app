@@ -8,8 +8,7 @@ import 'package:e_grocery/src/components/product_tabbar_view.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/clothing/superbalist_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/providers/clothing/superbalist/superbalist_product_name_provider.dart';
-import 'package:e_grocery/src/providers/clothing/superbalist/superbalist_product_provider.dart';
+import 'package:e_grocery/src/providers/clothing/superbalist_product_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
@@ -295,16 +294,14 @@ class _SuperbalistHomeScreenState extends State<SuperbalistHomeScreen>
                                 SuperbalistData _networkData =
                                     SuperbalistData();
 
-                                Provider.of<SuperbalistProductNameList>(context,
-                                        listen: false)
-                                    .getProductNameList(data, context);
                                 final result = await showSearch(
                                     context: context,
                                     delegate: FoschiniGroupProductSearch(
-                                        items: Provider.of<
-                                                    SuperbalistProductNameList>(
-                                                context,
-                                                listen: false)
+                                        items: Provider
+                                            .of<
+                                            SuperbalistAllProductList>(
+                                            context,
+                                            listen: false)
                                             .items,
                                         networkData: _networkData));
                                 print(result);

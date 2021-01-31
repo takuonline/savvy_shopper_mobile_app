@@ -317,7 +317,7 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
                     ),
                   )),
                   Positioned(
-                    bottom: screenHeight10p * 4,
+                    bottom: screenHeight10p * 2.3,
                     child: FadeTransition(
                       opacity: _textFadeAnimation,
                       child: SlideTransition(

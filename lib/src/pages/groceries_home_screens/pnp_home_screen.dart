@@ -2,25 +2,24 @@ import 'dart:convert';
 
 import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/homescreen_components.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/components/grid_homescreen_product_card/product_card_white.dart';
+import 'package:e_grocery/src/components/grid_homescreen_product_card/product_card_white.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/components/pnp/pnp_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/pnp_product_graph.dart';
-import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
-import 'package:e_grocery/src/providers/pnp_product_provider.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
+import 'package:e_grocery/src/providers/grocery/pnp_product_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
 class PnPHomeScreen extends StatefulWidget {
-  static const id = "/pnpHomeScreen" ;
+  static const id = "/pnpHomeScreen";
+
   @override
   _PnPHomeScreenState createState() => _PnPHomeScreenState();
 }
 
 class _PnPHomeScreenState extends State<PnPHomeScreen> {
-
   final _textController = TextEditingController();
   final _gridScrollController = ScrollController();
   ScrollController _scrollController = ScrollController();
@@ -235,24 +234,6 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
       setState(() => _isLoading=false);
     }
 
-//    if (data != null) {
-//      setState(() {
-//        _isLoading=false;
-//      });
-//
-//      try{
-//        _cleanCheap(jsonDecode(data["cheap"]));
-//        _cleanExpensive(jsonDecode(data["expensive"]));
-//      } on FormatException catch(e){
-//        print(e);
-//      }
-//
-//
-//    }else{
-//      setState(() {
-//        _isLoading=true;
-//      });
-//    }
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -315,8 +296,6 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
 
                               if(await TestConnection.checkForConnection()){
 
-                                Provider.of<PnPProductNameList>(context, listen: false)
-                                    .getProductNameList(data, context);
                                 final result = await showSearch(
                                     context: context, delegate: ProductSearch());
                                 print(result);
@@ -465,9 +444,6 @@ class _PnPHomeScreenState extends State<PnPHomeScreen> {
       ),
     );
   }
-
-
-
 
 
   ListView productTabBarView(BuildContext context, List<ProductItem> itemList) {

@@ -8,8 +8,7 @@ import 'package:e_grocery/src/components/product_tabbar_view.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/clothing/foschini_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/providers/clothing/foschini/foschini_product_provider.dart';
-import 'package:e_grocery/src/providers/clothing/foschini/foschini_product_name_provider.dart';
+import 'package:e_grocery/src/providers/clothing/foschini_product_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
@@ -95,7 +94,6 @@ class _FoschiniHomeScreenState extends State<FoschiniHomeScreen>
         });
       }
     } else {
-//      TestConnection.showNetworkDialog(context);
       await _showNetworkDialog(context);
     }
   }
@@ -197,29 +195,23 @@ class _FoschiniHomeScreenState extends State<FoschiniHomeScreen>
   final _nullImageUrl =
       'https://image.tfgmedia.co.za/image/1/process/452x57?source=http://cdn.tfgmedia.co.za/00/BrandImage/foschini.png';
 
-  void toggleGrid() {
-    setState(() {
-      _isGridOff = !_isGridOff;
-    });
-  }
+  void toggleGrid() => setState(() => _isGridOff = !_isGridOff);
 
   void _loadData(BuildContext context) {
     if (data != null && !_isDataLoaded) {
-//        print("in if statement");
       _cleanCheap(jsonDecode(data["cheap"]));
       _cleanExpensive(jsonDecode(data["expensive"]));
 
       setState(() => _isLoading = false);
       setState(() => _isDataLoaded = true);
     } else {
-//      print("in else statement");
       setState(() => _isLoading = true);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    data = Provider.of<FoschiniAllProductList>(context, listen: true).data;
+    data = Provider.of<FoschiniAllProductList>(context).data;
 
     if (!_isDataLoaded) {
       _loadData(context);
@@ -289,17 +281,18 @@ class _FoschiniHomeScreenState extends State<FoschiniHomeScreen>
                           child: GestureDetector(
                             onTap: () async {
                               if (await TestConnection.checkForConnection()) {
-                                Provider.of<FoschiniProductNameList>(context,
-                                        listen: false)
-                                    .getProductNameList(data, context);
+//                                Provider.of<FoschiniProductNameList>(context,
+//                                        listen: false)
+//                                    .getProductNameList(data, context);
 
                                 final result = await showSearch(
                                     context: context,
                                     delegate: FoschiniGroupProductSearch(
-                                        items: Provider.of<
-                                                    FoschiniProductNameList>(
-                                                context,
-                                                listen: false)
+                                        items:
+                                        Provider
+                                            .of<FoschiniAllProductList>(
+                                            context,
+                                            listen: false)
                                             .items,
                                         networkData: FoschiniData()));
                                 print(result);
@@ -375,13 +368,6 @@ class _FoschiniHomeScreenState extends State<FoschiniHomeScreen>
 //              physics: NeverScrollableScrollPhysics(),
 
               height:
-//             _tabController.index==0?
-//
-//     ( _isGridOff
-//    ? screenHeight10p* 7 * _cheap.length.toDouble()
-//        : screenHeight10p* 24 * _cheap.length.toDouble())
-//
-//                 :
 
                   (_isGridOff
                       ? screenHeight10p * 7 * _cheap.length.toDouble()
@@ -433,16 +419,8 @@ class _FoschiniHomeScreenState extends State<FoschiniHomeScreen>
                     Expanded(
                       child: Material(
                           child: TabBarView(
-//    BuildContext context,
-//    List<ProductItem> itemList,
-//    ScrollController _scrollController,
-//    bool _isGridOff,
-//    String _nullImageUrl,
-//
-//    ScrollController _gridScrollController
 
-//                                  controller: _tabController,
-                        children: [
+                            children: [
                           StoreMainMenuTabBarView.productTabBarView(
                             context,
                             _allProducts,

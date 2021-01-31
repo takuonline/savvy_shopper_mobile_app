@@ -306,17 +306,14 @@ class _TakealotHomeScreenState extends State<TakealotHomeScreen> {
                           child: GestureDetector(
                             onTap: () async {
                               if (await TestConnection.checkForConnection()) {
-                                Provider.of<TakealotProductNameList>(context,
-                                        listen: false)
-                                    .getProductNameList(data, context);
 
-                                final result = await showSearch(
+                                       final result = await showSearch(
                                     context: context,
                                     delegate: AccessoriesProductSearch(
                                       networkData: TakealotData(),
                                       bgColor: kBgTakealot,
                                       items:
-                                          Provider.of<TakealotProductNameList>(
+                                          Provider.of<TakealotAllProductList>(
                                                   context,
                                                   listen: false)
                                               .titles,

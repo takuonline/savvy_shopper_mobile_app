@@ -89,12 +89,12 @@ class _FilterDialogState extends State<FilterDialog> {
                 RaisedButton(
                   color: Colors.black,
                   onPressed: () {
-                    if (!widget.isShopriteChecked &&
-                        !widget.isPnPChecked &&
-                        !!widget.isWooliesChecked) {
-                    } else {
-                      Navigator.pop(context);
-                    }
+//                    if (!widget.isShopriteChecked &&
+//                        !widget.isPnPChecked &&
+//                        !widget.isWooliesChecked) {
+//                    } else {
+                    Navigator.pop(context);
+//                    }
                   },
                   child: Padding(
                     padding:

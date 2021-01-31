@@ -8,8 +8,7 @@ import 'package:e_grocery/src/components/product_tabbar_view.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/clothing/markham_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/providers/clothing/markham/markham_product_name_provider.dart';
-import 'package:e_grocery/src/providers/clothing/markham/markham_product_provider.dart';
+import 'package:e_grocery/src/providers/clothing/markham_product_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
@@ -289,16 +288,16 @@ class _MarkhamHomeScreenState extends State<MarkhamHomeScreen>
                           child: GestureDetector(
                             onTap: () async {
                               if (await TestConnection.checkForConnection()) {
-                                Provider.of<MarkhamProductNameList>(context,
-                                        listen: false)
-                                    .getProductNameList(data, context);
+//                                Provider.of<MarkhamAllProductList>(context,
+//                                        listen: false)
+//                                    .getProductNameList(data, context);
 
                                 final _networkData = MarkhamData();
                                 final result = await showSearch(
                                     context: context,
                                     delegate: FoschiniGroupProductSearch(
                                         items:
-                                            Provider.of<MarkhamProductNameList>(
+                                            Provider.of<MarkhamAllProductList>(
                                                     context,
                                                     listen: false)
                                                 .items,

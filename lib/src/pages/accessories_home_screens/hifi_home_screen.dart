@@ -303,17 +303,15 @@ class _HifiHomeScreenState extends State<HifiHomeScreen> {
                           child: GestureDetector(
                             onTap: () async {
                               if (await TestConnection.checkForConnection()) {
-                                Provider.of<HifiProductNameList>(context,
-                                        listen: false)
-                                    .getProductNameList(data, context);
                                 final result = await showSearch(
                                     context: context,
                                     delegate: AccessoriesProductSearch(
                                       networkData: HifiData(),
                                       bgColor: kBgHifi,
-                                      items: Provider.of<HifiProductNameList>(
-                                              context,
-                                              listen: false)
+                                      items: Provider
+                                          .of<HifiAllProductList>(
+                                          context,
+                                          listen: false)
                                           .titles,
                                     ));
                                 print(result);

@@ -16,26 +16,25 @@ import 'package:string_similarity/string_similarity.dart';
 class AccessoriesGraphRecommendations {
   static Future<Map> getRecommendations(
       BuildContext context, String productTitle) async {
-    var dataTakealot =
-        Provider.of<TakealotAllProductList>(context, listen: false).data;
-    Provider.of<TakealotProductNameList>(context, listen: false)
-        .getProductNameList(dataTakealot, context);
+//    var dataTakealot =
+//        Provider.of<TakealotAllProductList>(context, listen: false).data;
+//    Provider.of<TakealotProductNameList>(context, listen: false)
+//        .getProductNameList(dataTakealot, context);
     List<String> takealotList =
-        Provider.of<TakealotProductNameList>(context, listen: false).titles;
+        Provider.of<TakealotAllProductList>(context, listen: false).titles;
 
-    var dataHifi = Provider.of<HifiAllProductList>(context, listen: false).data;
-    Provider.of<HifiProductNameList>(context, listen: false)
-        .getProductNameList(dataHifi, context);
+//    var dataHifi = Provider.of<HifiAllProductList>(context, listen: false).data;
+//    Provider.of<HifiProductNameList>(context, listen: false)
+//        .getProductNameList(dataHifi, context);
     List<String> hifiList =
-        Provider.of<HifiProductNameList>(context, listen: false).titles;
-
-    var dataComputermania =
-        Provider.of<ComputermaniaAllProductList>(context, listen: false).data;
-    Provider.of<ComputermaniaProductNameList>(context, listen: false)
-        .getProductNameList(dataComputermania, context);
+        Provider.of<HifiAllProductList>(context, listen: false).titles;
+//
+//    var dataComputermania =
+//        Provider.of<ComputermaniaAllProductList>(context, listen: false).data;
+//    Provider.of<ComputermaniaProductNameList>(context, listen: false)
+//        .getProductNameList(dataComputermania, context);
     List<String> computermaniaList =
-        Provider.of<ComputermaniaProductNameList>(context, listen: false)
-            .titles;
+        Provider.of<ComputermaniaAllProductList>(context, listen: false).titles;
 
     try {
       Future<List<ProductItem>> resultTakealot = runBestMatchHelper(

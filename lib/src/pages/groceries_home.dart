@@ -8,7 +8,6 @@ import 'package:e_grocery/src/pages/groceries_home_screens/woolies_home_screen.d
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 
 class GroceriesHomePage extends StatefulWidget {
   static const id = "/groceriesHome";
@@ -28,36 +27,11 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
   Animation<Offset> _pnpSlide;
   Animation<Offset> _woolworthsSlide;
 
-  bool _isInit = false;
-  bool _pnpIsInit = false;
-  bool _wooliesIsInit = false;
-
 
   @override
   void initState() {
     super.initState();
 
-//
-//    if (!_isInit) {
-//      Provider.of<AllProductList>(context,listen:false).getItems();
-//      setState(() {
-//        _isInit = true;
-//      });
-//    }
-//
-//    if (!_pnpIsInit) {
-//      Provider.of<PnPAllProductList>(context,listen:false).getItems();
-//      setState(() {
-//        _pnpIsInit = true;
-//      });
-//    }
-//
-//    if (!_wooliesIsInit) {
-//      Provider.of<WooliesAllProductList>(context,listen:false).getItems();
-//      setState(() {
-//        _wooliesIsInit = true;
-//      });
-//    }
 
     _aController = AnimationController(
       duration: Duration(milliseconds: 3000),
@@ -180,10 +154,6 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
           text: "Explore",
           color: kBgShoprite,
           navigationFunction: () async {
-//                            bool _isConnected =  await TestConnection.checkForConnection();
-//
-//                           _isConnected
-
             Navigator.pushNamed(
                 context, ShopriteHomeScreen.id);
 //                                : TestConnection.showNetworkDialog(context);
@@ -285,13 +255,6 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
       )
     };
 
-//    ScreenUtil.init(constrants);
-//    allowFontScaling:false;
-//    ScreenUtil.instance = ScreenUtil.getInstance()..init(context);
-
-//If the design is based on the size of the iPhone6 ​​(iPhone6 ​​750*1334)
-//    ScreenUtil.instance = ScreenUtil()..init(context);
-
 
     return Scaffold(
       body: Container(
@@ -327,7 +290,7 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                         ),
                       )),
                   Positioned(
-                    bottom: screenHeight10p * 4,
+                    bottom: screenHeight10p * 2.3,
                     child: FadeTransition(
                       opacity: _textFadeAnimation,
                       child: SlideTransition(
@@ -358,7 +321,7 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                 decoration: BoxDecoration(
                     color: kTextFieldBgGrey,
                     borderRadius: BorderRadius.circular(
-                        screenWidth * .07
+                        screenWidth * .06
                     )
                 ),
                 child: Column(
@@ -370,12 +333,6 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                       position: _shopriteSlide,
                       child: InkWell(
                         onTap: () async {
-//                      if (!_isInit) {
-//                      Provider.of<ShopriteAllProductList>(context,listen:false).getItems();
-//                        setState(() {
-//                          _isInit = true;
-//                        });
-//                      }
                           final _item = _welcomeScreenItemMap['shoprite'];
                           await _whenCardIsClicked();
                           Navigator.push(
@@ -404,15 +361,7 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                                 borderRadius: cardBorderRadius),
                             child: Stack(
                               children: [
-//                              Positioned(
-//                                left: -80,
-//                                bottom: -50,
-//                                child: SvgPicture.asset(
-//                                  "assets/blob-1.svg",
-//                                  height: screenHeight * .31,
-//                                  color: Colors.black.withOpacity(.3),
-//                                ),
-//                              ),
+
 
                                 Positioned(
                                   right: 30,

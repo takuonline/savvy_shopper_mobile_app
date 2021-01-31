@@ -4,9 +4,7 @@ import 'package:e_grocery/src/components/grocery_shoppinglist/grocery_shoppingli
 class GroceryShoppingList with ChangeNotifier {
   List<GroceryShoppingListItem> _items = [];
 
-  List<GroceryShoppingListItem> get items {
-    return _items;
-  }
+  List<GroceryShoppingListItem> get items => _items;
 
   void addToGroceryShoppingList(GroceryShoppingListItem value) {
     if (!items.contains(value)) {

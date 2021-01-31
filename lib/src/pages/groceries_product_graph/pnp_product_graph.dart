@@ -5,6 +5,7 @@ import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/shoprite_product_graph.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
+import 'package:e_grocery/src/services/grocery_services/get_graph_page_recommendations_groceries.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -21,11 +22,6 @@ class PnPProductGraph extends StatefulWidget {
 }
 
 class _PnPProductGraphState extends State<PnPProductGraph> {
-//  List<String> finalShopriteProducts = [];
-//  List finalShopriteProductItems = [];
-//
-//  List<String> finalWooliesProducts = [];
-//  List finalWooliesProductItems = [];
   List finalPnPProductItems = [];
   List finalShopriteProductItems = [];
   List finalWooliesProductItems = [];
@@ -47,17 +43,7 @@ class _PnPProductGraphState extends State<PnPProductGraph> {
 
   Future<void> _getProductData() async {
     await GroceryStoresProviderMethods.checkNullAndGetAllProductData(context);
-//    Provider.of<ShopriteAllProductList>(context,
-//        listen: false)
-//        .getItems();
-//
-//    Provider.of<PnPAllProductList>(context,
-//        listen: false)
-//        .getItems();
-//
-//    Provider.of<WooliesAllProductList>(context,
-//        listen: false)
-//        .getItems();
+
   }
 
   Future<void> _onRefresh() async {
@@ -66,22 +52,8 @@ class _PnPProductGraphState extends State<PnPProductGraph> {
       _isLoadingRecommendations = true;
     });
     try {
-//      WidgetsBinding.instance.addPostFrameCallback((_)async{
-//      });
-//        GraphGetRecommendation.getRecommendations(
-//            context,
-////            finalPnPProducts ,
-////              finalPnPProductItems ,
-////                         finalShopriteProducts ,
-////                  finalShopriteProductItems ,
-////                      finalWooliesProducts ,
-////               finalWooliesProductItems ,
-//            widget.productItem.title
-//
-//        )
-//       );
-
-      Map dataMap = await GraphGetRecommendation.getRecommendations(
+      Map dataMap = await GetGraphPageRecommendationGroceries
+          .getRecommendations(
           context, widget.productItem.title);
 
       finalPnPProductItems = await dataMap['pnp'];
@@ -101,7 +73,8 @@ class _PnPProductGraphState extends State<PnPProductGraph> {
       _getProductData();
 //      WidgetsBinding.instance.addPostFrameCallback((_) async{
 
-      Map dataMap = await GraphGetRecommendation.getRecommendations(
+      Map dataMap = await GetGraphPageRecommendationGroceries
+          .getRecommendations(
           context, widget.productItem.title);
 
       finalPnPProductItems = await dataMap['pnp'];
@@ -122,7 +95,8 @@ class _PnPProductGraphState extends State<PnPProductGraph> {
 
 //      WidgetsBinding.instance.addPostFrameCallback((_) async{
 
-      Map dataMap = await GraphGetRecommendation.getRecommendations(
+      Map dataMap = await GetGraphPageRecommendationGroceries
+          .getRecommendations(
           context, widget.productItem.title);
 
       finalPnPProductItems = await dataMap['pnp'];
@@ -145,45 +119,45 @@ class _PnPProductGraphState extends State<PnPProductGraph> {
 
   @override
   void initState() {
-//    if (Provider.of<AllGroceryStoresData>(context, listen: false).data ==
-//        null) {
-//      Provider.of<AllGroceryStoresData>(context, listen: false)
-//          .getAllStoresData();
-//    }
-//
-//
-//    WidgetsBinding.instance.addPostFrameCallback((_){
-//      getRecommendations();
-//      // Add Your Code here.
-//
-//    });
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _onRefresh();
     });
   }
 
-  void _showSnackBar(BuildContext context, String text, Color color) {
-    Scaffold.of(context).showSnackBar(new SnackBar(
-      duration: Duration(milliseconds: 2000),
-      content: new Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white),
-      ),
-      backgroundColor: color,
-    ));
-  }
+//  void _showSnackBar(BuildContext context, String text, Color color) {
+//    Scaffold.of(context).showSnackBar(new SnackBar(
+//      duration: Duration(milliseconds: 2000),
+//      content: new Text(
+//        text,
+//        textAlign: TextAlign.center,
+//        style: TextStyle(color: Colors.white),
+//      ),
+//      backgroundColor: color,
+//    ));
+//  }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     final screenHeight10p =
-        screenHeight * (10 / MediaQuery.of(context).size.height);
+        screenHeight * (10 / MediaQuery
+            .of(context)
+            .size
+            .height);
     final screenWidth10p =
-        screenWidth * (10 / MediaQuery.of(context).size.width);
+        screenWidth * (10 / MediaQuery
+            .of(context)
+            .size
+            .width);
 
     return RefreshIndicator(
       onRefresh: () => _onRefresh(),

@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
-import 'package:e_grocery/src/providers/pnp_product_provider.dart';
-import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
-import 'package:e_grocery/src/providers/woolies_product_provider.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/pnp_product_provider.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/shoprite_product_provider.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/woolies_product_provider.dart';
 import 'package:e_grocery/src/components/graph_page_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
+import 'package:e_grocery/src/services/grocery_services/get_graph_page_recommendations_groceries.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
@@ -25,13 +26,6 @@ class ShopriteProductGraph extends StatefulWidget {
 }
 
 class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
-//  List<String> finalPnPProducts = [];
-//  List finalPnPProductItems = [];
-//  List<String> finalShopriteProducts = [];
-//  List finalShopriteProductItems = [];
-//  List<String> finalWooliesProducts = [];
-//  List finalWooliesProductItems = []
-
   List finalPnPProductItems = [];
   List finalShopriteProductItems = [];
   List finalWooliesProductItems = [];
@@ -72,7 +66,8 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
       _isLoadingRecommendations = true;
     });
     try {
-      Map dataMap = await GraphGetRecommendation.getRecommendations(
+      Map dataMap = await GetGraphPageRecommendationGroceries
+          .getRecommendations(
           context, widget.productItem.title);
 
       finalPnPProductItems = await dataMap['pnp'];
@@ -92,7 +87,8 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
       _getProductData();
 //      WidgetsBinding.instance.addPostFrameCallback((_) async{
 
-      Map dataMap = await GraphGetRecommendation.getRecommendations(
+      Map dataMap = await GetGraphPageRecommendationGroceries
+          .getRecommendations(
           context, widget.productItem.title);
 
       finalPnPProductItems = await dataMap['pnp'];
@@ -114,16 +110,15 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
 
 //      WidgetsBinding.instance.addPostFrameCallback((_) async{
 
-      Map dataMap = await GraphGetRecommendation.getRecommendations(
+      Map dataMap = await GetGraphPageRecommendationGroceries
+          .getRecommendations(
           context, widget.productItem.title);
 
       finalPnPProductItems = await dataMap['pnp'];
-
       finalShopriteProductItems = await dataMap['shoprite'];
       finalWooliesProductItems = await dataMap['woolies'];
       setState(() {});
 
-//      });
 
       setState(() {
         _isLoadingRecommendations = false;

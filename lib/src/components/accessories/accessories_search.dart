@@ -5,7 +5,6 @@ import 'package:e_grocery/src/components/is_loading_dialog.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/pages/accessories_product_graph/accessories_product_graph.dart';
-import 'package:e_grocery/src/pages/clothing/foschini_product_graph.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 

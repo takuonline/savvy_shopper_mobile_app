@@ -3,13 +3,9 @@ import 'dart:io';
 
 import 'package:e_grocery/src/components/is_loading_dialog.dart';
 import 'package:e_grocery/src/components/product_item.dart';
-import 'package:e_grocery/src/networking/clothing/foschini_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/pages/clothing/foschini_product_graph.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/pnp_product_graph.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/clothing/foschini/foschini_product_name_provider.dart';
+import 'package:e_grocery/src/pages/clothing_product_graph/foschini_product_graph.dart';
 import "package:flutter/material.dart";
-import 'package:provider/provider.dart';
 
 class FoschiniGroupProductSearch extends SearchDelegate {
   List items;

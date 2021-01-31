@@ -3,13 +3,12 @@ import 'dart:convert';
 import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/homescreen_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/components/grid_homescreen_product_card/shoprite_product_card.dart';
+import 'package:e_grocery/src/components/grid_homescreen_product_card/shoprite_product_card.dart';
 import 'package:e_grocery/src/components/shoprite/shoprite_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/shoprite_product_graph.dart';
-import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
-import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/shoprite_product_graph.dart';
+import 'package:e_grocery/src/providers/grocery/shoprite_product_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +18,7 @@ import 'package:provider/provider.dart';
 
 class ShopriteHomeScreen extends StatefulWidget {
   static const id = "shopriteHomeScreen";
+
   @override
   _ShopriteHomeScreenState createState() => _ShopriteHomeScreenState();
 }
@@ -133,14 +133,15 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen> {
                             child: GestureDetector(
                               onTap: () async {
 
-                                if(await TestConnection.checkForConnection()){
-                                  Provider.of<ShopriteProductNameList>(
-                                      context, listen: false)
-                                      .getProductNameList(_data, context);
-                                  final result = await showSearch(
-                                      context: context, delegate: ProductSearch());
-                                  print(result);
-                                } else{
+                                if(await TestConnection.checkForConnection()) {
+//                                  Provider.of<ShopriteAllProductList>(
+//                                      context, listen: false)
+//                                      .getProductNameList();
+                                final result = await showSearch(
+                                    context: context,
+                                    delegate: ProductSearch());
+                                print(result);
+                              } else{
                                  await TestConnection.showNoNetworkDialog(
                                     context);
                               }

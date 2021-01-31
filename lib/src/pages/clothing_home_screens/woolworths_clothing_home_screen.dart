@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:e_grocery/src/components/clothing/foschini/foschini_search.dart';
 import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/homescreen_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
@@ -8,9 +7,8 @@ import 'package:e_grocery/src/components/woolies/woolies_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/clothing/woolworths_clothing_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/pages/clothing/woolworths_clothing_product_graph.dart';
-import 'package:e_grocery/src/providers/clothing/woolworths_clothing/woolworths_clothing_product_name_provider.dart';
-import 'package:e_grocery/src/providers/clothing/woolworths_clothing/woolworths_clothing_product_provider.dart';
+import 'package:e_grocery/src/pages/clothing_product_graph/woolworths_clothing_product_graph.dart';
+import 'package:e_grocery/src/providers/clothing/woolworths_clothing_product_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
@@ -306,16 +304,12 @@ class _WoolworthsClothingHomeScreenState
                               if (await TestConnection.checkForConnection()) {
                                 WoolworthsClothingData _networkData = WoolworthsClothingData();
 
-                                Provider.of<WoolworthsClothingProductNameList>(
-                                    context,
-                                    listen: false)
-                                    .getProductNameList(data, context);
                                 final result = await showSearch(
                                     context: context,
                                     delegate: WooliesProductSearch(
                                         items: Provider
                                             .of<
-                                            WoolworthsClothingProductNameList>(
+                                            WoolworthsClothingAllProductList>(
                                             context, listen: false)
                                             .items,
                                         networkData: _networkData
@@ -372,20 +366,6 @@ class _WoolworthsClothingHomeScreenState
             SizedBox(
               height: 40,
             ),
-//            Container(
-//              decoration: BoxDecoration(
-//                  color: kBgWoolies.withOpacity(.1),
-//                  borderRadius: BorderRadius.circular(15)),
-//              height: 70,
-//              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-//              padding: EdgeInsets.symmetric(
-//                horizontal: 10,
-//              ),
-//              child: DatatableGridSelector(
-//                _isGrid,toggleGrid
-//
-//              ),
-//            ),
 
             _isLoading
                 ? Center(child: CircularProgressIndicator())
@@ -587,105 +567,10 @@ class _WoolworthsClothingHomeScreenState
             ],
           ),
         )
-//        else Scrollbar(
-//          controller: _gridScrollController,
-//
-//          child: Padding(
-//            padding: const EdgeInsets.symmetric(horizontal: 10),
-//            child: GridView.builder(
-//                controller: _gridScrollController,
-//                itemCount: itemList.length,
-//                shrinkWrap: true,
-//                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//                  crossAxisCount: 2,
-//                  childAspectRatio: 1 / 1.4,
-//                  crossAxisSpacing: screenWidth*.03,
-//                ),
-//                itemBuilder: (_, index) {
-//                  return  index==itemList.length-1 ?  Container()   :
-//                  ( index.isEven ?
-//                  GestureDetector(
-//                    onTap: () =>Navigator.push(
-//                          context,
-//                          MaterialPageRoute(
-//                            builder: (context) =>
-//                                PnPProductGraph(
-//                                    productItem: itemList[index]),
-//                          ),
-//                        )
-//                        ,
-//                    child: ProductCard(
-//                      index: index,
-//
-//                      cheap: itemList,
-//                      shopriteNullImageUrl: _pnpNullImageUrl,
-////                                    showDialog: _showDialog(itemList[index], context),
-//                      product: itemList[index],
-//                    ),
-//                  ) :
-//                  Transform.translate(
-//                    offset: Offset(0,80),
-//                    child: GestureDetector(
-//                      onTap: () =>
-//                          Navigator.push(
-//                            context,
-//                            MaterialPageRoute(
-//                              builder: (context) =>
-//                                  PnPProductGraph(
-//                                      productItem: itemList[index]),
-//                            ),
-//                          )
-//                      ,
-//                      child: ProductCard(
-//                        index: index,
-//
-//                        cheap: itemList,
-//                        shopriteNullImageUrl: _pnpNullImageUrl,
-////                                    showDialog: _showDialog(itemList[index], context),
-//                        product: itemList[index],
-//                      ),
-//                    ),
-//                  ));
-//                }),
-//          ),
-//        ),
+
       ],
     );
   }
 
-//  Future<void> _showDialog(ProductItem product, BuildContext context) async {
-//    return showDialog<void>(
-//      context: context,
-//      builder: (BuildContext context) {
-//        return Hero(
-//            tag: '${product.imageUrl}',
-//            child: GestureDetector(
-//              onTap: () => Navigator.pop(context),
-//              child: Column(
-//                children: [
-//                  Expanded(
-//                    flex: 4,
-//                    child: Container(
-//                        child:
-//                        product.imageUrl == _badImageUrl ? Image.network(_pnpNullImageUrl) : Image.network(
-//                          product.imageUrl??_pnpNullImageUrl,
-//                        ),
-//
-//
-//
-//                    ),
-//                  ),
-//                  Expanded(
-//                    flex: 1,
-//                    child: Row(
-//                      children: [],
-//                    ),
-//                  )
-//                ],
-//              ),
-//            ));
-//      },
-//    );
-//  }
 
 }

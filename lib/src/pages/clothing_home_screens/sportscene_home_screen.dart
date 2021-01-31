@@ -8,8 +8,7 @@ import 'package:e_grocery/src/components/product_tabbar_view.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/clothing/sportscene_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/providers/clothing/sportscene/sportscene_product_name_provider.dart';
-import 'package:e_grocery/src/providers/clothing/sportscene/sportscene_product_provider.dart';
+import 'package:e_grocery/src/providers/clothing/sportscene_product_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
@@ -290,15 +289,15 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
                             onTap: () async {
                               if (await TestConnection.checkForConnection()) {
                                 SportsceneData _networkData = SportsceneData();
-
-                                Provider.of<SportsceneProductNameList>(context,
-                                        listen: false)
-                                    .getProductNameList(data, context);
+//
+//                                Provider.of<SportsceneAllProductList>(context,
+//                                        listen: false)
+//                                    .getProductNameList(data, context);
                                 final result = await showSearch(
                                     context: context,
                                     delegate: FoschiniGroupProductSearch(
                                         items: Provider.of<
-                                                    SportsceneProductNameList>(
+                                                    SportsceneAllProductList>(
                                                 context,
                                                 listen: false)
                                             .items,

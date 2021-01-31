@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:e_grocery/src/networking/accessories/hifi_data.dart';
-import 'package:e_grocery/src/networking/accessories/takealot_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:flutter/material.dart';
 
 class HifiAllProductList with ChangeNotifier {
   dynamic _data;
+  List<String> _titles = [];
+
+  List<String> get titles {
+    return [..._titles];
+  }
 
   dynamic get data {
     return _data;
@@ -16,6 +22,7 @@ class HifiAllProductList with ChangeNotifier {
       dynamic data = await _networkData.getData();
 
       _data = data;
+      getProductNameList();
       notifyListeners();
     }
   }
@@ -23,8 +30,13 @@ class HifiAllProductList with ChangeNotifier {
   void addData(dynamic value) {
     value == null ? print("values is null : $value") : _data = value;
   }
-//  void addToWishList(String value) {
-//    _items.add(value);
-//    notifyListeners();
-//  }
+
+  void getProductNameList() {
+    if (data != null) {
+      List<dynamic> _allProducts = jsonDecode(data["all_products"]);
+      _titles = _allProducts.map((e) => e.toString()).toList();
+    }
+
+    notifyListeners();
+  }
 }

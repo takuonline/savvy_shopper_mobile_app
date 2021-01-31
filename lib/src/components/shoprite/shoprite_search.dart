@@ -8,6 +8,7 @@ import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/networking/shoprite_data.dart';
 import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/shoprite_product_graph.dart';
 import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/shoprite_product_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
@@ -80,8 +81,9 @@ class ProductSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var _providerData = Provider.of<ShopriteProductNameList>(context);
-    final results = _providerData.titles
+//    var _providerData = ;
+    final results = Provider.of<ShopriteAllProductList>(context)
+        .titles
         .where(
           (product) => product.toLowerCase().contains(
                 query.toLowerCase(),
@@ -92,7 +94,7 @@ class ProductSearch extends SearchDelegate {
     return ((query == '')
         ? Container()
         : ListView.builder(
-        itemCount: results.length,
+            itemCount: results.length,
         itemBuilder: (context, index) =>
             ListTile(
               title: Text(

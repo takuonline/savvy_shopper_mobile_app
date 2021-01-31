@@ -1,7 +1,7 @@
 import 'package:e_grocery/src/components/grocery_shoppinglist/grocery_shoppinglist_search.dart';
-import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
-import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
-import 'package:e_grocery/src/providers/woolies_product_name_provider.dart';
+import 'package:e_grocery/src/providers/grocery/pnp_product_provider.dart';
+import 'package:e_grocery/src/providers/grocery/shoprite_product_provider.dart';
+import 'package:e_grocery/src/providers/grocery/woolies_product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,27 +18,26 @@ class GroceryShoppingListFilter with ChangeNotifier {
   }
 
   void getCombinedList(BuildContext context) {
-    var _pnpProviderData =
-        Provider.of<PnPProductNameList>(context, listen: false);
-    var _shopriteProviderData =
-        Provider.of<ShopriteProductNameList>(context, listen: false);
-    var _wooliesProviderData =
-        Provider.of<WooliesProductNameList>(context, listen: false);
-
-    print('calling getCombined');
-    List<StoreAndTitle> _pnpTitles = _pnpProviderData.titles
+    List<StoreAndTitle> _pnpTitles = Provider
+        .of<PnPAllProductList>(context, listen: false)
+        .titles
         .map((e) => StoreAndTitle("Pick n Pay", e))
         .toList();
-    List<StoreAndTitle> _shopriteTitles = _shopriteProviderData.titles
+    List<StoreAndTitle> _shopriteTitles = Provider
+        .of<ShopriteAllProductList>(context, listen: false)
+        .titles
         .map((e) => StoreAndTitle("Shoprite", e))
         .toList();
-    List<StoreAndTitle> _wooliesTitles = _wooliesProviderData.titles
+    List<StoreAndTitle> _wooliesTitles = Provider
+        .of<WooliesAllProductList>(context, listen: false)
+        .titles
         .map((e) => StoreAndTitle("Woolworths", e))
         .toList();
 
     List<StoreAndTitle> shuffledList = [];
 
-    if (Provider.of<GroceryShoppingListFilter>(context, listen: false)
+    if (Provider
+        .of<GroceryShoppingListFilter>(context, listen: false)
         .getData['pnp']) {
       shuffledList += _pnpTitles;
     }

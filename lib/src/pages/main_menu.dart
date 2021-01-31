@@ -9,17 +9,10 @@ import 'package:e_grocery/src/pages/accessories_home.dart';
 import 'package:e_grocery/src/pages/clothing_home.dart';
 import 'package:e_grocery/src/pages/groceries_home.dart';
 import 'package:e_grocery/src/pages/shopping_list.dart';
-import 'package:e_grocery/src/providers/clothing/foschini/foschini_product_provider.dart';
-import 'package:e_grocery/src/providers/clothing/markham/markham_product_provider.dart';
-import 'package:e_grocery/src/providers/clothing/sportscene/sportscene_product_provider.dart';
-import 'package:e_grocery/src/providers/clothing/superbalist/superbalist_product_provider.dart';
-import 'package:e_grocery/src/providers/clothing/woolworths_clothing/woolworths_clothing_product_provider.dart';
-import 'package:e_grocery/src/services/push_notification_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 
 class MainMenu extends StatefulWidget {
   static const id = 'main-menu';
@@ -118,7 +111,7 @@ class _MainMenuState extends State<MainMenu>
       parent: _aController,
       curve: Interval(
         .6,
-        .9,
+        1,
         curve: Curves.easeOut,
       ),
     );
@@ -137,7 +130,7 @@ class _MainMenuState extends State<MainMenu>
       parent: _aController,
       curve: Interval(
         .6,
-        .9,
+        1,
         curve: Curves.easeOut,
       ),
     );
@@ -191,26 +184,23 @@ class _MainMenuState extends State<MainMenu>
         .of(context)
         .size
         .width;
+
     final screenHeight = MediaQuery
         .of(context)
         .size
         .height;
-    final screenHeight10p = screenHeight * (10 / MediaQuery
-        .of(context)
-        .size
-        .height);
-    final screenWidth10p = screenWidth * (10 / MediaQuery
-        .of(context)
-        .size
-        .width);
+
+    final screenHeight10p = screenHeight * (10 / MediaQuery.of(context).size.height);
+
+    final screenWidth10p =
+        screenWidth * (10 / MediaQuery.of(context).size.width);
 
     final topBottomMargin = screenHeight10p * 2;
-    final _extraSpace = SizedBox(height: screenHeight10p * 4,);
+    final _extraSpace = SizedBox(
+      height: screenHeight10p * 3,
+    );
 
-    final TextStyle textStyle = Theme
-        .of(context)
-        .textTheme
-        .bodyText2;
+    final TextStyle textStyle = Theme.of(context).textTheme.bodyText2;
 
     final _mainTextStyle = TextStyle(
         color: kTextColor,
@@ -371,9 +361,7 @@ class _MainMenuState extends State<MainMenu>
                   ),),
               )
           ),
-          SizedBox(
-            height: screenHeight10p * 3,
-          ),
+          _extraSpace,
           FadeTransition(
             opacity: _clothingFade,
             child: SlideTransition(

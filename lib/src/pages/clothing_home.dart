@@ -449,7 +449,7 @@ class _ClothingHomeState extends State<ClothingHome>
                   ),
                 ),
                 Positioned(
-                  bottom: screenHeight10p * 3.5,
+                    bottom: screenHeight10p * 2.3,
                   child: FadeTransition(
                     opacity: _textFadeAnimation,
                     child: SlideTransition(
@@ -479,8 +479,7 @@ class _ClothingHomeState extends State<ClothingHome>
               child: Container(
                 decoration: BoxDecoration(
                     color: kTextFieldBgGrey,
-                    borderRadius: BorderRadius.circular(screenWidth10p * 4)
-                ),
+                    borderRadius: BorderRadius.circular(screenWidth10p * 3)),
 
                 child: Column(
                   children: [

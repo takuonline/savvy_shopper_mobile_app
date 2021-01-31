@@ -28,7 +28,7 @@ class _AccessoriesProductGraphState extends State<AccessoriesProductGraph> {
   bool _isLoadingRecommendations = false;
 
   final _nullImageUrl =
-      'https://www.pnp.co.za//pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_400x400.jpg';
+      'https://play-lh.googleusercontent.com/tTcm_kToEtUvXdVGytgjB2Lc-qQiNo5fxcagB7c7MX_UJsO43OFKkeOJOZZiOL1VO6c=s180-rw';
 
   List<ProductData> _getData() {
     List<ProductData> temp = [];

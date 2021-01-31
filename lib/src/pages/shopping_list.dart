@@ -9,12 +9,12 @@ import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/providers/grocery_shopping_list.dart';
 import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
-import 'package:e_grocery/src/providers/pnp_product_provider.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/pnp_product_provider.dart';
 import 'package:e_grocery/src/providers/shoppinglist_filter.dart';
 import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
-import 'package:e_grocery/src/providers/shoprite_product_provider.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/shoprite_product_provider.dart';
 import 'package:e_grocery/src/providers/woolies_product_name_provider.dart';
-import 'package:e_grocery/src/providers/woolies_product_provider.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/woolies_product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -247,44 +247,44 @@ class _ShoppingListState extends State<ShoppingList> {
                                       .checkForConnection()) {
                                     try {
 //                          get client data with all the info stored in provider
-                                      final _dataShoprite =
-                                          Provider
-                                              .of<ShopriteAllProductList>(
-                                              context,
-                                              listen: false)
-                                              .data;
+//                                      final _dataShoprite =
+//                                          Provider
+//                                              .of<ShopriteAllProductList>(
+//                                              context,
+//                                              listen: false)
+//                                              .data;
+//
+//                                      final _dataPnP =
+//                                          Provider
+//                                              .of<PnPAllProductList>(
+//                                              context,
+//                                              listen: false)
+//                                              .data;
 
-                                      final _dataPnP =
-                                          Provider
-                                              .of<PnPAllProductList>(
-                                              context,
-                                              listen: false)
-                                              .data;
-
-                                      final _dataWoolies =
-                                          Provider
-                                              .of<WooliesAllProductList>(
-                                              context,
-                                              listen: false)
-                                              .data;
+//                                      final _dataWoolies =
+//                                          Provider
+//                                              .of<WooliesAllProductList>(
+//                                              context,
+//                                              listen: false)
+//                                              .data;
 
                                       //                          only get the Title data from all the info
-                                      Provider.of<ShopriteProductNameList>(
-                                          context,
-                                          listen: false)
-                                          .getProductNameList(
-                                          _dataShoprite, context);
+//                                      Provider.of<ShopriteAllProductList>(
+//                                          context,
+//                                          listen: false)
+//                                          .getProductNameList(
+//                                           );
 
-                                      Provider.of<PnPProductNameList>(context,
-                                          listen: false)
-                                          .getProductNameList(
-                                          _dataPnP, context);
+//                                      Provider.of<PnPProductNameList>(context,
+//                                          listen: false)
+//                                          .getProductNameList(
+//                                          _dataPnP, context);
 
-                                      Provider.of<WooliesProductNameList>(
-                                          context,
-                                          listen: false)
-                                          .getProductNameList(
-                                          _dataWoolies, context);
+//                                      Provider.of<WooliesProductNameList>(
+//                                          context,
+//                                          listen: false)
+//                                          .getProductNameList(
+//                                          _dataWoolies, context);
                                     } on Exception {
                                       TestConnection.showOtherErrorDialog(
                                           context);
@@ -331,17 +331,18 @@ class _ShoppingListState extends State<ShoppingList> {
                                       Icon(
                                         Icons.search,
                                         color: Colors.black,
+                                        size: screenWidth10p * 2.3,
                                       ),
 
                                       Flexible(
                                         child: SizedBox(
-                                          width: screenWidth * .045,
+                                          width: screenWidth * .04,
                                         ),
                                       ),
 
                                       Padding(
                                         padding: EdgeInsets.symmetric(
-                                            horizontal: screenWidth10p * .3,
+                                            horizontal: screenWidth10p * .2,
                                             vertical: screenHeight10p * 2),
                                         child: FittedBox(
                                           child: Text(
@@ -352,7 +353,7 @@ class _ShoppingListState extends State<ShoppingList> {
                                                 decoration: TextDecoration.none,
                                                 color: kTextColor,
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: screenWidth10p * 1.8),
+                                                fontSize: screenWidth10p * 1.7),
                                           ),
                                         ),
                                       ),
@@ -381,7 +382,7 @@ class _ShoppingListState extends State<ShoppingList> {
                                     child: Center(
                                       child: Icon(
                                         Icons.filter_alt_outlined,
-                                        size: screenWidth10p * 2.8,
+                                        size: screenWidth10p * 2.6,
                                       ),
                                     ),
                                   ),
