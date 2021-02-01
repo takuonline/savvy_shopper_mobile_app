@@ -4,7 +4,6 @@ import 'package:e_grocery/src/components/welcome_screen_components.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/pages/groceries_home_screens/shoprite_home_screen.dart';
 import 'package:e_grocery/src/pages/groceries_home_screens/woolies_home_screen.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

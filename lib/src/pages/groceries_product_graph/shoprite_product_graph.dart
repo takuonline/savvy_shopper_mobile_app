@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:e_grocery/src/mixins/grocery_graph_page_mixin.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
 import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/pnp_product_provider.dart';
@@ -25,110 +26,17 @@ class ShopriteProductGraph extends StatefulWidget {
   _ShopriteProductGraphState createState() => _ShopriteProductGraphState();
 }
 
-class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
-  List finalPnPProductItems = [];
-  List finalShopriteProductItems = [];
-  List finalWooliesProductItems = [];
-
-  bool _isLoadingRecommendations = true;
-
-  final _nullImageUrl =
-      'https://play-lh.googleusercontent.com/tTcm_kToEtUvXdVGytgjB2Lc-qQiNo5fxcagB7c7MX_UJsO43OFKkeOJOZZiOL1VO6c=s180-rw';
-
-  List<ProductData> _getData() {
-    List<ProductData> temp = [];
-    for (int i = 0; i < widget.productItem.prices.length; i++) {
-      temp.add(ProductData(
-          widget.productItem.dates[i], widget.productItem.prices[i]));
-    }
-    return temp;
-  }
-
+class _ShopriteProductGraphState extends State<ShopriteProductGraph>
+    with GroceryGraphPageMixin {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _onRefresh();
-    });
   }
 
-  Future<void> _getProductData() async {
-    Provider.of<ShopriteAllProductList>(context, listen: false).getItems();
-
-    Provider.of<PnPAllProductList>(context, listen: false).getItems();
-
-    Provider.of<WooliesAllProductList>(context, listen: false).getItems();
-  }
-
-  Future<void> _onRefresh() async {
-    print("is getting data");
-    setState(() {
-      _isLoadingRecommendations = true;
-    });
-    try {
-      Map dataMap = await GetGraphPageRecommendationGroceries
-          .getRecommendations(
-          context, widget.productItem.title);
-
-      finalPnPProductItems = await dataMap['pnp'];
-      finalShopriteProductItems = await dataMap['shoprite'];
-      finalWooliesProductItems = await dataMap['woolies'];
-      setState(() {});
-
-      setState(() {
-        _isLoadingRecommendations = false;
-      });
-    } on NoSuchMethodError {
-      print("noooooooooooo such  methoddddddddddddddddd  in refreshing data ");
-
-      setState(() {
-        _isLoadingRecommendations = true;
-      });
-      _getProductData();
-//      WidgetsBinding.instance.addPostFrameCallback((_) async{
-
-      Map dataMap = await GetGraphPageRecommendationGroceries
-          .getRecommendations(
-          context, widget.productItem.title);
-
-      finalPnPProductItems = await dataMap['pnp'];
-      finalShopriteProductItems = await dataMap['shoprite'];
-      finalWooliesProductItems = await dataMap['woolies'];
-      setState(() {});
-
-//      });
-      setState(() {
-        _isLoadingRecommendations = false;
-      });
-    } on RangeError {
-      print("range errrrrrrrrrrrrrrrrrrrror in refreshing data");
-      setState(() {
-        _isLoadingRecommendations = true;
-      });
-
-      _getProductData();
-
-//      WidgetsBinding.instance.addPostFrameCallback((_) async{
-
-      Map dataMap = await GetGraphPageRecommendationGroceries
-          .getRecommendations(
-          context, widget.productItem.title);
-
-      finalPnPProductItems = await dataMap['pnp'];
-      finalShopriteProductItems = await dataMap['shoprite'];
-      finalWooliesProductItems = await dataMap['woolies'];
-      setState(() {});
-
-
-      setState(() {
-        _isLoadingRecommendations = false;
-      });
-    } catch (e) {
-      print(e);
-      setState(() {
-        _isLoadingRecommendations = false;
-      });
-    }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    onRefresh(widget.productItem.title);
   }
 
   @override
@@ -142,7 +50,7 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
         screenWidth * (10 / MediaQuery.of(context).size.width);
 
     return RefreshIndicator(
-      onRefresh: () => _onRefresh(),
+      onRefresh: () => onRefresh(widget.productItem.title),
       child: Scaffold(
 //      appBar: AppBar(
 //        title: Text("${widget.productItem.title}"),
@@ -187,7 +95,7 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: screenHeight10p * 1.5),
                             child: Image.network(
-                              widget.productItem.imageUrl ?? _nullImageUrl,
+                              widget.productItem.imageUrl ?? nullImageUrl,
                               fit: BoxFit.contain,
                             ),
                           ),
@@ -326,7 +234,7 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
                           series: <LineSeries>[
                             LineSeries(
 
-                                dataSource: _getData(),
+                                dataSource: getData(widget.productItem),
                                 xValueMapper: (product, _) => product.time,
                                 yValueMapper: (product, _) => product.price,
                                 // Enable data label
@@ -349,7 +257,7 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
 
                           GestureDetector(
                             onLongPress: () {
-                              _getProductData();
+                              getProductData();
                             },
                             child: MaxMinCard(
 //                        widget: widget,
@@ -406,7 +314,7 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
                   ),
 
 
-                  if(_isLoadingRecommendations) Center(
+                  if(isLoadingRecommendations) Center(
                     child: Container(
                       padding: EdgeInsets.symmetric(
                           vertical: screenHeight10p * 3),
@@ -443,8 +351,8 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
                                 ),
                             child: RecommendationProductCard(
                                 finalStoreProductItems: finalPnPProductItems,
-                                  nullImageUrl: _nullImageUrl,
-                                  index: index),
+                                nullImageUrl: nullImageUrl,
+                                index: index),
                           );
                         },
 
@@ -481,7 +389,7 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
                                 ),
                             child: RecommendationProductCardNoImage(
                                 finalPnPProductItems: finalWooliesProductItems,
-                                nullImageUrl: _nullImageUrl,
+                                nullImageUrl: nullImageUrl,
                                 index: index
 
                             ),
@@ -520,7 +428,7 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph> {
                                   ),
                               child: RecommendationProductCard(
                                   finalStoreProductItems: finalShopriteProductItems,
-                                  nullImageUrl: _nullImageUrl,
+                                  nullImageUrl: nullImageUrl,
                                   index: index
 
                               ),

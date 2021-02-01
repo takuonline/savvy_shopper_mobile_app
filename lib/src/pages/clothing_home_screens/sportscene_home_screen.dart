@@ -6,6 +6,7 @@ import 'package:e_grocery/src/components/homescreen_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/components/product_tabbar_view.dart';
 import 'package:e_grocery/src/constants/constants.dart';
+import 'package:e_grocery/src/mixins/clothing_home_page_mixin.dart';
 import 'package:e_grocery/src/networking/clothing/sportscene_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/providers/clothing/sportscene_product_provider.dart';
@@ -20,232 +21,148 @@ class SportsceneHomeScreen extends StatefulWidget {
 }
 
 class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
-    with SingleTickerProviderStateMixin {
-  final _textController = TextEditingController();
-  final _gridScrollController = ScrollController();
-  ScrollController _scrollController = ScrollController();
-  TabController _tabController;
-
-  bool _isDataLoaded = false;
-
-  bool _isLoading = false;
-  dynamic data;
-
-  List<ProductItem> _cheap = [];
-  List<ProductItem> _expensive = [];
-  List<ProductItem> _allProducts = [];
-
-  Future<void> _showNetworkDialog(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Please check your Network'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'An internet connection is required for this app, please make sure you are'
-                  ' connected to a network and try again',
-                  style: TextStyle(
-                    fontFamily: "Montserrat",
-                    color: Colors.black,
-                  ),
-                ),
-//                Text('Would you like to approve of this message?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'Retry',
-                style: TextStyle(color: kBgFoschini),
-              ),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                if (await TestConnection.checkForConnection()) {
-                  Provider.of<SportsceneAllProductList>(context, listen: false)
-                      .getItems();
-                } else {
-                  _showNetworkDialog(context);
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _testConnection() async {
-    if (await TestConnection.checkForConnection()) {
-      await Future.delayed(Duration(seconds: 15));
-      if (Provider.of<SportsceneAllProductList>(context, listen: false).data ==
-          null) {
-        setState(() {
-          _isLoading = true;
-        });
-        await Provider.of<SportsceneAllProductList>(context, listen: false)
-            .getItems();
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    } else {
-//      TestConnection.showNetworkDialog(context);
-      await _showNetworkDialog(context);
-    }
-  }
+    with SingleTickerProviderStateMixin, ClothingHomePageMixin {
+//  final textController = TextEditingController();
+//  final gridScrollController = ScrollController();
+//  ScrollController scrollController = ScrollController();
+//  TabController tabController;
+//
+//  bool isDataLoaded = false;
+//
+//  bool isLoading = false;
+//  dynamic data;
+//
+//  List<ProductItem> cheap = [];
+//  List<ProductItem> expensive = [];
+//  List<ProductItem> allProducts = [];
+//
+//  Future<void> showNetworkDialog(BuildContext context) async {
+//    return showDialog<void>(
+//      context: context,
+//      barrierDismissible: false,
+//      builder: (BuildContext context) {
+//        return AlertDialog(
+//          title: Text('Please check your Network'),
+//          content: SingleChildScrollView(
+//            child: ListBody(
+//              children: <Widget>[
+//                Text(
+//                  'An internet connection is required for this app, please make sure you are'
+//                  ' connected to a network and try again',
+//                  style: TextStyle(
+//                    fontFamily: "Montserrat",
+//                    color: Colors.black,
+//                  ),
+//                ),
+////                Text('Would you like to approve of this message?'),
+//              ],
+//            ),
+//          ),
+//          actions: <Widget>[
+//            TextButton(
+//              child: Text(
+//                'Retry',
+//                style: TextStyle(color: kBgFoschini),
+//              ),
+//              onPressed: () async {
+//                Navigator.of(context).pop();
+//                if (await TestConnection.checkForConnection()) {
+//                  Provider.of<SportsceneAllProductList>(context, listen: false)
+//                      .getItems();
+//                } else {
+//                  showNetworkDialog(context);
+//                }
+//              },
+//            ),
+//          ],
+//        );
+//      },
+//    );
+//  }
+//
+//  void testConnection() async {
+//    if (await TestConnection.checkForConnection()) {
+//      await Future.delayed(Duration(seconds: 15));
+//      if (Provider.of<SportsceneAllProductList>(context, listen: false).data ==
+//          null) {
+//        setState(() {
+//          isLoading = true;
+//        });
+//        await Provider.of<SportsceneAllProductList>(context, listen: false)
+//            .getItems();
+//        setState(() {
+//          isLoading = false;
+//        });
+//      }
+//    } else {
+////      TestConnection.showNetworkDialog(context);
+//      await showNetworkDialog(context);
+//    }
+//  }
 
   @override
   void initState() {
     super.initState();
 
-    _tabController = TabController(vsync: this, length: 3, initialIndex: 1);
+    tabController = TabController(vsync: this, length: 3, initialIndex: 1);
 
-    setState(() => _tabController.addListener(() {}));
-    _testConnection();
+    setState(() => tabController.addListener(() {}));
+    testConnection(
+        Provider.of<SportsceneAllProductList>(context, listen: false));
   }
 
   @override
   void dispose() {
-    _textController.dispose();
-    _gridScrollController.dispose();
-    _scrollController.dispose();
-    _tabController.dispose();
+    textController.dispose();
+    gridScrollController.dispose();
+    scrollController.dispose();
+    tabController.dispose();
     super.dispose();
-  }
-
-  void _cleanExpensive(List<dynamic> items) {
-    for (var i in items) {
-      List<DateTime> tempDateList = [];
-
-      List<dynamic> datesList = i[i.keys.elementAt(0).toString()]['dates'];
-
-      for (var dateString in datesList) {
-        tempDateList.add((DateTime.parse(dateString)));
-      }
-
-      ProductItem _productItem = ProductItem(
-          i[i.keys.elementAt(0).toString()]['image_url'],
-          i[i.keys.elementAt(0).toString()]['prices_list'],
-          tempDateList,
-          i.keys.elementAt(0).toString(),
-          i[i.keys.elementAt(0).toString()]['change']);
-
-      _expensive.add(_productItem);
-    }
-
-    setState(() {});
-  }
-
-  void _cleanCheap(List<dynamic> items) {
-    for (var i in items) {
-      List<DateTime> tempDateList = [];
-
-      List<dynamic> datesList = i[i.keys.elementAt(0).toString()]['dates'];
-
-      for (var dateString in datesList) {
-        tempDateList.add((DateTime.parse(dateString)));
-      }
-
-      ProductItem _productItem = ProductItem(
-          i[i.keys.elementAt(0).toString()]['image_url'],
-          i[i.keys.elementAt(0).toString()]['prices_list'],
-          tempDateList,
-          i.keys.elementAt(0).toString(),
-          i[i.keys.elementAt(0).toString()]['change']);
-
-      _cheap.add(_productItem);
-    }
-
-    setState(() {});
-  }
-
-  Future<void> _getDataOnRefresh() async {
-    if (await TestConnection.checkForConnection()) {
-      print('refreshing');
-      setState(() => _isLoading = true);
-      setState(() => _isDataLoaded = false);
-
-      await Provider.of<SportsceneAllProductList>(context, listen: false)
-          .getItems();
-
-      _cheap = [];
-      _expensive = [];
-      _allProducts = [];
-
-      data = Provider.of<SportsceneAllProductList>(context, listen: false).data;
-
-      print(data);
-      print(_isDataLoaded);
-
-      _cleanCheap(jsonDecode(data["cheap"]));
-      _cleanExpensive(jsonDecode(data["expensive"]));
-
-      setState(() => _isLoading = false);
-      setState(() => _isDataLoaded = true);
-    } else {
-      _showNetworkDialog(context);
-    }
-  }
-
-  final double _horizontalPadding = 20.0;
-  bool _isGridOff = false;
-  final _nullImageUrl =
-      'https://image.tfgmedia.co.za/image/1/process/452x57?source=http://cdn.tfgmedia.co.za/00/BrandImage/foschini.png';
-
-  void toggleGrid() {
-    setState(() {
-      _isGridOff = !_isGridOff;
-    });
-  }
-
-  void _loadData(BuildContext context) {
-    if (data != null && !_isDataLoaded) {
-//        print("in if statement");
-      _cleanCheap(jsonDecode(data["cheap"]));
-      _cleanExpensive(jsonDecode(data["expensive"]));
-
-      setState(() => _isLoading = false);
-      setState(() => _isDataLoaded = true);
-    } else {
-//      print("in else statement");
-      setState(() => _isLoading = true);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    data = Provider.of<SportsceneAllProductList>(context, listen: true).data;
+    data = Provider
+        .of<SportsceneAllProductList>(context, listen: true)
+        .data;
 
-    if (!_isDataLoaded) {
-      _loadData(context);
+    if (!isDataLoaded) {
+      loadData(context);
     }
 
-    if (_cheap.isNotEmpty && _expensive.isNotEmpty) {
-      setState(() => _isLoading = false);
+    if (cheap.isNotEmpty && expensive.isNotEmpty) {
+      setState(() => isLoading = false);
     }
 
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenHeight10p =
-        screenHeight * (10 / MediaQuery.of(context).size.height);
-    final screenWidth10p =
-        screenWidth * (10 / MediaQuery.of(context).size.width);
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final screenHeight10p = screenHeight * (10 / MediaQuery
+        .of(context)
+        .size
+        .height);
+    final screenWidth10p = screenWidth * (10 / MediaQuery
+        .of(context)
+        .size
+        .width);
 
-    _allProducts = _cheap + _expensive;
-    List<ProductItem> bestBuys = _cheap.take(5).toList();
-    _allProducts.shuffle();
+    allProducts = cheap + expensive;
+    List<ProductItem> bestBuys = cheap.take(5).toList();
+    allProducts.shuffle();
 
     return Container(
       color: Colors.white,
       child: RefreshIndicator(
-        onRefresh: () => _getDataOnRefresh(),
+        onRefresh: () =>
+            getDataOnRefresh(
+                Provider.of<SportsceneAllProductList>(context, listen: true)),
         child: ListView(
-          controller: _scrollController,
+          controller: scrollController,
           children: [
             Stack(
               children: [
@@ -264,7 +181,7 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
                     ),
                     Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                      EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: FittedBox(
                         child: Text(
                           "Sportscene",
@@ -283,7 +200,7 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
                     ),
                     Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: _horizontalPadding),
+                            horizontal: horizontalPadding),
                         child: Center(
                           child: GestureDetector(
                             onTap: () async {
@@ -363,9 +280,9 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
               padding: EdgeInsets.symmetric(
                 horizontal: 10,
               ),
-              child: DatatableGridSelector(_isGridOff, toggleGrid),
+              child: DatatableGridSelector(isGridOff, toggleGrid),
             ),
-            _isLoading
+            isLoading
                 ? Center(child: CircularProgressIndicator())
                 : Container(),
             SizedBox(
@@ -374,9 +291,9 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
             Container(
 //              physics: NeverScrollableScrollPhysics(),
 
-              height: (_isGridOff
-                  ? screenHeight10p * 7 * _cheap.length.toDouble()
-                  : screenHeight10p * 13.6 * _cheap.length.toDouble()),
+              height: (isGridOff
+                  ? screenHeight10p * 7 * cheap.length.toDouble()
+                  : screenHeight10p * 13.6 * cheap.length.toDouble()),
 
               child: DefaultTabController(
                 length: 3,
@@ -428,27 +345,27 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
                         children: [
                           StoreMainMenuTabBarView.productTabBarView(
                             context,
-                            _allProducts,
-                            _scrollController,
-                            _isGridOff,
-                            _nullImageUrl,
-                            _gridScrollController,
+                            allProducts,
+                            scrollController,
+                            isGridOff,
+                            nullImageUrl,
+                            gridScrollController,
                           ),
                           StoreMainMenuTabBarView.productTabBarView(
                             context,
-                            _cheap,
-                            _scrollController,
-                            _isGridOff,
-                            _nullImageUrl,
-                            _gridScrollController,
+                            cheap,
+                            scrollController,
+                            isGridOff,
+                            nullImageUrl,
+                            gridScrollController,
                           ),
                           StoreMainMenuTabBarView.productTabBarView(
                             context,
-                            _expensive,
-                            _scrollController,
-                            _isGridOff,
-                            _nullImageUrl,
-                            _gridScrollController,
+                            expensive,
+                            scrollController,
+                            isGridOff,
+                            nullImageUrl,
+                            gridScrollController,
                           ),
                         ],
                       )),
@@ -466,234 +383,5 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
     );
   }
 
-//  ListView productTabBarView(BuildContext context, List<ProductItem> itemList) {
-//    final screenWidth = MediaQuery.of(context).size.width;
-//    final screenHeight = MediaQuery.of(context).size.height;
-//    final screenHeight10p = screenHeight*(10/MediaQuery.of(context).size.height);
-//    final screenWidth10p =screenWidth* (10/MediaQuery.of(context).size.width);
-//
-//    return ListView(
-//      controller: _scrollController,
-//      physics: NeverScrollableScrollPhysics(),
-//      children: [
-//        SizedBox(
-//          height: 50,
-//        ),
-//        if (_isGridOff) Material(
-//          child: DataTable(
-//            columnSpacing: 5,
-//            headingTextStyle: TextStyle(
-//                fontFamily: "Montserrat",
-//                fontWeight: FontWeight.w600,
-//                color: Colors.black),
-//
-//            showBottomBorder: false,
-//            sortAscending: true,
-//            sortColumnIndex: 1,
-//            dividerThickness: 0,
-////                  horizontalMargin: 20,
-//            dataRowHeight: 55,
-//            headingRowColor: MaterialStateProperty.all(
-//                kBgWoolies.withOpacity(.3)),
-//            columns: [
-//              DataColumn(
-//                label: FittedBox(child: Text('Image')),
-//              ),
-//              DataColumn(
-//                label: FittedBox(child: Text('Title')),
-//              ),
-//              DataColumn(
-//                  label: FittedBox(
-//                    child: Text(
-//                      'Price',
-//                    ),
-//                  ),
-//                  numeric: true),
-//              DataColumn(
-//                  label: FittedBox(
-//                    child: Text(
-//                      'Change',
-//                    ),
-//                  ),
-//                  numeric: true),
-//            ],
-//            rows: [
-//              ...itemList.map(
-//                    (product) =>
-//                    DataRow(
-//                      cells: [
-//                        DataCell(
-//                             Image.network(
-//                                product.imageUrl ?? _nullImageUrl),
-//                            onTap: () =>
-//                            product.imageUrl == null
-//                                ? null
-//                                : _showDialog(product, context)),
-//                        DataCell(
-//                          Text(
-//                            "${product.title}",
-//                            maxLines: 3,
-//                            style: TextStyle(
-//                              fontSize: screenWidth10p*1.2,
-////                                color: Colors.redAccent,
-//                              fontWeight: FontWeight.w300,
-//                            ),
-//                          ),
-//                          onTap: () =>
-//                              Navigator.push(
-//                                context,
-//                                MaterialPageRoute(
-//                                  builder: (context) =>
-//                                      FoschiniProductGraph(
-//                                          productItem: product),
-//                                ),
-//                              ),
-//                        ),
-//                        DataCell(
-//                          FittedBox(
-//                            child: Text(
-//                              'R${product.prices[product.prices.length - 1]}',
-//                              style: TextStyle(
-//                                fontSize: screenWidth10p*1.4,
-////                                color: Colors.redAccent,
-//                                fontWeight: FontWeight.w700,
-//                              ),
-//                            ),
-//                          ),
-//                          onTap: () =>
-//                              Navigator.push(
-//                                context,
-//                                MaterialPageRoute(
-//                                  builder: (context) =>
-//                                      FoschiniProductGraph(
-//                                          productItem: product),
-//                                ),
-//                              ),
-//                        ),
-//                        DataCell(
-//                          Text(
-//                            "${product.change.round()}%",
-//                            style: TextStyle(
-//                              color: product.change > 0
-//                                  ? Colors.red
-//                                  : Colors.green,
-//                            ),
-//                          ),
-//                          onTap: () =>
-//                              Navigator.push(
-//                                context,
-//                                MaterialPageRoute(
-//                                  builder: (context) =>
-//                                      FoschiniProductGraph(
-//                                          productItem: product),
-//                                ),
-//                              ),
-//                        )
-//                      ],
-//                    ),
-//              )
-//            ],
-//          ),
-//        ) else Scrollbar(
-//          controller: _gridScrollController,
-//
-//          child: Padding(
-//            padding: const EdgeInsets.symmetric(horizontal: 10),
-//            child: GridView.builder(
-//                controller: _gridScrollController,
-//                itemCount: itemList.length,
-//                shrinkWrap: true,
-//                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//                  crossAxisCount: 2,
-//                  childAspectRatio: 1 / 1.4,
-//                  crossAxisSpacing: screenWidth*.03,
-//                ),
-//                itemBuilder: (_, index) {
-//                  return  index==itemList.length-1 ?  Container()   :
-//                  ( index.isEven ?
-//                  GestureDetector(
-//                    onTap: () =>Navigator.push(
-//                      context,
-//                      MaterialPageRoute(
-//                        builder: (context) =>
-//                            FoschiniProductGraph(
-//                                productItem: itemList[index]),
-//                      ),
-//                    )
-//                    ,
-//                    child: ProductCard(
-//                      index: index,
-//
-//                      cheap: itemList,
-//                      shopriteNullImageUrl: _nullImageUrl,
-////                                    showDialog: _showDialog(itemList[index], context),
-//                      product: itemList[index],
-//                    ),
-//                  ) :
-//                  Transform.translate(
-//                    offset: Offset(0,80),
-//                    child: GestureDetector(
-//                      onTap: () =>
-//                          Navigator.push(
-//                            context,
-//                            MaterialPageRoute(
-//                              builder: (context) =>
-//                                  FoschiniProductGraph(
-//                                      productItem: itemList[index]),
-//                            ),
-//                          )
-//                      ,
-//                      child: ProductCard(
-//                        index: index,
-//
-//                        cheap: itemList,
-//                        shopriteNullImageUrl: _nullImageUrl,
-////                                    showDialog: _showDialog(itemList[index], context),
-//                        product: itemList[index],
-//                      ),
-//                    ),
-//                  ));
-//                }),
-//          ),
-//        ),
-//      ],
-//    );
-//  }
-//
-//  Future<void> _showDialog(ProductItem product, BuildContext context) async {
-//    return showDialog<void>(
-//      context: context,
-//      builder: (BuildContext context) {
-//        return Hero(
-//            tag: '${product.imageUrl}',
-//            child: GestureDetector(
-//              onTap: () => Navigator.pop(context),
-//              child: Column(
-//                children: [
-//                  Expanded(
-//                    flex: 4,
-//                    child: Container(
-//                      child:
-//                       Image.network(
-//                        product.imageUrl??_nullImageUrl,
-//                      ),
-//
-//
-//
-//                    ),
-//                  ),
-//                  Expanded(
-//                    flex: 1,
-//                    child: Row(
-//                      children: [],
-//                    ),
-//                  )
-//                ],
-//              ),
-//            ));
-//      },
-//    );
-//  }
-//
 
 }

@@ -4,6 +4,7 @@ import 'package:e_grocery/src/components/clothing/ClothingStoresProviderMethods.
 import 'package:e_grocery/src/components/graph_page_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
+import 'package:e_grocery/src/mixins/clothing_graph_page_mixin.dart';
 import 'package:e_grocery/src/networking/clothing/foschini_data.dart';
 import 'package:e_grocery/src/networking/clothing/markham_data.dart';
 import 'package:e_grocery/src/networking/clothing/sportscene_data.dart';
@@ -34,88 +35,88 @@ class FoschiniProductGraph extends StatefulWidget {
   _FoschiniProductGraphState createState() => _FoschiniProductGraphState();
 }
 
-class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
-  List finalFoschiniProductItems = [];
-  List finalMarkhamProductItems = [];
-  List finalSportsceneProductItems = [];
-  List finalSuperbalistProductItems = [];
-  List finalWoolworthsClothingProductItems = [];
+class _FoschiniProductGraphState extends State<FoschiniProductGraph>
+    with ClothingGraphPageMixin {
+//  List finalFoschiniProductItems = [];
+//  List finalMarkhamProductItems = [];
+//  List finalSportsceneProductItems = [];
+//  List finalSuperbalistProductItems = [];
+//  List finalWoolworthsClothingProductItems = [];
+//
+//  bool _isLoadingRecommendations = false;
 
-  bool _isLoadingRecommendations = false;
+//  final _nullImageUrl =
+//      'https://play-lh.googleusercontent.com/tTcm_kToEtUvXdVGytgjB2Lc-qQiNo5fxcagB7c7MX_UJsO43OFKkeOJOZZiOL1VO6c=s180-rw';
 
-  final _nullImageUrl =
-      'https://play-lh.googleusercontent.com/tTcm_kToEtUvXdVGytgjB2Lc-qQiNo5fxcagB7c7MX_UJsO43OFKkeOJOZZiOL1VO6c=s180-rw';
-
-  List<ProductData> _getData() {
-    List<ProductData> temp = [];
-    for (int i = 0; i < widget.productItem.prices.length; i++) {
-      temp.add(ProductData(
-          widget.productItem.dates[i], widget.productItem.prices[i]));
-    }
-    return temp;
-  }
+//  List<ProductData> _getData() {
+//    List<ProductData> temp = [];
+//    for (int i = 0; i < widget.productItem.prices.length; i++) {
+//      temp.add(ProductData(
+//          widget.productItem.dates[i], widget.productItem.prices[i]));
+//    }
+//    return temp;
+//  }
 
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _onRefresh();
+      onRefresh(widget.productItem.title);
     });
   }
 
-  Future<void> _getProductData() async {
-    if (await TestConnection.checkForConnection()) {
-      ClothingStoresProviderMethods.checkNullAndGetAllProductData(context);
-    } else {
-      TestConnection.showNoNetworkDialog(context);
-    }
-  }
+//  Future<void> _getProductData() async {
+//    if (await TestConnection.checkForConnection()) {
+//      ClothingStoresProviderMethods.checkNullAndGetAllProductData(context);
+//    } else {
+//      TestConnection.showNoNetworkDialog(context);
+//    }
+//  }
 
-  Future<void> _onRefresh() async {
-    setState(() {
-      _isLoadingRecommendations = true;
-    });
-    try {
-      Map recommendationDataMap =
-      await GetGraphPageRecommendationsClothing.getRecommendations(
-          context, widget.productItem.title);
-
-      finalFoschiniProductItems = await recommendationDataMap["foschini"];
-      finalMarkhamProductItems = await recommendationDataMap["markham"];
-      finalSportsceneProductItems = await recommendationDataMap['sportscene'];
-      finalSuperbalistProductItems = await recommendationDataMap['superbalist'];
-      finalWoolworthsClothingProductItems = await
-      recommendationDataMap['woolworthsClothing'];
-
-
-      setState(() {
-        _isLoadingRecommendations = false;
-      });
-    } on NoSuchMethodError {
-      print("noooooooooooo such  methoddddddddddddddddd  ");
-
-      setState(() {
-        _isLoadingRecommendations = false;
-      });
-    } on RangeError {
-
-      setState(() {
-        _isLoadingRecommendations = false;
-      });
-    } catch (e) {
-      print(e);
-    }
-    setState(() {
-      _isLoadingRecommendations = false;
-    });
-  }
+//  Future<void> _onRefresh() async {
+//    setState(() {
+//      isLoadingRecommendations = true;
+//    });
+//    try {
+//      Map recommendationDataMap =
+//      await GetGraphPageRecommendationsClothing.getRecommendations(
+//          context, widget.productItem.title);
+//
+//      finalFoschiniProductItems = await recommendationDataMap["foschini"];
+//      finalMarkhamProductItems = await recommendationDataMap["markham"];
+//      finalSportsceneProductItems = await recommendationDataMap['sportscene'];
+//      finalSuperbalistProductItems = await recommendationDataMap['superbalist'];
+//      finalWoolworthsClothingProductItems = await
+//      recommendationDataMap['woolworthsClothing'];
+//
+//
+//      setState(() {
+//        isLoadingRecommendations = false;
+//      });
+//    } on NoSuchMethodError {
+//      print("noooooooooooo such  methoddddddddddddddddd  ");
+//
+//      setState(() {
+//        isLoadingRecommendations = false;
+//      });
+//    } on RangeError {
+//
+//      setState(() {
+//        isLoadingRecommendations = false;
+//      });
+//    } catch (e) {
+//      print(e);
+//    }
+//    setState(() {
+//      isLoadingRecommendations = false;
+//    });
+//  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
     final screenHeight10p =
         screenHeight * (10 / MediaQuery.of(context).size.height);
     final screenWidth10p =
@@ -123,26 +124,26 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
 
     return Container(
         child: Scaffold(
-          body: RefreshIndicator(
-            onRefresh: () => _onRefresh(),
-            child: Container(
-                color: Colors.white,
-                child: ListView(
+      body: RefreshIndicator(
+        onRefresh: () => onRefresh(widget.productItem.title),
+        child: Container(
+            color: Colors.white,
+            child: ListView(
+              children: [
+                SizedBox(
+                  height: screenHeight10p * 4,
+                ),
+                Stack(
                   children: [
-                    SizedBox(
-                      height: screenHeight10p * 4,
-                    ),
-                    Stack(
-                      children: [
-                        Center(
-                          child: Container(
+                    Center(
+                      child: Container(
                             width: screenWidth * .8,
                             height: screenHeight * .35,
                             child: Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: screenHeight10p * 1.5),
                               child: Image.network(
-                                widget.productItem.imageUrl ?? _nullImageUrl,
+                                widget.productItem.imageUrl ?? nullImageUrl,
                                 fit: BoxFit.contain,
                               ),
                             ),
@@ -233,7 +234,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
 
                             series: <LineSeries>[
                               LineSeries(
-                                  dataSource: _getData(),
+                                  dataSource: getData(widget.productItem),
                                   xValueMapper: (product, _) => product.time,
                                   yValueMapper: (product, _) => product.price,
                                   // Enable data label
@@ -254,24 +255,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
                           children: [
                             GestureDetector(
                               onLongPress: () async {
-                                print(finalFoschiniProductItems);
-//                            await Provider.of<FoschiniAllProductList>(context,
-//                                    listen: false)
-//                                .getItems();
-//                            await Provider.of<MarkhamAllProductList>(context,
-//                                    listen: false)
-//                                .getItems();
-//                            await Provider.of<SportsceneAllProductList>(context,
-//                                    listen: false)
-//                                .getItems();
-//                            await Provider.of<SuperbalistAllProductList>(
-//                                    context,
-//                                    listen: false)
-//                                .getItems();
-//                            await Provider.of<WoolworthsClothingAllProductList>(
-//                                    context,
-//                                    listen: false)
-//                                .getItems();
+                                print(finalSportsceneProductItems);
                               },
                               child: MaxMinCard(
                                 priceValue: widget.productItem.prices
@@ -328,7 +312,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
                     SizedBox(
                       height: 5 * screenHeight10p,
                     ),
-                    if (_isLoadingRecommendations)
+                    if (isLoadingRecommendations)
                       Center(
                         child: Container(
                           padding:
@@ -361,7 +345,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
                                     ),
                                 child: RecommendationProductCard(
                                     finalStoreProductItems: finalFoschiniProductItems,
-                                    nullImageUrl: _nullImageUrl,
+                                    nullImageUrl: nullImageUrl,
                                     index: index),
                               );
                             },
@@ -373,7 +357,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
                       if (finalMarkhamProductItems.isNotEmpty)
                         RecommendationListViewBuilder(
                           finalStoreProductItems: finalMarkhamProductItems,
-                          nullImageUrl: _nullImageUrl,
+                          nullImageUrl: nullImageUrl,
                         ),
                       if (finalSportsceneProductItems.isNotEmpty)
                         RecommendationStoreName(
@@ -381,7 +365,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
                       if (finalSportsceneProductItems.isNotEmpty)
                         RecommendationListViewBuilder(
                           finalStoreProductItems: finalSportsceneProductItems,
-                          nullImageUrl: _nullImageUrl,
+                          nullImageUrl: nullImageUrl,
                         ),
                       if (finalSuperbalistProductItems.isNotEmpty)
                         RecommendationStoreName(
@@ -389,7 +373,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
                       if (finalSuperbalistProductItems.isNotEmpty)
                         RecommendationListViewBuilder(
                           finalStoreProductItems: finalSuperbalistProductItems,
-                          nullImageUrl: _nullImageUrl,
+                          nullImageUrl: nullImageUrl,
                         ),
                       if (finalWoolworthsClothingProductItems.isNotEmpty)
                         RecommendationStoreName(
@@ -397,7 +381,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph> {
                       if (finalWoolworthsClothingProductItems.isNotEmpty)
                         RecommendationListViewBuilderNoImage(
                           finalStoreProductItems: finalWoolworthsClothingProductItems,
-                          nullImageUrl: _nullImageUrl,
+                          nullImageUrl: nullImageUrl,
                         ),
                       if (finalWoolworthsClothingProductItems.isNotEmpty)
                         SizedBox(

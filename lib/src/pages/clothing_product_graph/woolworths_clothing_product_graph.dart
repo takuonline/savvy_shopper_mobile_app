@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:e_grocery/src/components/graph_page_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
-import 'package:e_grocery/src/mixins/woolworths_clothing_graph_mixin.dart';
+import 'package:e_grocery/src/mixins/clothing_graph_page_mixin.dart';
 import 'package:e_grocery/src/pages/clothing_product_graph/foschini_product_graph.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -22,20 +22,19 @@ class WoolworthsClothingProductGraph extends StatefulWidget {
 }
 
 class _WoolworthsClothingProductGraphState
-    extends State<WoolworthsClothingProductGraph>
-    with WoolworthsClothingGraphMixin {
+    extends State<WoolworthsClothingProductGraph> with ClothingGraphPageMixin {
   @override
   void initState() {
     super.initState();
-
-    init();
+    onRefresh(widget.productItem.title);
+//    init();
   }
 
-  void init() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      onRefresh(widget.productItem.title);
-    });
-  }
+//  void init() {
+//    WidgetsBinding.instance.addPostFrameCallback((_) {
+//
+//    });
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +110,6 @@ class _WoolworthsClothingProductGraphState
           height: 5 * screenHeight10p,
         ),
     ];
-
     return RefreshIndicator(
       onRefresh: () => onRefresh(widget.productItem.title),
       child: Scaffold(

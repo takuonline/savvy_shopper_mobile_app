@@ -1,20 +1,12 @@
 import 'package:e_grocery/src/pages/accessories_home_screens/computermania_home_screen.dart';
 import 'package:e_grocery/src/pages/accessories_home_screens/hifi_home_screen.dart';
 import 'package:e_grocery/src/pages/accessories_home_screens/takealot_home_screen.dart';
-import 'package:e_grocery/src/pages/groceries_home_screens/pnp_home_screen.dart';
 import 'package:e_grocery/src/pages/welcome_screen.dart';
 import 'package:e_grocery/src/components/welcome_screen_components.dart';
 import 'package:e_grocery/src/constants/constants.dart';
-import 'package:e_grocery/src/pages/groceries_home_screens/shoprite_home_screen.dart';
-import 'package:e_grocery/src/pages/groceries_home_screens/woolies_home_screen.dart';
-import 'package:e_grocery/src/providers/accessories/computermania_product_provider.dart';
-import 'package:e_grocery/src/providers/accessories/hifi_product_provider.dart';
-import 'package:e_grocery/src/providers/accessories/takealot_product_provider.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 
 class AccessoriesHome extends StatefulWidget {
   static const id = "/accessoriesHome";

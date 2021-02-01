@@ -5,6 +5,7 @@ import 'package:e_grocery/src/components/homescreen_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/components/woolies/woolies_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
+import 'package:e_grocery/src/mixins/woolworths_clothing_home_page_mixin.dart';
 import 'package:e_grocery/src/networking/clothing/woolworths_clothing_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/pages/clothing_product_graph/woolworths_clothing_product_graph.dart';
@@ -21,243 +22,72 @@ class WoolworthsClothingHomeScreen extends StatefulWidget {
 }
 
 class _WoolworthsClothingHomeScreenState
-    extends State<WoolworthsClothingHomeScreen> {
-  final _textController = TextEditingController();
-  final _gridScrollController = ScrollController();
-  final _scrollController = ScrollController();
-
-  bool _isDataLoaded = false;
-  dynamic data;
-
-  bool _isLoading = false;
-
-  List<WooliesProductItem> _cheap = [];
-  List<WooliesProductItem> _expensive = [];
-  List<WooliesProductItem> _allProducts = [];
-
-  Future<void> _showNetworkDialog(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Please check your Network'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'An internet connection is required for this app, please make sure you are'
-                  ' connected to a network and try again',
-                  style: TextStyle(
-                    fontFamily: "Montserrat",
-                    color: Colors.black,
-                  ),
-                ),
-//                Text('Would you like to approve of this message?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'Retry',
-                style: TextStyle(color: kBgWoolies),
-              ),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                if (await TestConnection.checkForConnection()) {
-                  Provider.of<WoolworthsClothingAllProductList>(context,
-                          listen: false)
-                      .getItems();
-                } else {
-                  _showNetworkDialog(context);
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _testWooliesConnection() async {
-    if (await TestConnection.checkForConnection()) {
-      await Future.delayed(Duration(seconds: 15));
-      if (Provider
-          .of<WoolworthsClothingAllProductList>(context, listen: false)
-          .data ==
-          null) {
-        setState(() {
-          _isLoading = true;
-        });
-        await Provider.of<WoolworthsClothingAllProductList>(
-            context, listen: false)
-            .getItems();
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    } else {
-//      TestConnection.showNetworkDialog(context);
-      await _showNetworkDialog(context);
-    }
-  }
-
-
+    extends State<WoolworthsClothingHomeScreen>
+    with WoolworthsClothingHomePageMixin {
   @override
   void initState() {
     super.initState();
-
-    _testWooliesConnection();
+    testConnection(
+        Provider.of<WoolworthsClothingAllProductList>(context, listen: false));
   }
 
   @override
   void dispose() {
-    _textController.dispose();
-    _gridScrollController.dispose();
-    _scrollController.dispose();
+    textController.dispose();
+    gridScrollController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
-  void _loadData(BuildContext context){
-    if (data != null && !_isDataLoaded) {
-//        print("in if statement");
-      _cleanCheap(jsonDecode(data["cheap"]));
-      _cleanExpensive(jsonDecode(data["expensive"]));
-
-      setState(()=> _isLoading=false);
-      setState(()=> _isDataLoaded=true);
-
-    }else{
-      setState(() => _isLoading=true);
-    }
-  }
-
-  void _cleanExpensive(List<dynamic> items) {
-    for (var i in items) {
-      List<DateTime> tempDateList = [];
-
-      List<dynamic> datesList = i[i.keys.elementAt(0).toString()]['dates'];
-
-      for (var dateString in datesList) {
-        tempDateList.add((DateTime.parse(dateString)));
-      }
-
-      WooliesProductItem _productItem = WooliesProductItem(
-//          i[i.keys.elementAt(0).toString()]['image_url'],
-          i[i.keys.elementAt(0).toString()]['prices_list'],
-          tempDateList,
-          i.keys.elementAt(0).toString(),
-          i[i.keys.elementAt(0).toString()]['change']);
-
-      _expensive.add(_productItem);
-    }
-
-    setState(() {});
-  }
-
-  void _cleanCheap(List<dynamic> items) {
-    for (var i in items) {
-      List<DateTime> tempDateList = [];
-
-      List<dynamic> datesList = i[i.keys.elementAt(0).toString()]['dates'];
-
-      for (var dateString in datesList) {
-        tempDateList.add((DateTime.parse(dateString)));
-      }
-
-      WooliesProductItem _productItem = WooliesProductItem(
-//          i[i.keys.elementAt(0).toString()]['image_url'],
-          i[i.keys.elementAt(0).toString()]['prices_list'],
-          tempDateList,
-          i.keys.elementAt(0).toString(),
-          i[i.keys.elementAt(0).toString()]['change']);
-
-      _cheap.add(_productItem);
-    }
-//    print(cheap);
-
-    setState(() {});
-  }
-
-  Future<void> _getDataOnRefresh()async{
-    if (await TestConnection.checkForConnection()){
-      print('refreshing');
-      setState(() => _isLoading = true);
-      setState(() => _isDataLoaded = false);
-
-      await Provider.of<WoolworthsClothingAllProductList>(
-          context, listen: false).getItems();
-
-      _cheap = [];
-      _expensive = [];
-      _allProducts = [];
-
-      data = Provider
-          .of<WoolworthsClothingAllProductList>(context, listen: false)
-          .data;
-
-      print(data);
-      print(_isDataLoaded);
-
-      _cleanCheap(jsonDecode(data["cheap"]));
-      _cleanExpensive(jsonDecode(data["expensive"]));
-
-      setState(() => _isLoading = false);
 
 
-      setState(()=> _isDataLoaded=true);
-    } else {
-      _showNetworkDialog(context);
-    }
-  }
-
-
-  final double _horizontalPadding = 20.0;
-  bool _isGrid = false;
-
-  void toggleGrid() {
-//    setState(() {
-//      _isGrid = !_isGrid;
-//    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    data =
-        Provider
-            .of<WoolworthsClothingAllProductList>(context, listen: true)
-            .data;
+    data = Provider
+        .of<WoolworthsClothingAllProductList>(context, listen: true)
+        .data;
 
-    if (!_isDataLoaded) {
-      _loadData(context);
+    if (!isDataLoaded) {
+      loadData(context);
     }
 
-    if (_cheap.isNotEmpty && _expensive.isNotEmpty) {
-      setState(() => _isLoading = false);
+    if (cheap.isNotEmpty && expensive.isNotEmpty) {
+      setState(() => isLoading = false);
     }
 
     final screenWidth = MediaQuery
         .of(context)
         .size
         .width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
     final screenHeight10p =
-        screenHeight * (10 / MediaQuery.of(context).size.height);
+        screenHeight * (10 / MediaQuery
+            .of(context)
+            .size
+            .height);
     final screenWidth10p =
-        screenWidth * (10 / MediaQuery.of(context).size.width);
+        screenWidth * (10 / MediaQuery
+            .of(context)
+            .size
+            .width);
 
-    _allProducts = _cheap + _expensive;
-    List<WooliesProductItem> bestBuys = _cheap.take(5).toList();
-    _allProducts.shuffle();
+    allProducts = cheap + expensive;
+    List<WooliesProductItem> bestBuys = cheap.take(5).toList();
+    allProducts.shuffle();
 
     return Container(
-//      color: kShopriteSecondary,
+
       color: Colors.white,
       child: RefreshIndicator(
-        onRefresh: () => _getDataOnRefresh(),
+        onRefresh: () =>
+            getDataOnRefresh(Provider
+                .of<WoolworthsClothingAllProductList>(context, listen: false)),
         child: ListView(
-          controller: _scrollController,
+          controller: scrollController,
           children: [
             Stack(
               children: [
@@ -266,7 +96,8 @@ class _WoolworthsClothingHomeScreenState
                     size: Size(
                         screenWidth,
                         screenHeight *
-                            .37), //You can Replace this with your desired WIDTH and HEIGHT
+                            .37),
+                    //You can Replace this with your desired WIDTH and HEIGHT
                     painter: HomeBGCustomPaint(color: kBgWoolies),
                   ),
                 ),
@@ -278,7 +109,7 @@ class _WoolworthsClothingHomeScreenState
                     ),
                     Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                      EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: FittedBox(
                         child: Text(
                           "Woolworths Clothing",
@@ -297,7 +128,7 @@ class _WoolworthsClothingHomeScreenState
                     ),
                     Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: _horizontalPadding),
+                            horizontal: horizontalPadding),
                         child: Center(
                           child: GestureDetector(
                             onTap: () async {
@@ -367,14 +198,14 @@ class _WoolworthsClothingHomeScreenState
               height: 40,
             ),
 
-            _isLoading
+            isLoading
                 ? Center(child: CircularProgressIndicator())
                 : Container(),
             SizedBox(
               height: 30,
             ),
             Container(
-              height: screenHeight10p * 7.3 * _cheap.length.toDouble(),
+              height: screenHeight10p * 7.3 * cheap.length.toDouble(),
               child: DefaultTabController(
                 length: 3,
                 child: Column(
@@ -422,9 +253,9 @@ class _WoolworthsClothingHomeScreenState
                       child: Material(
                           child: TabBarView(
                         children: [
-                          productTabBarView(context, _allProducts),
-                          productTabBarView(context, _cheap),
-                          productTabBarView(context, _expensive),
+                          productTabBarView(context, allProducts),
+                          productTabBarView(context, cheap),
+                          productTabBarView(context, expensive),
                         ],
                       )),
                     ),
@@ -451,7 +282,7 @@ class _WoolworthsClothingHomeScreenState
         screenWidth * (10 / MediaQuery.of(context).size.width);
 
     return ListView(
-      controller: _scrollController,
+      controller: scrollController,
       physics: NeverScrollableScrollPhysics(),
       children: [
         SizedBox(

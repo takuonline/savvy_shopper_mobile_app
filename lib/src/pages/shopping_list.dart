@@ -8,13 +8,7 @@ import 'package:e_grocery/src/components/grocery_stores_provider_aggregate_metho
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/providers/grocery_shopping_list.dart';
-import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/pnp_product_provider.dart';
 import 'package:e_grocery/src/providers/shoppinglist_filter.dart';
-import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/shoprite_product_provider.dart';
-import 'package:e_grocery/src/providers/woolies_product_name_provider.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/woolies_product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -102,11 +96,6 @@ class _ShoppingListState extends State<ShoppingList> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Container(
-//            constraints: BoxConstraints(
-//              maxHeight:  screenHeight*.3,
-//              maxWidth:screenWidth*.6,
-//            ),
-
 
           margin: EdgeInsets.symmetric(
             vertical: screenHeight * .27,
@@ -167,16 +156,7 @@ class _ShoppingListState extends State<ShoppingList> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: screenWidth10p * 1),
                   child: GestureDetector(
-                    onTap: () {
-//                      Provider.of<PnPAllProductList>(context, listen: false)
-//                          .getItems();
-//
-//                      Provider.of<WooliesAllProductList>(context, listen: false)
-//                          .getItems();
-//
-//                      Provider.of<ShopriteAllProductList>(context, listen: false)
-//                          .getItems();
-                    },
+                    onTap: () {},
                     child: Text(
                       "Shopping List",
                       style: TextStyle(

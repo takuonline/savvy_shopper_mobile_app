@@ -3,6 +3,7 @@ import 'package:e_grocery/src/components/graph_page_components.dart';
 import 'package:e_grocery/src/components/grocery_stores_provider_aggregate_methods.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
+import 'package:e_grocery/src/mixins/grocery_graph_page_mixin.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/shoprite_product_graph.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
 import 'package:e_grocery/src/services/grocery_services/get_graph_page_recommendations_groceries.dart';
@@ -21,108 +22,115 @@ class PnPProductGraph extends StatefulWidget {
   _PnPProductGraphState createState() => _PnPProductGraphState();
 }
 
-class _PnPProductGraphState extends State<PnPProductGraph> {
-  List finalPnPProductItems = [];
-  List finalShopriteProductItems = [];
-  List finalWooliesProductItems = [];
-  bool _isLoadingRecommendations = false;
+class _PnPProductGraphState extends State<PnPProductGraph>
+    with GroceryGraphPageMixin {
+//  List finalPnPProductItems = [];
+//  List finalShopriteProductItems = [];
+//  List finalWooliesProductItems = [];
+//  bool _isLoadingRecommendations = false;
 
   final _badImageUrl =
       "/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_140x140.jpg";
-  final _nullImageUrl =
-      'https://www.pnp.co.za//pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_400x400.jpg';
 
-  List<ProductData> _getData() {
-    List<ProductData> temp = [];
-    for (int i = 0; i < widget.productItem.prices.length; i++) {
-      temp.add(ProductData(
-          widget.productItem.dates[i], widget.productItem.prices[i]));
-    }
-    return temp;
-  }
+//  final _nullImageUrl =
+//      'https://www.pnp.co.za//pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_400x400.jpg';
+//
+//  List<ProductData> _getData() {
+//    List<ProductData> temp = [];
+//    for (int i = 0; i < widget.productItem.prices.length; i++) {
+//      temp.add(ProductData(
+//          widget.productItem.dates[i], widget.productItem.prices[i]));
+//    }
+//    return temp;
+//  }
 
   Future<void> _getProductData() async {
     await GroceryStoresProviderMethods.checkNullAndGetAllProductData(context);
-
   }
 
-  Future<void> _onRefresh() async {
-    print("is getting data");
-    setState(() {
-      _isLoadingRecommendations = true;
-    });
-    try {
-      Map dataMap = await GetGraphPageRecommendationGroceries
-          .getRecommendations(
-          context, widget.productItem.title);
-
-      finalPnPProductItems = await dataMap['pnp'];
-      finalShopriteProductItems = await dataMap['shoprite'];
-      finalWooliesProductItems = await dataMap['woolies'];
-      setState(() {});
-
-      setState(() {
-        _isLoadingRecommendations = false;
-      });
-    } on NoSuchMethodError {
-      print("noooooooooooo such  methoddddddddddddddddd  in refreshing data ");
-
-      setState(() {
-        _isLoadingRecommendations = true;
-      });
-      _getProductData();
-//      WidgetsBinding.instance.addPostFrameCallback((_) async{
-
-      Map dataMap = await GetGraphPageRecommendationGroceries
-          .getRecommendations(
-          context, widget.productItem.title);
-
-      finalPnPProductItems = await dataMap['pnp'];
-      finalShopriteProductItems = await dataMap['shoprite'];
-      finalWooliesProductItems = await dataMap['woolies'];
-      setState(() {});
-
-      setState(() {
-        _isLoadingRecommendations = false;
-      });
-    } on RangeError {
-      print("range errrrrrrrrrrrrrrrrrrrror in refreshing data");
-      setState(() {
-        _isLoadingRecommendations = true;
-      });
-
-      _getProductData();
-
-//      WidgetsBinding.instance.addPostFrameCallback((_) async{
-
-      Map dataMap = await GetGraphPageRecommendationGroceries
-          .getRecommendations(
-          context, widget.productItem.title);
-
-      finalPnPProductItems = await dataMap['pnp'];
-      finalShopriteProductItems = await dataMap['shoprite'];
-      finalWooliesProductItems = await dataMap['woolies'];
-      setState(() {});
-
+//  Future<void> _onRefresh() async {
+//    print("is getting data");
+//    setState(() {
+//      _isLoadingRecommendations = true;
+//    });
+//    try {
+//      Map dataMap = await GetGraphPageRecommendationGroceries
+//          .getRecommendations(
+//          context, widget.productItem.title);
+//
+//      finalPnPProductItems = await dataMap['pnp'];
+//      finalShopriteProductItems = await dataMap['shoprite'];
+//      finalWooliesProductItems = await dataMap['woolies'];
+//      setState(() {});
+//
+//      setState(() {
+//        _isLoadingRecommendations = false;
 //      });
-
-      setState(() {
-        _isLoadingRecommendations = false;
-      });
-    } catch (e) {
-      print(e);
-      setState(() {
-        _isLoadingRecommendations = false;
-      });
-    }
-  }
+//    } on NoSuchMethodError {
+//      print("noooooooooooo such  methoddddddddddddddddd  in refreshing data ");
+//
+//      setState(() {
+//        _isLoadingRecommendations = true;
+//      });
+//      _getProductData();
+////      WidgetsBinding.instance.addPostFrameCallback((_) async{
+//
+//      Map dataMap = await GetGraphPageRecommendationGroceries
+//          .getRecommendations(
+//          context, widget.productItem.title);
+//
+//      finalPnPProductItems = await dataMap['pnp'];
+//      finalShopriteProductItems = await dataMap['shoprite'];
+//      finalWooliesProductItems = await dataMap['woolies'];
+//      setState(() {});
+//
+//      setState(() {
+//        _isLoadingRecommendations = false;
+//      });
+//    } on RangeError {
+//      print("range errrrrrrrrrrrrrrrrrrrror in refreshing data");
+//      setState(() {
+//        _isLoadingRecommendations = true;
+//      });
+//
+//      _getProductData();
+//
+////      WidgetsBinding.instance.addPostFrameCallback((_) async{
+//
+//      Map dataMap = await GetGraphPageRecommendationGroceries
+//          .getRecommendations(
+//          context, widget.productItem.title);
+//
+//      finalPnPProductItems = await dataMap['pnp'];
+//      finalShopriteProductItems = await dataMap['shoprite'];
+//      finalWooliesProductItems = await dataMap['woolies'];
+//      setState(() {});
+//
+////      });
+//
+//      setState(() {
+//        _isLoadingRecommendations = false;
+//      });
+//    } catch (e) {
+//      print(e);
+//      setState(() {
+//        _isLoadingRecommendations = false;
+//      });
+//    }
+//  }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _onRefresh();
-    });
+//    WidgetsBinding.instance.addPostFrameCallback((_) {
+//      onRefresh(widget.productItem.title);
+//    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    onRefresh(widget.productItem.title);
   }
 
 //  void _showSnackBar(BuildContext context, String text, Color color) {
@@ -160,7 +168,7 @@ class _PnPProductGraphState extends State<PnPProductGraph> {
             .width);
 
     return RefreshIndicator(
-      onRefresh: () => _onRefresh(),
+      onRefresh: () => onRefresh(widget.productItem.title),
       child: Scaffold(
         body: Container(
             color: Colors.white,
@@ -179,11 +187,11 @@ class _PnPProductGraphState extends State<PnPProductGraph> {
                           padding: EdgeInsets.symmetric(
                               horizontal: screenHeight10p * 1.5),
                           child: widget.productItem.imageUrl == _badImageUrl
-                              ? Image.network(_nullImageUrl)
+                              ? Image.network(nullImageUrl)
                               : Image.network(
-                                  widget.productItem.imageUrl ?? _nullImageUrl,
-                                  fit: BoxFit.contain,
-                                ),
+                            widget.productItem.imageUrl ?? nullImageUrl,
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ),
@@ -366,7 +374,7 @@ class _PnPProductGraphState extends State<PnPProductGraph> {
                         series: <LineSeries>[
                           LineSeries(
 
-                              dataSource: _getData(),
+                              dataSource: getData(widget.productItem),
                               xValueMapper: (product, _) => product.time,
                               yValueMapper: (product, _) => product.price,
                               // Enable data label
@@ -450,7 +458,7 @@ class _PnPProductGraphState extends State<PnPProductGraph> {
                   height: 3 * screenHeight10p,
                 ),
 
-                if(_isLoadingRecommendations) Center(
+                if(isLoadingRecommendations) Center(
                   child: Container(
                     padding: EdgeInsets.symmetric(
                         vertical: screenHeight10p * 3),
@@ -487,9 +495,9 @@ class _PnPProductGraphState extends State<PnPProductGraph> {
                               ),
                           child: RecommendationProductCard(
                               finalStoreProductItems:
-                                    finalShopriteProductItems,
-                                nullImageUrl: _nullImageUrl,
-                                index: index),
+                              finalShopriteProductItems,
+                              nullImageUrl: nullImageUrl,
+                              index: index),
                         );
                       },
 
@@ -526,7 +534,7 @@ class _PnPProductGraphState extends State<PnPProductGraph> {
                               ),
                           child: RecommendationProductCardNoImage(
                               finalPnPProductItems: finalWooliesProductItems,
-                              nullImageUrl: _nullImageUrl,
+                              nullImageUrl: nullImageUrl,
                               index: index
 
                           ),
@@ -565,7 +573,7 @@ class _PnPProductGraphState extends State<PnPProductGraph> {
                               ),
                           child: RecommendationProductCard(
                               finalStoreProductItems: finalPnPProductItems,
-                              nullImageUrl: _nullImageUrl,
+                              nullImageUrl: nullImageUrl,
                               index: index
 
                           ),
@@ -590,84 +598,6 @@ class _PnPProductGraphState extends State<PnPProductGraph> {
     );
   }
 
-
-//  Future<void> getRecommendations() async {
-//    setState(() {
-//      _isLoadingRecommendations = true;
-//    });
-//
-//    Map<String, dynamic> data = Provider
-//        .of<AllGroceryStoresData>(context, listen: false)
-//        .data;
-//    List<String> shopriteList = Provider.of<AllGroceryStoresData>(
-//        context, listen: false).getStoreProductNameList(
-//        data['shoprite'], context);
-//    List<String> wooliesList = Provider.of<AllGroceryStoresData>(
-//        context, listen: false).getStoreProductNameList(
-//        data['woolies'], context);
-//
-//    finalShopriteProductItems = [];
-//    finalWooliesProducts = [];
-//    try {
-//      runBestMatch(
-//          shopriteList, finalShopriteProducts, 3, widget.productItem.title);
-//      ShopriteData _shopriteNetworkData = ShopriteData();
-//
-//      for (String i in finalShopriteProducts) {
-//        ProductItem result = await RecommendationDataGetProduct.getProduct(
-//            i, context, _shopriteNetworkData);
-//        setState(() {
-//          finalShopriteProductItems.add(result);
-//        });
-//      }
-//      print(finalShopriteProductItems);
-//      setState(() {});
-//
-//
-//      ////////////////////////////// woolies  ////////////////////////////////
-//
-//      runBestMatch(
-//          wooliesList, finalWooliesProducts, 3, widget.productItem.title);
-//      WooliesData _wooliesNetworkData = WooliesData();
-//
-//      for (String i in finalWooliesProducts) {
-//        WooliesProductItem resultWoolies = await RecommendationDataGetProduct
-//            .getProductNoImage(i, context, _wooliesNetworkData);
-//        setState(() {
-//          finalWooliesProductItems.add(resultWoolies);
-//        });
-//      }
-//      print(finalWooliesProductItems);
-//      setState(() {});
-//
-//      setState(() {
-//        _isLoadingRecommendations = false;
-//      });
-//    } on NoSuchMethodError {
-//      setState(() {
-//        _isLoadingRecommendations = false;
-//      });
-//      print("noooooooooooo such  methoddddddddddddddddd  ");
-////      Provider.of<AllGroceryStoresData>(context,listen:false).getAllStoresData();
-//
-//    } catch (e) {
-//      print(e);
-//
-//      setState(() => _isLoadingRecommendations = false);
-//    }
-//  }
-//
-//
-//  static void runBestMatch(List<String> storeList, List<String> resultsList,
-//      int num, String title) {
-//    for (int i = 0; i < num; i++) {
-//      BestMatch results = title.bestMatch(storeList);
-//      resultsList.add((results.bestMatch.target));
-//      storeList.removeAt(results.bestMatchIndex);
-//    }
-//
-//    print(resultsList);
-//  }
 
 
 }

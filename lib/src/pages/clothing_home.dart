@@ -30,37 +30,12 @@ class _ClothingHomeState extends State<ClothingHome>
   Animation<Offset> _woolworthsClothingSlide;
   Animation<Offset> _markhamSlide;
 
-  bool _isFoschiniInit = false;
-  bool _isSportsceneInit = false;
 
-//  bool _pnpIsInit = false;
   bool _wooliesIsInit = false;
 
   @override
   void initState() {
     super.initState();
-
-//
-//    if (!_isInit) {
-//      Provider.of<AllProductList>(context,listen:false).getItems();
-//      setState(() {
-//        _isInit = true;
-//      });
-//    }
-//
-//    if (!_pnpIsInit) {
-//      Provider.of<PnPAllProductList>(context,listen:false).getItems();
-//      setState(() {
-//        _pnpIsInit = true;
-//      });
-//    }
-//
-//    if (!_wooliesIsInit) {
-//      Provider.of<WooliesAllProductList>(context,listen:false).getItems();
-//      setState(() {
-//        _wooliesIsInit = true;
-//      });
-//    }
 
     _aController = AnimationController(
       duration: Duration(milliseconds: 3000),
@@ -490,13 +465,6 @@ class _ClothingHomeState extends State<ClothingHome>
                       position: _foschiniSlide,
                       child: InkWell(
                         onTap: () async {
-//                      if (!_isFoschiniInit) {
-//                        Provider.of<FoschiniAllProductList>(context,listen:false).getItems();
-//                        setState(() {
-//                          _isFoschiniInit = true;
-//                        });
-//                      }
-
                           final _item = welcomeScreenItems["foschini"];
                           await _whenCardIsClicked();
 
@@ -524,24 +492,7 @@ class _ClothingHomeState extends State<ClothingHome>
                                   borderRadius: cardBorderRadius),
                               child: Stack(
                                 children: [
-//                              Positioned(
-//                                left: -80,
-//                                bottom: -50,
-//                                child: SvgPicture.asset(
-//                                  "assets/blob-1.svg",
-//                                  height: screenHeight * .31,
-//                                  color: Colors.white.withOpacity(.1),
-//                                ),
-//                              ),
-//                              Positioned(
-//                                right: 30,
-//                                bottom: 40,
-//                                child: SvgPicture.asset(
-//                                  "assets/shoprite/shoprite_cart.svg",
-//                                  height: screenWidth * .25,
-//                                  color: Colors.white,
-//                                ),
-//                              ),
+
                                   Positioned(
                                     bottom: 20,
                                     left: 20,
@@ -571,12 +522,6 @@ class _ClothingHomeState extends State<ClothingHome>
                       position: _sportsceneSlide,
                       child: InkWell(
                         onTap: () async {
-//                      if (!_isSportsceneInit) {
-//                        Provider.of<SportsceneAllProductList>(context,listen:false).getItems();
-//                        setState(() {
-//                          _isSportsceneInit = true;
-//                        });
-//                      }
 
                           final _item = welcomeScreenItems['sportscene'];
                           await _whenCardIsClicked();
@@ -604,24 +549,7 @@ class _ClothingHomeState extends State<ClothingHome>
                                   borderRadius: cardBorderRadius),
                               child: Stack(
                                 children: [
-//                              Positioned(
-//                                right: -120,
-//                                bottom: -80,
-//                                child: SvgPicture.asset(
-//                                  "assets/blob-1.svg",
-//                                  height: screenHeight * .31,
-//                                  color: Colors.white.withOpacity(.2),
-//                                ),
-//                              ),
-//                              Positioned(
-//                                left: 30,
-//                                bottom: 60,
-//                                child: SvgPicture.asset(
-//                                  "assets/pnp/pnp_cart.svg",
-//                                  height: screenHeight * .12,
-//                                  color: Colors.white,
-//                                ),
-//                              ),
+
                                   Positioned(
                                     bottom: 20,
                                     right: 20,
@@ -648,12 +576,6 @@ class _ClothingHomeState extends State<ClothingHome>
                       position: _markhamSlide,
                       child: InkWell(
                         onTap: () async {
-//                      if (!_wooliesIsInit) {
-//                        Provider.of<MarkhamAllProductList>(context,listen:false).getItems();
-//                        setState(() {
-//                          _wooliesIsInit = true;
-//                        });
-//                      }
 
                           final _item = welcomeScreenItems['markham'];
                           await _whenCardIsClicked();
@@ -683,24 +605,7 @@ class _ClothingHomeState extends State<ClothingHome>
                                   borderRadius: cardBorderRadius),
                               child: Stack(
                                 children: [
-//                              Positioned(
-//                                left: -80,
-//                                top: -100,
-//                                child: SvgPicture.asset(
-//                                  "assets/blob-1.svg",
-//                                  height: screenHeight * .31,
-//                                  color: Colors.white.withOpacity(.2),
-//                                ),
-//                              ),
-//                              Positioned(
-//                                right: 30,
-//                                bottom: 60,
-//                                child: SvgPicture.asset(
-//                                  "assets/woolworths/woolies_cart.svg",
-//                                  height: screenHeight * .12,
-//                                  color: Colors.white,
-//                                ),
-//                              ),
+
                                   Positioned(
                                     bottom: 20,
                                     left: 20,
@@ -727,12 +632,6 @@ class _ClothingHomeState extends State<ClothingHome>
                       position: _superbalistSlide,
                       child: InkWell(
                         onTap: () async {
-//                      if (!_isInit) {
-//                        Provider.of<SuperbalistAllProductList>(context,listen:false).getItems();
-//                        setState(() {
-//                          _isInit = true;
-//                        });
-//                      }
 
                           final _item = welcomeScreenItems['superbalist'];
                           await _whenCardIsClicked();
@@ -761,24 +660,7 @@ class _ClothingHomeState extends State<ClothingHome>
                                   borderRadius: cardBorderRadius),
                               child: Stack(
                                 children: [
-//                              Positioned(
-//                                right: -20,
-//                                bottom: -50,
-//                                child: SvgPicture.asset(
-//                                  "assets/blob-1.svg",
-//                                  height: screenHeight * .31,
-//                                  color: Colors.white.withOpacity(.1),
-//                                ),
-//                              ),
-//                              Positioned(
-//                                right: 30,
-//                                bottom: 40,
-//                                child: SvgPicture.asset(
-//                                  "assets/shoprite/shoprite_cart.svg",
-//                                  height: screenWidth * .25,
-//                                  color: Colors.white,
-//                                ),
-//                              ),
+
                                   Positioned(
                                     bottom: 20,
                                     right: 20,
@@ -808,13 +690,6 @@ class _ClothingHomeState extends State<ClothingHome>
                       position: _woolworthsClothingSlide,
                       child: InkWell(
                         onTap: () async {
-                          if (!_wooliesIsInit) {
-//                        Provider.of<WoolworthsClothingAllProductList>(context,listen:false).getItems();
-//                        setState(() {
-//                          _wooliesIsInit = true;
-//                        });
-                          }
-
                           final _item = welcomeScreenItems['woolworths_clothing'];
                           await _whenCardIsClicked();
                           Navigator.push(
@@ -841,24 +716,7 @@ class _ClothingHomeState extends State<ClothingHome>
                                   borderRadius: cardBorderRadius),
                               child: Stack(
                                 children: [
-//                              Positioned(
-//                                left: -80,
-//                                top: -100,
-//                                child: SvgPicture.asset(
-//                                  "assets/blob-1.svg",
-//                                  height: screenHeight * .31,
-//                                  color: Colors.white.withOpacity(.2),
-//                                ),
-//                              ),
-//                              Positioned(
-//                                right: 30,
-//                                bottom: 60,
-//                                child: SvgPicture.asset(
-//                                  "assets/woolworths/woolies_cart.svg",
-//                                  height: screenHeight * .12,
-//                                  color: Colors.white,
-//                                ),
-//                              ),
+
                                   Positioned(
                                     bottom: 20,
                                     left: 20,
@@ -875,7 +733,7 @@ class _ClothingHomeState extends State<ClothingHome>
                               ),
                             ),
                           ),
-                        ),
+                        )
                       ),
                     ),
                     SizedBox(
@@ -885,139 +743,6 @@ class _ClothingHomeState extends State<ClothingHome>
                 ),
               ),
             ),
-
-
-//                SlideTransition(
-//                  position: _pnpSlide,
-//                  child: InkWell(
-//                    onTap: ()async {
-//
-//                      if (!_pnpIsInit) {
-////                        Provider.of<PnPAllProductList>(context,listen:false).getItems();
-////                        setState(() {
-////                          _pnpIsInit = true;
-////                        });
-//                      }
-//
-//
-//                      final _item = WelcomeScreenItem(
-//                        header: "Sportscene",
-//                        details:
-//                        'Respected as the kings of sneakerwear,'
-//                            ' sportscene is an authorised retailer'
-//                            ' of footwear and clothing from iconic '
-//                            'street-inspired brands including Redbat,'
-//                            ' Nike, Air Jordan, adidas Originals, PUMA, '
-//                            'Converse and Vans to name a few',
-//                        blob1: Positioned(
-//                          top: -300,
-//                          left: -70,
-//                          child: Transform.rotate(
-//                            angle: 100,
-//                            child: SvgPicture.asset(
-//                              "assets/blob-3.svg",
-//                              width: screenHeight * 1.2,
-//                            ),
-//                          ),
-//                        ),
-//                        blob2: Positioned(
-//                          top: 390,
-//                          right: 10,
-//                          child: Transform.rotate(
-//                            angle: 180,
-//                            child: SvgPicture.asset(
-//                              "assets/blob-2.svg",
-//                              color: Colors.white,
-//                              width: screenHeight * .93,
-//                            ),
-//                          ),
-//                        ),
-//                        blob3: Positioned(
-//                          top: 110,
-//                          left: 170,
-//                          child: Transform.rotate(
-//                            angle: 37,
-//                            child: SvgPicture.asset(
-//                              "assets/blob-3.svg",
-//                              color: Colors.black.withOpacity(1),
-//                              width: screenHeight * 1.1,
-//                            ),
-//                          ),
-//                        ),
-//                        bgColor: kBgPnP,
-//                        btn: WelcomeScreenButton(
-//                          text: "Explore",
-//                          color: kPnPSecondary,
-//                          navigationFunction: () async{
-//
-////                            Navigator.pushNamed( context, PnPHomeScreen.id);
-//
-//                          },
-//                        ),
-//                      );
-//                      await   _whenCardIsClicked();
-//
-//
-//                      Navigator.push(
-//                        context,
-//                        MaterialPageRoute(
-//                          builder: (context) => WelcomeScreen(_item),
-//                        ),
-//                      );
-//                    },
-//                    child: Padding(
-//                      padding: cardPadding,
-//                      child: ClipRRect(
-//                        borderRadius: cardBorderRadius,
-//                        child: Container(
-//                          width: cardWidth,
-//                          height: cardHeight,
-//                          decoration: BoxDecoration(
-//                              boxShadow: [_cardBoxShadow],
-//                              color: kBgWoolies,
-//                              borderRadius: cardBorderRadius),
-//                          child: Stack(
-//                            children: [
-//                              Positioned(
-//                                right: -120,
-//                                bottom: -80,
-//                                child: SvgPicture.asset(
-//                                  "assets/blob-1.svg",
-//                                  height: screenHeight * .31,
-//                                  color: Colors.white.withOpacity(.2),
-//                                ),
-//                              ),
-////                              Positioned(
-////                                left: 30,
-////                                bottom: 60,
-////                                child: SvgPicture.asset(
-////                                  "assets/pnp/pnp_cart.svg",
-////                                  height: screenHeight * .12,
-////                                  color: Colors.white,
-////                                ),
-////                              ),
-//                              Positioned(
-//                                bottom: 20,
-//                                right: 20,
-//                                child: FittedBox(
-//                                  child: Text("Sportscene",
-//                                      style: TextStyle(
-//                                          color: Colors.white,
-//                                          fontFamily: "Montserrat",
-//                                          fontWeight: FontWeight.w700,
-//                                          fontSize: screenWidth * .08)),
-//                                ),
-//                              ),
-//                            ],
-//                          ),
-//                        ),
-//                      ),
-//                    ),
-//                  ),
-//                ),
-//                SizedBox(
-//                  height: 20,
-//                ),
           ],
         ),
       ),
