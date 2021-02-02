@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:e_grocery/src/components/custom_paint.dart';
-import 'package:e_grocery/src/components/homescreen_components.dart';
+import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
+import 'package:e_grocery/src/components/homescreen_components/datatable_grid_selector.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/components/grid_homescreen_product_card/shoprite_product_card.dart';
 import 'package:e_grocery/src/components/shoprite/shoprite_search.dart';
@@ -44,7 +45,10 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen>
   @override
   void didChangeDependencies() {
     print("running did change");
-    testConnection(Provider.of<ShopriteAllProductList>(context, listen: true));
+    if (Provider.of<ShopriteAllProductList>(context, listen: false) == null) {
+      testConnection(
+          Provider.of<ShopriteAllProductList>(context, listen: true));
+    }
   }
 
   final double _horizontalPadding = 20.0;
@@ -54,9 +58,7 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    data = Provider
-        .of<ShopriteAllProductList>(context, listen: true)
-        .data;
+    data = Provider.of<ShopriteAllProductList>(context).data;
 
     if (!isDataLoaded) {
       loadData(context);

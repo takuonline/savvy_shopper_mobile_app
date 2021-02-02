@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/networking/pnp_data.dart';
-import 'package:e_grocery/src/networking/shoprite_data.dart';
-import 'package:e_grocery/src/networking/woolies_data.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/networking/grocery/pnp_data.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/networking/grocery/shoprite_data.dart';
+import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/networking/grocery/woolies_data.dart';
 import 'package:e_grocery/src/pages/clothing_product_graph/foschini_product_graph.dart';
 import 'package:e_grocery/src/pages/clothing_product_graph/woolworths_clothing_product_graph.dart';
 import 'package:e_grocery/src/providers/grocery/pnp_product_provider.dart';

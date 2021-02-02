@@ -2,9 +2,7 @@
 import 'package:flutter/material.dart';
 
 
-
 class IsLoading{
-
 
   static Future<void> showIsLoadingDialog(BuildContext context) async {
     return showDialog<void>(

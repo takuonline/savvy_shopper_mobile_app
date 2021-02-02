@@ -1,19 +1,13 @@
-import 'package:e_grocery/src/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
-class HomeBGCustomPaint extends CustomPainter{
-
+class HomeBGCustomPaint extends CustomPainter {
   HomeBGCustomPaint({this.color});
 
-  Color color ;
-
+  Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
-
-
-
     Paint paint_0 = new Paint()
       ..color = color
       ..style = PaintingStyle.fill
@@ -41,7 +35,4 @@ class HomeBGCustomPaint extends CustomPainter{
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
   }
-
 }
-
-

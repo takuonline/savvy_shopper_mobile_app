@@ -1,9 +1,9 @@
 import 'dart:math';
-import 'package:e_grocery/src/components/accessories/graph_recommendations.dart';
 import 'package:e_grocery/src/components/graph_page_components.dart';
-import 'package:e_grocery/src/components/grocery_stores_provider_aggregate_methods.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
+import 'package:e_grocery/src/services/accessories_services/graph_recommendations.dart';
+import 'package:e_grocery/src/services/grocery_services/grocery_stores_provider_aggregate_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';

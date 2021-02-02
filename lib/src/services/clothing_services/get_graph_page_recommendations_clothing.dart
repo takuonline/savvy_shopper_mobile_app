@@ -17,23 +17,18 @@ import 'package:string_similarity/string_similarity.dart';
 class GetGraphPageRecommendationsClothing {
   static Future<Map> getRecommendations(
       BuildContext context, String productTitle) async {
-    ////  foschini  ///////
     List<String> foschiniList =
         Provider.of<FoschiniAllProductList>(context, listen: false).items;
 
-    ////  markham  ///////
     List<String> markhamList =
         Provider.of<MarkhamAllProductList>(context, listen: false).items;
 
-    //// sportscene  ///////
     List<String> sportsceneList =
         Provider.of<SportsceneAllProductList>(context, listen: false).items;
 
-    //// superbalist  ///////
     List<String> superbalistList =
         Provider.of<SuperbalistAllProductList>(context, listen: false).items;
 
-    //// woolworths  ///////
     List<String> woolworthsClothingList =
         Provider.of<WoolworthsClothingAllProductList>(context, listen: false)
             .items;
@@ -107,7 +102,7 @@ class GetGraphPageRecommendationsClothing {
     } catch (e) {
       print(e);
       print(
-          "error above is in run best mathcer $networkData ---  ${listOfProducts.length}   ");
+          "error above is in run best matcher $networkData ---  ${listOfProducts.length}   ");
       return finalStoreProductItems;
     }
   }
@@ -141,13 +136,15 @@ class GetGraphPageRecommendationsClothing {
   static List<String> runBestMatch(
       List<String> storeList, int num, String title) {
     List<String> resultsList = [];
-
-    for (int i = 0; i < num; i++) {
-      BestMatch results = title.bestMatch(storeList);
-      resultsList.add((results.bestMatch.target));
-      storeList.removeAt(results.bestMatchIndex);
+    try {
+      for (int i = 0; i < num; i++) {
+        BestMatch results = title.bestMatch(storeList);
+        resultsList.add((results.bestMatch.target));
+        storeList.removeAt(results.bestMatchIndex);
+      }
+    } catch (e) {
+      print(e);
     }
-
     return resultsList;
   }
 }

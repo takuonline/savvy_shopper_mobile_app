@@ -1,10 +1,7 @@
-import 'package:e_grocery/src/pages/groceries_home_screens/pnp_home_screen.dart';
+import 'package:e_grocery/src/page_views/grocery_page_view.dart';
 import 'package:e_grocery/src/pages/welcome_screen.dart';
 import 'package:e_grocery/src/components/welcome_screen_components.dart';
 import 'package:e_grocery/src/constants/constants.dart';
-import 'package:e_grocery/src/pages/groceries_home_screens/shoprite_home_screen.dart';
-import 'package:e_grocery/src/pages/groceries_home_screens/woolies_home_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -31,9 +28,8 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
   void initState() {
     super.initState();
 
-
     _aController = AnimationController(
-      duration: Duration(milliseconds: 3000),
+      duration: Duration(milliseconds: 2500),
       vsync: this,
     );
 
@@ -80,7 +76,7 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
       curve: Interval(.8, 1, curve: Curves.easeOut),
     ));
 
-    _aController.reverseDuration = Duration(milliseconds: 1500);
+    _aController.reverseDuration = Duration(milliseconds: 1000);
     _aController.addListener(() => setState(() {}));
   }
 
@@ -93,7 +89,7 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
   Future<void> _whenCardIsClicked() async {
     _aController.reverse();
     await Future.delayed(
-      Duration(milliseconds: 2500),
+      Duration(milliseconds: 1500),
     );
   }
 
@@ -152,9 +148,17 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
         btn: WelcomeScreenButton(
           text: "Explore",
           color: kBgShoprite,
-          navigationFunction: () async {
-            Navigator.pushNamed(
-                context, ShopriteHomeScreen.id);
+          navigationFunction: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GroceryPageView(
+                  pageNumber: 0,
+                ),
+              ),
+            );
+//            Navigator.pushNamed(
+//                context, ShopriteHomeScreen.id);
 //                                : TestConnection.showNetworkDialog(context);
           },
         ),
@@ -205,8 +209,17 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
         btn: WelcomeScreenButton(
           text: "Explore",
           color: kPnPSecondary,
-          navigationFunction: () async {
-            Navigator.pushNamed(context, PnPHomeScreen.id);
+          navigationFunction: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    GroceryPageView(
+                      pageNumber: 1,
+                    ),
+              ),
+            );
+//            Navigator.pushNamed(context, PnPHomeScreen.id);
           },
         ),
       ),
@@ -247,8 +260,17 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
         btn: WelcomeScreenButton(
           text: "Explore",
           color: kWooliesSecondary,
-          navigationFunction: () async {
-            Navigator.pushNamed(context, WooliesHomeScreen.id);
+          navigationFunction: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    GroceryPageView(
+                      pageNumber: 2,
+                    ),
+              ),
+            );
+//            Navigator.pushNamed(context, WooliesHomeScreen.id);
           },
         ),
       )
@@ -278,14 +300,14 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                       child: Container(
 //                          color: Colors.black.withOpacity(.5),
                         decoration: BoxDecoration(
-//                              color: kBgShoprite,
-                          gradient: RadialGradient(
-                            radius: .5,
-                            colors: [
-                              Colors.transparent,
-                              Colors.black.withOpacity(.3),
-                            ],
-                          ),
+                          color: Colors.black.withOpacity(.3),
+//                          gradient: RadialGradient(
+//                            radius: .5,
+//                            colors: [
+//                              Colors.transparent,
+//                              Colors.black.withOpacity(.3),
+//                            ],
+//                          ),
                         ),
                       )),
                   Positioned(
@@ -536,15 +558,7 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                                   borderRadius: cardBorderRadius),
                               child: Stack(
                                 children: [
-//                              Positioned(
-//                                left: -80,
-//                                top: -100,
-//                                child: SvgPicture.asset(
-//                                  "assets/blob-1.svg",
-//                                  height: screenHeight * .31,
-//                                  color: Colors.white.withOpacity(.2),
-//                                ),
-//                              ),
+
                                   Positioned(
                                     right: 30,
                                     bottom: 60,

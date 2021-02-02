@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:e_grocery/src/components/custom_paint.dart';
-import 'package:e_grocery/src/components/homescreen_components.dart';
 import 'package:e_grocery/src/components/grid_homescreen_product_card/product_card_white.dart';
+import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
+import 'package:e_grocery/src/components/homescreen_components/datatable_grid_selector.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/components/pnp/pnp_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
@@ -29,7 +30,11 @@ class _PnPHomeScreenState extends State<PnPHomeScreen>
 
   @override
   void didChangeDependencies() {
-    testConnection(Provider.of<PnPAllProductList>(context, listen: false));
+    super.didChangeDependencies();
+
+    if (Provider.of<PnPAllProductList>(context, listen: false) == null) {
+      testConnection(Provider.of<PnPAllProductList>(context, listen: false));
+    }
   }
 
   @override

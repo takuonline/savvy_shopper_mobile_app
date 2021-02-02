@@ -1,27 +1,11 @@
 import 'dart:math';
-import 'package:e_grocery/locator.dart';
-import 'package:e_grocery/src/components/clothing/ClothingStoresProviderMethods.dart';
 import 'package:e_grocery/src/components/graph_page_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/mixins/clothing_graph_page_mixin.dart';
-import 'package:e_grocery/src/networking/clothing/foschini_data.dart';
-import 'package:e_grocery/src/networking/clothing/markham_data.dart';
-import 'package:e_grocery/src/networking/clothing/sportscene_data.dart';
-import 'package:e_grocery/src/networking/clothing/superbalist_data.dart';
-import 'package:e_grocery/src/networking/clothing/woolworths_clothing_data.dart';
-import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/pages/clothing_product_graph/woolworths_clothing_product_graph.dart';
-import 'package:e_grocery/src/providers/clothing/foschini_product_provider.dart';
-import 'package:e_grocery/src/providers/clothing/markham_product_provider.dart';
-import 'package:e_grocery/src/providers/clothing/sportscene_product_provider.dart';
-import 'package:e_grocery/src/providers/clothing/superbalist_product_provider.dart';
-import 'package:e_grocery/src/providers/clothing/woolworths_clothing_product_provider.dart';
-import 'package:e_grocery/src/services/clothing_services/get_graph_page_recommendations_clothing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:provider/provider.dart';
-import 'package:string_similarity/string_similarity.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class FoschiniProductGraph extends StatefulWidget {
@@ -37,81 +21,16 @@ class FoschiniProductGraph extends StatefulWidget {
 
 class _FoschiniProductGraphState extends State<FoschiniProductGraph>
     with ClothingGraphPageMixin {
-//  List finalFoschiniProductItems = [];
-//  List finalMarkhamProductItems = [];
-//  List finalSportsceneProductItems = [];
-//  List finalSuperbalistProductItems = [];
-//  List finalWoolworthsClothingProductItems = [];
-//
-//  bool _isLoadingRecommendations = false;
-
-//  final _nullImageUrl =
-//      'https://play-lh.googleusercontent.com/tTcm_kToEtUvXdVGytgjB2Lc-qQiNo5fxcagB7c7MX_UJsO43OFKkeOJOZZiOL1VO6c=s180-rw';
-
-//  List<ProductData> _getData() {
-//    List<ProductData> temp = [];
-//    for (int i = 0; i < widget.productItem.prices.length; i++) {
-//      temp.add(ProductData(
-//          widget.productItem.dates[i], widget.productItem.prices[i]));
-//    }
-//    return temp;
-//  }
 
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      onRefresh(widget.productItem.title);
-    });
   }
 
-//  Future<void> _getProductData() async {
-//    if (await TestConnection.checkForConnection()) {
-//      ClothingStoresProviderMethods.checkNullAndGetAllProductData(context);
-//    } else {
-//      TestConnection.showNoNetworkDialog(context);
-//    }
-//  }
-
-//  Future<void> _onRefresh() async {
-//    setState(() {
-//      isLoadingRecommendations = true;
-//    });
-//    try {
-//      Map recommendationDataMap =
-//      await GetGraphPageRecommendationsClothing.getRecommendations(
-//          context, widget.productItem.title);
-//
-//      finalFoschiniProductItems = await recommendationDataMap["foschini"];
-//      finalMarkhamProductItems = await recommendationDataMap["markham"];
-//      finalSportsceneProductItems = await recommendationDataMap['sportscene'];
-//      finalSuperbalistProductItems = await recommendationDataMap['superbalist'];
-//      finalWoolworthsClothingProductItems = await
-//      recommendationDataMap['woolworthsClothing'];
-//
-//
-//      setState(() {
-//        isLoadingRecommendations = false;
-//      });
-//    } on NoSuchMethodError {
-//      print("noooooooooooo such  methoddddddddddddddddd  ");
-//
-//      setState(() {
-//        isLoadingRecommendations = false;
-//      });
-//    } on RangeError {
-//
-//      setState(() {
-//        isLoadingRecommendations = false;
-//      });
-//    } catch (e) {
-//      print(e);
-//    }
-//    setState(() {
-//      isLoadingRecommendations = false;
-//    });
-//  }
+  @override
+  void didChangeDependencies() {
+    onRefresh(widget.productItem.title);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,18 +44,18 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph>
     return Container(
         child: Scaffold(
       body: RefreshIndicator(
-        onRefresh: () => onRefresh(widget.productItem.title),
-        child: Container(
-            color: Colors.white,
-            child: ListView(
-              children: [
-                SizedBox(
-                  height: screenHeight10p * 4,
-                ),
-                Stack(
+            onRefresh: () => onRefresh(widget.productItem.title),
+            child: Container(
+                color: Colors.white,
+                child: ListView(
                   children: [
-                    Center(
-                      child: Container(
+                    SizedBox(
+                      height: screenHeight10p * 4,
+                    ),
+                    Stack(
+                      children: [
+                        Center(
+                          child: Container(
                             width: screenWidth * .8,
                             height: screenHeight * .35,
                             child: Padding(
@@ -393,7 +312,7 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph>
                   ],
                 )),
           ),
-    ));
+        ));
   }
 
 

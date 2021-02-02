@@ -1,12 +1,11 @@
-import 'package:e_grocery/src/pages/accessories_home_screens/computermania_home_screen.dart';
-import 'package:e_grocery/src/pages/accessories_home_screens/hifi_home_screen.dart';
-import 'package:e_grocery/src/pages/accessories_home_screens/takealot_home_screen.dart';
+import 'package:e_grocery/src/page_views/accessories_page_view.dart';
 import 'package:e_grocery/src/pages/welcome_screen.dart';
 import 'package:e_grocery/src/components/welcome_screen_components.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:math' as math;
 
 class AccessoriesHome extends StatefulWidget {
   static const id = "/accessoriesHome";
@@ -22,42 +21,16 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
   Animation<double> _textFadeAnimation;
   Animation<Offset> _textSlide;
 
-  Animation<Offset> _shopriteSlide;
-  Animation<Offset> _pnpSlide;
-  Animation<Offset> _woolworthsSlide;
-
-  bool _isInit = false;
-  bool _pnpIsInit = false;
-  bool _wooliesIsInit = false;
+  Animation<Offset> _takealotSlide;
+  Animation<Offset> _hifiSlide;
+  Animation<Offset> _computermaniaSlide;
 
   @override
   void initState() {
     super.initState();
 
-//
-//    if (!_isInit) {
-//      Provider.of<AllProductList>(context,listen:false).getItems();
-//      setState(() {
-//        _isInit = true;
-//      });
-//    }
-//
-//    if (!_pnpIsInit) {
-//      Provider.of<PnPAllProductList>(context,listen:false).getItems();
-//      setState(() {
-//        _pnpIsInit = true;
-//      });
-//    }
-//
-//    if (!_wooliesIsInit) {
-//      Provider.of<WooliesAllProductList>(context,listen:false).getItems();
-//      setState(() {
-//        _wooliesIsInit = true;
-//      });
-//    }
-
     _aController = AnimationController(
-      duration: Duration(milliseconds: 3000),
+      duration: Duration(milliseconds: 2500),
       vsync: this,
     );
 
@@ -80,7 +53,7 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
       curve: Interval(0, .5, curve: Curves.easeOut),
     ));
 
-    _shopriteSlide = Tween<Offset>(
+    _takealotSlide = Tween<Offset>(
       begin: Offset(2, 0),
       end: Offset.zero,
     ).animate(CurvedAnimation(
@@ -88,7 +61,7 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
       curve: Interval(.6, .8, curve: Curves.easeOut),
     ));
 
-    _pnpSlide = Tween<Offset>(
+    _hifiSlide = Tween<Offset>(
       begin: Offset(2, 0),
       end: Offset.zero,
     ).animate(CurvedAnimation(
@@ -96,7 +69,7 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
       curve: Interval(.7, .9, curve: Curves.easeOut),
     ));
 
-    _woolworthsSlide = Tween<Offset>(
+    _computermaniaSlide = Tween<Offset>(
       begin: Offset(2, 0),
       end: Offset.zero,
     ).animate(CurvedAnimation(
@@ -104,7 +77,7 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
       curve: Interval(.8, 1, curve: Curves.easeOut),
     ));
 
-    _aController.reverseDuration = Duration(milliseconds: 1500);
+    _aController.reverseDuration = Duration(milliseconds: 1000);
     _aController.addListener(() => setState(() {}));
   }
 
@@ -141,45 +114,55 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
 
     final Map<String, WelcomeScreenItem> _welcomeScreenItemMap = {
       'takealot': WelcomeScreenItem(
-        header: "Takealot",
-        details:
-            "Takealot, a place where extraordinary people come together to do extraordinary "
-            "things, bringing world-class online shopping to the"
-            " people of South Africa.",
-        blob1: Positioned(
-          top: -screenHeight * .4,
-          left: -screenWidth * .85,
-          child: SvgPicture.asset(
-            "assets/blob-1.svg",
-            width: screenHeight * 1.2,
-            color: Colors.blue,
+          header: "Takealot",
+          details:
+          "Takealot, a place where extraordinary people come together to do extraordinary "
+              "things, bringing world-class online shopping to the"
+              " people of South Africa.",
+          blob1: Positioned(
+            top: -screenHeight * .4,
+            left: -screenWidth * .85,
+            child: SvgPicture.asset(
+              "assets/blob-1.svg",
+              width: screenHeight * 1.2,
+              color: Colors.blue,
+            ),
           ),
-        ),
-        blob2: Positioned(
-          top: screenHeight * .08,
-          left: screenWidth * .55,
-          child: SvgPicture.asset(
-            "assets/blob-2.svg",
-            color: Colors.white.withOpacity(.5),
-            width: screenHeight * .93,
+          blob2: Positioned(
+            top: screenHeight * .08,
+            left: screenWidth * .55,
+            child: SvgPicture.asset(
+              "assets/blob-2.svg",
+              color: Colors.white.withOpacity(.5),
+              width: screenHeight * .93,
+            ),
           ),
-        ),
-        blob3: Positioned(
-          bottom: -screenHeight * .28,
-          left: -screenWidth * .88,
-          child: SvgPicture.asset(
-            "assets/blob-3.svg",
-            color: Colors.black.withOpacity(.2),
-            width: screenHeight * 1.1,
+          blob3: Positioned(
+            bottom: -screenHeight * .28,
+            left: -screenWidth * .88,
+            child: SvgPicture.asset(
+              "assets/blob-3.svg",
+              color: Colors.black.withOpacity(.2),
+              width: screenHeight * 1.1,
+            ),
           ),
-        ),
-        bgColor: kBgTakealot.withBlue(200),
-        btn: WelcomeScreenButton(
+          bgColor: kBgTakealot.withBlue(200),
+          btn: WelcomeScreenButton(
             text: "Explore",
             color: kBgTakealot,
             navigationFunction: () =>
-                Navigator.pushNamed(context, TakealotHomeScreen.id)),
-      ),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        AccessoriesPageView(
+                          pageNumber: 0,
+                        ),
+                  ),
+                ),
+          )),
+//                Navigator.pushNamed(context, TakealotHomeScreen.id)),
+
       'hifi': WelcomeScreenItem(
         header: "Hifi",
         details: 'After more than two decades of the leading '
@@ -227,14 +210,25 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
         btn: WelcomeScreenButton(
           text: "Explore",
           color: kBgHifi,
-          navigationFunction: () =>
-              Navigator.pushNamed(context, HifiHomeScreen.id),
+          navigationFunction: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    AccessoriesPageView(
+                      pageNumber: 1,
+                    ),
+              ),
+            );
+          },
+//              Navigator.pushNamed(context, HifiHomeScreen.id),
         ),
       ),
+
       'computermania': WelcomeScreenItem(
         header: "Computer Mania",
         details:
-            'With a success record spanning more than 28 years, Computer Mania'
+        'With a success record spanning more than 28 years, Computer Mania'
             'is equipped to lead dedicated'
             ' franchisees and become a successful retailer.',
         blob1: Positioned(
@@ -269,8 +263,16 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
           text: "Explore",
           color: kComputermaniaSecondary.withOpacity(.7),
           navigationFunction: () {
-            Navigator.pushNamed(context, ComputermaniaHomeScreen.id);
-//            Navigator.pushNamed(context, TakealotHomeScreen.id);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    AccessoriesPageView(
+                      pageNumber: 2,
+                    ),
+              ),
+            );
+//            Navigator.pushNamed(context, ComputermaniaHomeScreen.id);
           },
         ),
       )
@@ -287,27 +289,26 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
                   Container(
                     width: double.infinity,
                     height: screenHeight * .35,
-                    decoration: BoxDecoration(),
-                    child: SvgPicture.asset(
-                      "assets/main_menu/grocery_shoppinglist_bg.svg",
-                      width: screenWidth * 4,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Positioned.fill(
-                      child: Container(
-//                          color: Colors.black.withOpacity(.5),
                     decoration: BoxDecoration(
-//                              color: kBgShoprite,
-                      gradient: RadialGradient(
-                        radius: .5,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withOpacity(.3),
-                        ],
+                        gradient: LinearGradient(
+                            colors: [Colors.blue, Colors.lightBlue])),
+                    child: Transform.translate(
+                      offset: Offset(screenWidth * .27, 0),
+                      child: Transform.rotate(
+                        angle: math.pi / 2 * .2,
+                        child: Transform(
+                          transform: Matrix4.identity()
+                            ..scale(.8),
+                          child: SvgPicture.asset(
+                            "assets/headphone_bg.svg",
+
+                            height: screenHeight * .01,
+//                        fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
-                  )),
+                  ),
                   Positioned(
                     bottom: screenHeight10p * 2.3,
                     child: FadeTransition(
@@ -345,7 +346,7 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
                       height: screenHeight10p * 4,
                     ),
                     SlideTransition(
-                      position: _shopriteSlide,
+                      position: _takealotSlide,
                       child: InkWell(
                         onTap: () async {
 //                          if (Provider.of<TakealotAllProductList>(context,
@@ -435,25 +436,9 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
                       height: 20,
                     ),
                     SlideTransition(
-                      position: _pnpSlide,
+                      position: _hifiSlide,
                       child: InkWell(
                         onTap: () async {
-//                          if (Provider.of<HifiAllProductList>(context,
-//                                      listen: false)
-//                                  .data ==
-//                              null) {
-//                            await Provider.of<HifiAllProductList>(context,
-//                                    listen: false)
-//                                .getItems();
-//                          }
-
-//                      if (!_pnpIsInit) {
-//                        Provider.of<PnPAllProductList>(context,listen:false).getItems();
-//                        setState(() {
-//                          _pnpIsInit = true;
-//                        });
-//                      }
-
                           final _item = _welcomeScreenItemMap['hifi'];
                           await _whenCardIsClicked();
 
@@ -495,24 +480,7 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
                                       borderRadius: cardBorderRadius),
                                   child: Stack(
                                     children: [
-//                              Positioned(
-//                                right: -120,
-//                                bottom: -80,
-//                                child: SvgPicture.asset(
-//                                  "assets/blob-1.svg",
-//                                  height: screenHeight * .31,
-//                                  color: Colors.black.withOpacity(.3),
-//                                ),
-//                              ),
-//                                      Positioned(
-//                                        left: 30,
-//                                        bottom: 60,
-//                                        child: SvgPicture.asset(
-//                                          "assets/grocery_card_svg/grocery_bag_2.svg",
-//                                          height: constraints.maxWidth * .25,
-////                                      color: Colors.white,
-//                                        ),
-//                                      ),
+
                                       Positioned(
                                         bottom: 20,
                                         right: 20,
@@ -534,30 +502,9 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
                       height: 20,
                     ),
                     SlideTransition(
-                      position: _woolworthsSlide,
+                      position: _computermaniaSlide,
                       child: InkWell(
                         onTap: () async {
-//                          if (Provider.of<ComputermaniaAllProductList>(context,
-//                                      listen: false)
-//                                  .data ==
-//                              null) {
-//                            await Provider.of<ComputermaniaAllProductList>(
-//                                    context,
-//                                    listen: false)
-//                                .getItems();
-//                          }
-//                      if (!_wooliesIsInit) {
-//                        Provider.of<WooliesAllProductList>(context,listen:false).getItems();
-//                        setState(() {
-//                          _wooliesIsInit = true;
-//                        });
-//                      }
-
-//                          await Provider.of<ComputermaniaAllProductList>(
-//                                  context,
-//                                  listen: false)
-//                              .getItems();
-
                           final _item = _welcomeScreenItemMap['computermania'];
                           await _whenCardIsClicked();
                           Navigator.push(
@@ -587,24 +534,7 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
                                   borderRadius: cardBorderRadius),
                               child: Stack(
                                 children: [
-//                              Positioned(
-//                                left: -80,
-//                                top: -100,
-//                                child: SvgPicture.asset(
-//                                  "assets/blob-1.svg",
-//                                  height: screenHeight * .31,
-//                                  color: Colors.white.withOpacity(.2),
-//                                ),
-//                              ),
-//                                  Positioned(
-//                                    right: 30,
-//                                    bottom: 60,
-//                                    child: SvgPicture.asset(
-//                                      "assets/grocery_card_svg/plastic_bag.svg",
-//                                      height: screenHeight * .12,
-//
-//                                    ),
-//                                  ),
+
                                   Positioned(
                                     bottom: 20,
                                     left: 20,

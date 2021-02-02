@@ -1,15 +1,17 @@
+import 'dart:collection';
 import 'dart:convert';
 
-import 'package:e_grocery/src/components/clothing/foschini/foschini_search.dart';
+import 'package:e_grocery/src/components/clothing/product_tabbar_view.dart';
 import 'package:e_grocery/src/components/custom_paint.dart';
-import 'package:e_grocery/src/components/homescreen_components.dart';
+import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
+import 'package:e_grocery/src/components/homescreen_components/datatable_grid_selector.dart';
 import 'package:e_grocery/src/components/product_item.dart';
-import 'package:e_grocery/src/components/product_tabbar_view.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/mixins/clothing_home_page_mixin.dart';
 import 'package:e_grocery/src/networking/clothing/foschini_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/providers/clothing/foschini_product_provider.dart';
+import 'package:e_grocery/src/services/clothing_services/clothing_search.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
@@ -26,56 +28,35 @@ class _FoschiniHomeScreenState extends State<FoschiniHomeScreen>
   void initState() {
     super.initState();
     tabController = TabController(vsync: this, length: 3, initialIndex: 1);
-
     setState(() => tabController.addListener(() {}));
     testConnection(Provider.of<FoschiniAllProductList>(context, listen: false));
   }
 
-
   @override
   void dispose() {
-    textController.dispose();
     gridScrollController.dispose();
     scrollController.dispose();
     tabController.dispose();
     super.dispose();
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
-    data = Provider
-        .of<FoschiniAllProductList>(context)
-        .data;
+    data = Provider.of<FoschiniAllProductList>(context).data;
 
     if (!isDataLoaded) {
       loadData(context);
     }
-
     if (cheap.isNotEmpty && expensive.isNotEmpty) {
       setState(() => isLoading = false);
     }
 
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     final screenHeight10p =
-        screenHeight * (10 / MediaQuery
-            .of(context)
-            .size
-            .height);
+        screenHeight * (10 / MediaQuery.of(context).size.height);
     final screenWidth10p =
-        screenWidth * (10 / MediaQuery
-            .of(context)
-            .size
-            .width);
+        screenWidth * (10 / MediaQuery.of(context).size.width);
 
     final double _horizontalPadding = 20.0;
     allProducts = cheap + expensive;
@@ -107,7 +88,7 @@ class _FoschiniHomeScreenState extends State<FoschiniHomeScreen>
                     ),
                     Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                      EdgeInsets.symmetric(horizontal: _horizontalPadding),
                       child: FittedBox(
                         child: Text(
                           "Foschini",
@@ -131,13 +112,9 @@ class _FoschiniHomeScreenState extends State<FoschiniHomeScreen>
                           child: GestureDetector(
                             onTap: () async {
                               if (await TestConnection.checkForConnection()) {
-//                                Provider.of<FoschiniProductNameList>(context,
-//                                        listen: false)
-//                                    .getProductNameList(data, context);
-
                                 final result = await showSearch(
                                     context: context,
-                                    delegate: FoschiniGroupProductSearch(
+                                    delegate: ClothingProductSearch(
                                         items:
                                         Provider
                                             .of<FoschiniAllProductList>(
@@ -153,7 +130,7 @@ class _FoschiniHomeScreenState extends State<FoschiniHomeScreen>
                             },
                             child: Container(
                               margin:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              const EdgeInsets.symmetric(horizontal: 20),
                               decoration: BoxDecoration(
                                   color: Colors.white.withOpacity(.8),
                                   borderRadius: BorderRadius.circular(10)),
@@ -217,9 +194,7 @@ class _FoschiniHomeScreenState extends State<FoschiniHomeScreen>
             Container(
 //              physics: NeverScrollableScrollPhysics(),
 
-              height:
-
-              (isGridOff
+              height: (isGridOff
                   ? screenHeight10p * 7 * cheap.length.toDouble()
                   : screenHeight10p * 13.6 * cheap.length.toDouble()),
 
@@ -235,68 +210,67 @@ class _FoschiniHomeScreenState extends State<FoschiniHomeScreen>
                         tabs: [
                           Tab(
                               child: FittedBox(
-                            child: Text(
-                              "All",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: "Montserrat",
-                                  fontSize: 20),
-                            ),
-                          )),
+                                child: Text(
+                                  "All",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: "Montserrat",
+                                      fontSize: 20),
+                                ),
+                              )),
                           Tab(
                               child: FittedBox(
-                            child: Text(
-                              "Cheap",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: "Montserrat",
-                                  fontSize: 18),
-                            ),
-                          )),
+                                child: Text(
+                                  "Cheap",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: "Montserrat",
+                                      fontSize: 18),
+                                ),
+                              )),
                           Tab(
                               child: FittedBox(
-                            child: Text(
-                              "Expensive",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: "Montserrat",
-                                  fontSize: 20),
-                            ),
-                          )),
+                                child: Text(
+                                  "Expensive",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: "Montserrat",
+                                      fontSize: 20),
+                                ),
+                              )),
                         ],
                       ),
                     ),
                     Expanded(
                       child: Material(
                           child: TabBarView(
-
                             children: [
-                          StoreMainMenuTabBarView.productTabBarView(
-                            context,
-                            allProducts,
-                            scrollController,
-                            isGridOff,
-                            nullImageUrl,
-                            gridScrollController,
-                          ),
-                          StoreMainMenuTabBarView.productTabBarView(
-                            context,
-                            cheap,
-                            scrollController,
-                            isGridOff,
-                            nullImageUrl,
-                            gridScrollController,
-                          ),
-                          StoreMainMenuTabBarView.productTabBarView(
-                            context,
-                            expensive,
-                            scrollController,
-                            isGridOff,
-                            nullImageUrl,
-                            gridScrollController,
-                          ),
-                        ],
-                      )),
+                              StoreMainMenuTabBarView.productTabBarView(
+                                context,
+                                allProducts,
+                                scrollController,
+                                isGridOff,
+                                nullImageUrl,
+                                gridScrollController,
+                              ),
+                              StoreMainMenuTabBarView.productTabBarView(
+                                context,
+                                cheap,
+                                scrollController,
+                                isGridOff,
+                                nullImageUrl,
+                                gridScrollController,
+                              ),
+                              StoreMainMenuTabBarView.productTabBarView(
+                                context,
+                                expensive,
+                                scrollController,
+                                isGridOff,
+                                nullImageUrl,
+                                gridScrollController,
+                              ),
+                            ],
+                          )),
                     ),
                   ],
                 ),

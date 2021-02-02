@@ -1,18 +1,31 @@
+import 'package:flutter/material.dart';
 import 'dart:convert';
-
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/providers/grocery/pnp_product_provider.dart';
-import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
-mixin GroceriesHomePageMixin<T extends StatefulWidget> on State<T> {
+mixin AccessoriesHomePageMixin<T extends StatefulWidget> on State<T> {
+  final textController = TextEditingController();
+  final gridScrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
+
+  bool isDataLoaded = false;
+
+  bool isLoading = false;
+  dynamic data;
+
+  List<ProductItem> cheap = [];
+  List<ProductItem> expensive = [];
+  List<ProductItem> allProducts = [];
+
+  final double horizontalPadding = 20.0;
   bool isGridOff = false;
+  final nullImageUrl =
+      'https://www.pnp.co.za/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_400x400.jpg';
 
-  void toggleGrid() => setState(() => isGridOff = !isGridOff);
-
-  Future<void> showNetworkDialog(BuildContext context) async {
+  Future<void> showNetworkDialog(BuildContext context, storeProvider) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -38,15 +51,14 @@ mixin GroceriesHomePageMixin<T extends StatefulWidget> on State<T> {
             TextButton(
               child: Text(
                 'Retry',
-                style: TextStyle(color: kBgPnP),
+                style: TextStyle(color: kBgTakealot),
               ),
               onPressed: () async {
                 Navigator.of(context).pop();
                 if (await TestConnection.checkForConnection()) {
-                  Provider.of<PnPAllProductList>(context, listen: false)
-                      .getItems();
+                  storeProvider.getItems();
                 } else {
-                  showNetworkDialog(context);
+                  showNetworkDialog(context, storeProvider);
                 }
               },
             ),
@@ -56,38 +68,24 @@ mixin GroceriesHomePageMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  List<ProductItem> cheap = [];
-  List<ProductItem> expensive = [];
-  List<ProductItem> allProducts = [];
-  final textController = TextEditingController();
-  final gridScrollController = ScrollController();
-  ScrollController scrollController = ScrollController();
-  bool isDataLoaded = false;
-
-  bool isLoading = false;
-  dynamic data;
-
   void testConnection(storeProvider) async {
     if (await TestConnection.checkForConnection()) {
-      print("testing connection");
       await Future.delayed(Duration(seconds: 7));
       if (storeProvider.data == null) {
         setState(() {
           isLoading = true;
         });
+
         await storeProvider.getItems();
+
         setState(() {
           isLoading = false;
         });
       }
     } else {
-      await showNetworkDialog(context);
+      await showNetworkDialog(context, storeProvider);
     }
   }
-
-//  void toggleGrid(){
-//    setState(() =>isGridOff = !isGridOff);
-//  }
 
   void cleanExpensive(List<dynamic> items) {
     for (var i in items) {
@@ -110,18 +108,6 @@ mixin GroceriesHomePageMixin<T extends StatefulWidget> on State<T> {
     }
 
     setState(() {});
-  }
-
-  void loadData(BuildContext context) {
-    if (data != null && !isDataLoaded) {
-      cleanCheap(jsonDecode(data["cheap"]));
-      cleanExpensive(jsonDecode(data["expensive"]));
-
-      setState(() => isLoading = false);
-      setState(() => isDataLoaded = true);
-    } else {
-      setState(() => isLoading = true);
-    }
   }
 
   void cleanCheap(List<dynamic> items) {
@@ -153,11 +139,12 @@ mixin GroceriesHomePageMixin<T extends StatefulWidget> on State<T> {
       setState(() => isLoading = true);
       setState(() => isDataLoaded = false);
 
-      await storeProvider.getItems();
+//      await Provider.of<TakealotAllProductList>(context, listen: false)
+      storeProvider.getItems();
 
-      cheap.clear();
-      expensive.clear();
-      allProducts.clear();
+      cheap = [];
+      expensive = [];
+      allProducts = [];
 
       data = storeProvider.data;
 
@@ -170,7 +157,25 @@ mixin GroceriesHomePageMixin<T extends StatefulWidget> on State<T> {
       setState(() => isLoading = false);
       setState(() => isDataLoaded = true);
     } else {
-      showNetworkDialog(context);
+      showNetworkDialog(context, storeProvider);
+    }
+  }
+
+  void toggleGrid() {
+    setState(() {
+      isGridOff = !isGridOff;
+    });
+  }
+
+  void loadData(BuildContext context) {
+    if (data != null && !isDataLoaded) {
+      cleanCheap(jsonDecode(data["cheap"]));
+      cleanExpensive(jsonDecode(data["expensive"]));
+
+      setState(() => isLoading = false);
+      setState(() => isDataLoaded = true);
+    } else {
+      setState(() => isLoading = true);
     }
   }
 }

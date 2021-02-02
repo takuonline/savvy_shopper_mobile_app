@@ -3,11 +3,8 @@ import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/networking/accessories/computermania_data.dart';
 import 'package:e_grocery/src/networking/accessories/hifi_data.dart';
 import 'package:e_grocery/src/networking/accessories/takealot_data.dart';
-import 'package:e_grocery/src/providers/accessories/computermania_product_name_provider.dart';
 import 'package:e_grocery/src/providers/accessories/computermania_product_provider.dart';
-import 'package:e_grocery/src/providers/accessories/hifi_product_name_provider.dart';
 import 'package:e_grocery/src/providers/accessories/hifi_product_provider.dart';
-import 'package:e_grocery/src/providers/accessories/takealot_product_name_provider.dart';
 import 'package:e_grocery/src/providers/accessories/takealot_product_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -16,23 +13,13 @@ import 'package:string_similarity/string_similarity.dart';
 class AccessoriesGraphRecommendations {
   static Future<Map> getRecommendations(
       BuildContext context, String productTitle) async {
-//    var dataTakealot =
-//        Provider.of<TakealotAllProductList>(context, listen: false).data;
-//    Provider.of<TakealotProductNameList>(context, listen: false)
-//        .getProductNameList(dataTakealot, context);
     List<String> takealotList =
         Provider.of<TakealotAllProductList>(context, listen: false).titles;
 
-//    var dataHifi = Provider.of<HifiAllProductList>(context, listen: false).data;
-//    Provider.of<HifiProductNameList>(context, listen: false)
-//        .getProductNameList(dataHifi, context);
+
     List<String> hifiList =
         Provider.of<HifiAllProductList>(context, listen: false).titles;
-//
-//    var dataComputermania =
-//        Provider.of<ComputermaniaAllProductList>(context, listen: false).data;
-//    Provider.of<ComputermaniaProductNameList>(context, listen: false)
-//        .getProductNameList(dataComputermania, context);
+
     List<String> computermaniaList =
         Provider.of<ComputermaniaAllProductList>(context, listen: false).titles;
 

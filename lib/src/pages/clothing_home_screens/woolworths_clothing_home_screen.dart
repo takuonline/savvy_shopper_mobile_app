@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:e_grocery/src/components/custom_paint.dart';
-import 'package:e_grocery/src/components/homescreen_components.dart';
+import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/components/woolies/woolies_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
@@ -136,15 +136,15 @@ class _WoolworthsClothingHomeScreenState
                                 WoolworthsClothingData _networkData = WoolworthsClothingData();
 
                                 final result = await showSearch(
-                                    context: context,
-                                    delegate: WooliesProductSearch(
-                                        items: Provider
-                                            .of<
-                                            WoolworthsClothingAllProductList>(
-                                            context, listen: false)
-                                            .items,
-                                        networkData: _networkData
-                                    ));
+                                  context: context,
+                                  delegate: WooliesProductSearch(
+                                      items: Provider.of<
+                                                  WoolworthsClothingAllProductList>(
+                                              context,
+                                              listen: false)
+                                          .items,
+                                      networkData: _networkData),
+                                );
                                 print(result);
                               } else {
                                 await TestConnection.showNoNetworkDialog(

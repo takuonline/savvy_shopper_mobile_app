@@ -1,14 +1,14 @@
 import 'dart:io';
 
-import 'package:e_grocery/src/components/accessories/AccessoriesStoresProviderMethods.dart';
-import 'package:e_grocery/src/components/clothing/ClothingStoresProviderMethods.dart';
-import 'package:e_grocery/src/components/grocery_stores_provider_aggregate_methods.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/pages/accessories_home.dart';
 import 'package:e_grocery/src/pages/clothing_home.dart';
 import 'package:e_grocery/src/pages/groceries_home.dart';
 import 'package:e_grocery/src/pages/shopping_list.dart';
+import 'package:e_grocery/src/services/accessories_services/accessories_ stores_provider_methods.dart';
+import 'package:e_grocery/src/services/clothing_services/ClothingStoresProviderMethods.dart';
+import 'package:e_grocery/src/services/grocery_services/grocery_stores_provider_aggregate_methods.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
@@ -230,7 +230,6 @@ class _MainMenuState extends State<MainMenu>
                     'Images by unsplash.com: Judeus Samson, Alex Iby,'
                     ' Joseph Barrientos, Irene Kredenets and ruthson-zimmerman'
 
-
             ),
           ],
         ),
@@ -272,27 +271,10 @@ class _MainMenuState extends State<MainMenu>
                       child: Text("Welcome", style: _mainTextStyle)
                   ),
                 ),
-
-//                Transform.translate(
-//                  offset: Offset(0, -2),
-//                  child: Padding(
-//                    padding: EdgeInsets.only(
-//                      right: screenWidth * .77,
-//                    ),
-//                    child: Divider(
-//                      color: Colors.black,
-//                      thickness: 3,
-////                    indent: screenWidth*.7,
-//                    ),
-//                  ),
-//                )
               ],
             ),
           ),
-//          _extraSpace,
-//          SizedBox(
-//            height: screenHeight10p * 1,
-//          ),
+
           GestureDetector(
               onTap: () async {
                 if (await TestConnection.checkForConnection()) {
@@ -375,18 +357,7 @@ class _MainMenuState extends State<MainMenu>
 //            color: kHomeBg,
                 height: screenHeight * .25,
                 width: screenWidth,
-//            decoration: BoxDecoration(
-//                borderRadius: _borderRadius,
-//                image: DecorationImage(
-//                    image: AssetImage('assets/images/atikh.jpg'),
-//                    fit: BoxFit.cover,
-//                    scale: 2,
-//                    colorFilter: ColorFilter.mode(
-//                        Colors.black.withOpacity(.2), BlendMode.multiply),
-//                    alignment: Alignment.lerp(
-//                        Alignment.topLeft, Alignment.bottomLeft, .1),)
 
-//              ),
                 child: ClipRRect(
                   borderRadius: _borderRadius,
                   child: GestureDetector(
@@ -466,18 +437,7 @@ class _MainMenuState extends State<MainMenu>
                           flex: 5,
                           child: GestureDetector(
                             onTap: () async {
-//                                 if(await TestConnection.checkForConnection() )  {
-//
-//
-//                                   Provider.of<WooliesAllProductList>(context, listen: false)
-//                                       .getItems();
-//                                   Provider.of<PnPAllProductList>(context, listen: false).getItems();
-//                                   Provider.of<ShopriteAllProductList>(context, listen: false)
-//                                       .getItems();
                               Navigator.pushNamed(context, ShoppingList.id);
-//                                 }else{
-//                                   TestConnection.showNoNetworkDialog(context);
-//                                 }
                             },
                             child:
                             Transform.scale(

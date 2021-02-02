@@ -1,15 +1,16 @@
 import 'dart:convert';
 
-import 'package:e_grocery/src/components/clothing/foschini/foschini_search.dart';
+import 'package:e_grocery/src/components/clothing/product_tabbar_view.dart';
 import 'package:e_grocery/src/components/custom_paint.dart';
-import 'package:e_grocery/src/components/homescreen_components.dart';
+import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
+import 'package:e_grocery/src/components/homescreen_components/datatable_grid_selector.dart';
 import 'package:e_grocery/src/components/product_item.dart';
-import 'package:e_grocery/src/components/product_tabbar_view.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/mixins/clothing_home_page_mixin.dart';
 import 'package:e_grocery/src/networking/clothing/sportscene_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/providers/clothing/sportscene_product_provider.dart';
+import 'package:e_grocery/src/services/clothing_services/clothing_search.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
@@ -22,84 +23,6 @@ class SportsceneHomeScreen extends StatefulWidget {
 
 class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
     with SingleTickerProviderStateMixin, ClothingHomePageMixin {
-//  final textController = TextEditingController();
-//  final gridScrollController = ScrollController();
-//  ScrollController scrollController = ScrollController();
-//  TabController tabController;
-//
-//  bool isDataLoaded = false;
-//
-//  bool isLoading = false;
-//  dynamic data;
-//
-//  List<ProductItem> cheap = [];
-//  List<ProductItem> expensive = [];
-//  List<ProductItem> allProducts = [];
-//
-//  Future<void> showNetworkDialog(BuildContext context) async {
-//    return showDialog<void>(
-//      context: context,
-//      barrierDismissible: false,
-//      builder: (BuildContext context) {
-//        return AlertDialog(
-//          title: Text('Please check your Network'),
-//          content: SingleChildScrollView(
-//            child: ListBody(
-//              children: <Widget>[
-//                Text(
-//                  'An internet connection is required for this app, please make sure you are'
-//                  ' connected to a network and try again',
-//                  style: TextStyle(
-//                    fontFamily: "Montserrat",
-//                    color: Colors.black,
-//                  ),
-//                ),
-////                Text('Would you like to approve of this message?'),
-//              ],
-//            ),
-//          ),
-//          actions: <Widget>[
-//            TextButton(
-//              child: Text(
-//                'Retry',
-//                style: TextStyle(color: kBgFoschini),
-//              ),
-//              onPressed: () async {
-//                Navigator.of(context).pop();
-//                if (await TestConnection.checkForConnection()) {
-//                  Provider.of<SportsceneAllProductList>(context, listen: false)
-//                      .getItems();
-//                } else {
-//                  showNetworkDialog(context);
-//                }
-//              },
-//            ),
-//          ],
-//        );
-//      },
-//    );
-//  }
-//
-//  void testConnection() async {
-//    if (await TestConnection.checkForConnection()) {
-//      await Future.delayed(Duration(seconds: 15));
-//      if (Provider.of<SportsceneAllProductList>(context, listen: false).data ==
-//          null) {
-//        setState(() {
-//          isLoading = true;
-//        });
-//        await Provider.of<SportsceneAllProductList>(context, listen: false)
-//            .getItems();
-//        setState(() {
-//          isLoading = false;
-//        });
-//      }
-//    } else {
-////      TestConnection.showNetworkDialog(context);
-//      await showNetworkDialog(context);
-//    }
-//  }
-
   @override
   void initState() {
     super.initState();
@@ -107,8 +30,16 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
     tabController = TabController(vsync: this, length: 3, initialIndex: 1);
 
     setState(() => tabController.addListener(() {}));
-    testConnection(
-        Provider.of<SportsceneAllProductList>(context, listen: false));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (Provider.of<SportsceneAllProductList>(context, listen: false) == null) {
+      testConnection(
+          Provider.of<SportsceneAllProductList>(context, listen: false));
+    }
   }
 
   @override
@@ -122,9 +53,7 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    data = Provider
-        .of<SportsceneAllProductList>(context, listen: true)
-        .data;
+    data = Provider.of<SportsceneAllProductList>(context, listen: true).data;
 
     if (!isDataLoaded) {
       loadData(context);
@@ -134,22 +63,12 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
       setState(() => isLoading = false);
     }
 
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final screenHeight10p = screenHeight * (10 / MediaQuery
-        .of(context)
-        .size
-        .height);
-    final screenWidth10p = screenWidth * (10 / MediaQuery
-        .of(context)
-        .size
-        .width);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight10p =
+        screenHeight * (10 / MediaQuery.of(context).size.height);
+    final screenWidth10p =
+        screenWidth * (10 / MediaQuery.of(context).size.width);
 
     allProducts = cheap + expensive;
     List<ProductItem> bestBuys = cheap.take(5).toList();
@@ -158,9 +77,8 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
     return Container(
       color: Colors.white,
       child: RefreshIndicator(
-        onRefresh: () =>
-            getDataOnRefresh(
-                Provider.of<SportsceneAllProductList>(context, listen: true)),
+        onRefresh: () => getDataOnRefresh(
+            Provider.of<SportsceneAllProductList>(context, listen: true)),
         child: ListView(
           controller: scrollController,
           children: [
@@ -199,8 +117,8 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
                       height: screenHeight * .025,
                     ),
                     Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: horizontalPadding),
+                        padding:
+                        EdgeInsets.symmetric(horizontal: horizontalPadding),
                         child: Center(
                           child: GestureDetector(
                             onTap: () async {
@@ -212,11 +130,12 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
 //                                    .getProductNameList(data, context);
                                 final result = await showSearch(
                                     context: context,
-                                    delegate: FoschiniGroupProductSearch(
-                                        items: Provider.of<
-                                                    SportsceneAllProductList>(
-                                                context,
-                                                listen: false)
+                                    delegate: ClothingProductSearch(
+                                        items: Provider
+                                            .of<
+                                            SportsceneAllProductList>(
+                                            context,
+                                            listen: false)
                                             .items,
                                         networkData: _networkData));
                                 print(result);
@@ -382,6 +301,4 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
       ),
     );
   }
-
-
 }

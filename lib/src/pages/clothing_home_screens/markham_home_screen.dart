@@ -1,15 +1,16 @@
 import 'dart:convert';
 
-import 'package:e_grocery/src/components/clothing/foschini/foschini_search.dart';
+import 'package:e_grocery/src/components/clothing/product_tabbar_view.dart';
 import 'package:e_grocery/src/components/custom_paint.dart';
-import 'package:e_grocery/src/components/homescreen_components.dart';
+import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
+import 'package:e_grocery/src/components/homescreen_components/datatable_grid_selector.dart';
 import 'package:e_grocery/src/components/product_item.dart';
-import 'package:e_grocery/src/components/product_tabbar_view.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/mixins/clothing_home_page_mixin.dart';
 import 'package:e_grocery/src/networking/clothing/markham_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/providers/clothing/markham_product_provider.dart';
+import 'package:e_grocery/src/services/clothing_services/clothing_search.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
@@ -22,91 +23,21 @@ class MarkhamHomeScreen extends StatefulWidget {
 
 class _MarkhamHomeScreenState extends State<MarkhamHomeScreen>
     with SingleTickerProviderStateMixin, ClothingHomePageMixin {
-//
-//  final textController = TextEditingController();
-//  final gridScrollController = ScrollController();
-//  ScrollController scrollController = ScrollController();
-//  TabController tabController;
-//
-//  bool isDataLoaded = false;
-//
-//  bool isLoading = false;
-//  dynamic data;
-//
-//  List<ProductItem> cheap = [];
-//  List<ProductItem> expensive = [];
-//  List<ProductItem> allProducts = [];
-//
-//  Future<void> showNetworkDialog(BuildContext context) async {
-//    return showDialog<void>(
-//      context: context,
-//      barrierDismissible: false,
-//      builder: (BuildContext context) {
-//        return AlertDialog(
-//          title: Text('Please check your Network'),
-//          content: SingleChildScrollView(
-//            child: ListBody(
-//              children: <Widget>[
-//                Text(
-//                  'An internet connection is required for this app, please make sure you are'
-//                  ' connected to a network and try again',
-//                  style: TextStyle(
-//                    fontFamily: "Montserrat",
-//                    color: Colors.black,
-//                  ),
-//                ),
-////                Text('Would you like to approve of this message?'),
-//              ],
-//            ),
-//          ),
-//          actions: <Widget>[
-//            TextButton(
-//              child: Text(
-//                'Retry',
-//                style: TextStyle(color: kBgMarkham),
-//              ),
-//              onPressed: () async {
-//                Navigator.of(context).pop();
-//                if (await TestConnection.checkForConnection()) {
-//                  Provider.of<MarkhamAllProductList>(context, listen: false)
-//                      .getItems();
-//                } else {
-//                  showNetworkDialog(context);
-//                }
-//              },
-//            ),
-//          ],
-//        );
-//      },
-//    );
-//  }
-
-//  void testConnection() async {
-//    if (await TestConnection.checkForConnection()) {
-//      await Future.delayed(Duration(seconds: 15));
-//      if (Provider.of<MarkhamAllProductList>(context, listen: false).data ==
-//          null) {
-//        setState(() {
-//          isLoading = true;
-//        });
-//        await Provider.of<MarkhamAllProductList>(context, listen: false)
-//            .getItems();
-//        setState(() {
-//          isLoading = false;
-//        });
-//      }
-//    } else {
-////      TestConnection.showNetworkDialog(context);
-//      await showNetworkDialog(context);
-//    }
-//  }
-
   @override
   void initState() {
     super.initState();
     tabController = TabController(vsync: this, length: 3, initialIndex: 1);
     setState(() => tabController.addListener(() {}));
-    testConnection(Provider.of<MarkhamAllProductList>(context, listen: true));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (Provider.of<MarkhamAllProductList>(context, listen: false) == null) {
+      testConnection(
+          Provider.of<MarkhamAllProductList>(context, listen: false));
+    }
   }
 
   @override
@@ -117,106 +48,6 @@ class _MarkhamHomeScreenState extends State<MarkhamHomeScreen>
     tabController.dispose();
     super.dispose();
   }
-
-//  void cleanExpensive(List<dynamic> items) {
-//    for (var i in items) {
-//      List<DateTime> tempDateList = [];
-//
-//      List<dynamic> datesList = i[i.keys.elementAt(0).toString()]['dates'];
-//
-//      for (var dateString in datesList) {
-//        tempDateList.add((DateTime.parse(dateString)));
-//      }
-//
-//      ProductItem _productItem = ProductItem(
-//          i[i.keys.elementAt(0).toString()]['image_url'],
-//          i[i.keys.elementAt(0).toString()]['prices_list'],
-//          tempDateList,
-//          i.keys.elementAt(0).toString(),
-//          i[i.keys.elementAt(0).toString()]['change']);
-//
-//      expensive.add(_productItem);
-//    }
-//
-//    setState(() {});
-//  }
-//
-//  void cleanCheap(List<dynamic> items) {
-//    for (var i in items) {
-//      List<DateTime> tempDateList = [];
-//
-//      List<dynamic> datesList = i[i.keys.elementAt(0).toString()]['dates'];
-//
-//      for (var dateString in datesList) {
-//        tempDateList.add((DateTime.parse(dateString)));
-//      }
-//
-//      ProductItem _productItem = ProductItem(
-//          i[i.keys.elementAt(0).toString()]['image_url'],
-//          i[i.keys.elementAt(0).toString()]['prices_list'],
-//          tempDateList,
-//          i.keys.elementAt(0).toString(),
-//          i[i.keys.elementAt(0).toString()]['change']);
-//
-//      cheap.add(_productItem);
-//    }
-//
-//    setState(() {});
-//  }
-//
-//  Future<void> getDataOnRefresh() async {
-//    if (await TestConnection.checkForConnection()) {
-//      print('refreshing');
-//      setState(() => isLoading = true);
-//      setState(() => isDataLoaded = false);
-//
-//      await Provider.of<MarkhamAllProductList>(context, listen: false)
-//          .getItems();
-//
-//      cheap = [];
-//      expensive = [];
-//      allProducts = [];
-//
-//      data = Provider.of<MarkhamAllProductList>(context, listen: false).data;
-//
-//      print(data);
-//      print(isDataLoaded);
-//
-//      cleanCheap(jsonDecode(data["cheap"]));
-//      cleanExpensive(jsonDecode(data["expensive"]));
-//
-//      setState(() => isLoading = false);
-//      setState(() => isDataLoaded = true);
-//    } else {
-//      showNetworkDialog(context);
-//    }
-//  }
-
-  final double _horizontalPadding = 20.0;
-
-//  bool isGridOff = false;
-//  final nullImageUrl =
-//      'https://image.tfgmedia.co.za/image/1/process/452x57?source=http://cdn.tfgmedia.co.za/00/BrandImage/foschini.png';
-
-//  void toggleGrid() {
-//    setState(() {
-//      isGridOff = !isGridOff;
-//    });
-//  }
-
-//  void loadData(BuildContext context) {
-//    if (data != null && !isDataLoaded) {
-////        print("in if statement");
-//      cleanCheap(jsonDecode(data["cheap"]));
-//      cleanExpensive(jsonDecode(data["expensive"]));
-//
-//      setState(() => isLoading = false);
-//      setState(() => isDataLoaded = true);
-//    } else {
-////      print("in else statement");
-//      setState(() => isLoading = true);
-//    }
-//  }
 
   @override
   Widget build(BuildContext context) {
@@ -266,7 +97,7 @@ class _MarkhamHomeScreenState extends State<MarkhamHomeScreen>
                     ),
                     Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                          EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: FittedBox(
                         child: Text(
                           "Markham",
@@ -284,8 +115,8 @@ class _MarkhamHomeScreenState extends State<MarkhamHomeScreen>
                       height: screenHeight * .025,
                     ),
                     Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: _horizontalPadding),
+                        padding:
+                        EdgeInsets.symmetric(horizontal: horizontalPadding),
                         child: Center(
                           child: GestureDetector(
                             onTap: () async {
@@ -297,12 +128,13 @@ class _MarkhamHomeScreenState extends State<MarkhamHomeScreen>
                                 final _networkData = MarkhamData();
                                 final result = await showSearch(
                                     context: context,
-                                    delegate: FoschiniGroupProductSearch(
+                                    delegate: ClothingProductSearch(
                                         items:
-                                            Provider.of<MarkhamAllProductList>(
-                                                    context,
-                                                    listen: false)
-                                                .items,
+                                        Provider
+                                            .of<MarkhamAllProductList>(
+                                            context,
+                                            listen: false)
+                                            .items,
                                         networkData: _networkData));
                                 print(result);
                               } else {
@@ -467,7 +299,4 @@ class _MarkhamHomeScreenState extends State<MarkhamHomeScreen>
       ),
     );
   }
-
-
-
 }

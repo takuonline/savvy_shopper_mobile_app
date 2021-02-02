@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:e_grocery/src/components/custom_paint.dart';
-import 'package:e_grocery/src/components/homescreen_components.dart';
+import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/components/woolies/woolies_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/networking/woolies_data.dart';
+import 'package:e_grocery/src/networking/grocery/woolies_data.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
 import 'package:e_grocery/src/providers/grocery/woolies_product_provider.dart';
 import "package:flutter/material.dart";
@@ -101,6 +101,10 @@ class _WooliesHomeScreenState extends State<WooliesHomeScreen> {
   void initState() {
     super.initState();
     _testWooliesConnection();
+
+//    if( Provider.of<PnPAllProductList>(context, listen: false)==null){
+//      testConnection(Provider.of<PnPAllProductList>(context, listen: false));
+//    }
   }
 
   @override

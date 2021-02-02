@@ -1,11 +1,7 @@
 import 'package:e_grocery/src/components/welcome_screen_components.dart';
 import 'package:e_grocery/src/constants/constants.dart';
-import 'package:e_grocery/src/pages/clothing_home_screens/foschini_home_screen.dart';
-import 'package:e_grocery/src/pages/clothing_home_screens/markham_home_screen.dart';
-import 'package:e_grocery/src/pages/clothing_home_screens/superbalist_home_screen.dart';
-import 'package:e_grocery/src/pages/clothing_home_screens/woolworths_clothing_home_screen.dart';
 import 'package:e_grocery/src/pages/welcome_screen.dart';
-import 'package:e_grocery/src/pages/clothing_home_screens/sportscene_home_screen.dart';
+import 'package:e_grocery/src/page_views/clothing_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -101,7 +97,7 @@ class _ClothingHomeState extends State<ClothingHome>
       curve: Interval(.8, 1, curve: Curves.easeOut),
     ));
 
-    _aController.reverseDuration = Duration(milliseconds: 1500);
+    _aController.reverseDuration = Duration(milliseconds: 1000);
     _aController.addListener(() => setState(() {}));
   }
 
@@ -112,8 +108,8 @@ class _ClothingHomeState extends State<ClothingHome>
   }
 
   Future<void> _whenCardIsClicked() async {
-     _aController.reverse();
-    await Future.delayed(Duration(milliseconds: 2500));
+    _aController.reverse();
+    await Future.delayed(Duration(milliseconds: 1500));
   }
 
   @override
@@ -174,7 +170,16 @@ class _ClothingHomeState extends State<ClothingHome>
           text: "Explore",
           color: kWooliesSecondary,
           navigationFunction: () {
-            Navigator.pushNamed(context, FoschiniHomeScreen.id);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ClothingPageView(
+                  pageNumber: 0,
+                ),
+              ),
+            );
+
+//            Navigator.pushNamed(context, FoschiniHomeScreen.id);
           },
         ),
       ),
@@ -227,7 +232,16 @@ class _ClothingHomeState extends State<ClothingHome>
           text: "Explore",
           color: kWooliesSecondary,
           navigationFunction: () {
-            Navigator.pushNamed(context, SportsceneHomeScreen.id);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    ClothingPageView(
+                      pageNumber: 1,
+                    ),
+              ),
+            );
+//            Navigator.pushNamed(context, SportsceneHomeScreen.id);
           },
         ),
       ),
@@ -269,8 +283,17 @@ class _ClothingHomeState extends State<ClothingHome>
         btn: WelcomeScreenButton(
           text: "Explore",
           color: kWooliesSecondary,
-          navigationFunction: () async {
-            Navigator.pushNamed(context, MarkhamHomeScreen.id);
+          navigationFunction: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    ClothingPageView(
+                      pageNumber: 2,
+                    ),
+              ),
+            );
+//            Navigator.pushNamed(context, MarkhamHomeScreen.id);
           },
         ),
       ),
@@ -312,8 +335,16 @@ class _ClothingHomeState extends State<ClothingHome>
           text: "Explore",
           color: kWooliesSecondary,
           navigationFunction: () {
-//                            return null;
-            Navigator.pushNamed(context, SuperbalistHomeScreen.id);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    ClothingPageView(
+                      pageNumber: 3,
+                    ),
+              ),
+            );
+//            Navigator.pushNamed(context, SuperbalistHomeScreen.id);
           },
         ),
       ),
@@ -353,7 +384,16 @@ class _ClothingHomeState extends State<ClothingHome>
           text: "Explore",
           color: kWooliesSecondary,
           navigationFunction: () async {
-            Navigator.pushNamed(context, WoolworthsClothingHomeScreen.id);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    ClothingPageView(
+                        pageNumber: 4
+                    ),
+              ),
+            );
+//            Navigator.pushNamed(context, WoolworthsClothingHomeScreen.id);
           },
         ),
       ),

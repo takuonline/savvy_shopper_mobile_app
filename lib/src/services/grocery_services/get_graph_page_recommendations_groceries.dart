@@ -1,8 +1,8 @@
 import 'package:e_grocery/src/components/graph_page_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
-import 'package:e_grocery/src/networking/pnp_data.dart';
-import 'package:e_grocery/src/networking/shoprite_data.dart';
-import 'package:e_grocery/src/networking/woolies_data.dart';
+import 'package:e_grocery/src/networking/grocery/pnp_data.dart';
+import 'package:e_grocery/src/networking/grocery/shoprite_data.dart';
+import 'package:e_grocery/src/networking/grocery/woolies_data.dart';
 import 'package:e_grocery/src/providers/grocery/pnp_product_provider.dart';
 import 'package:e_grocery/src/providers/grocery/shoprite_product_provider.dart';
 import 'package:e_grocery/src/providers/grocery/woolies_product_provider.dart';

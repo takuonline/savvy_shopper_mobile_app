@@ -149,16 +149,11 @@ class MyApp extends StatelessWidget {
               WoolworthsClothingHomeScreen(),
           WoolworthsClothingProductGraph.id: (context) =>
               WoolworthsClothingProductGraph(),
-
           AccessoriesHome.id: (context) => AccessoriesHome(),
-
           TakealotHomeScreen.id: (context) => TakealotHomeScreen(),
-          AccessoriesProductGraph.id: (context) => AccessoriesProductGraph(),
-
           HifiHomeScreen.id: (context) => HifiHomeScreen(),
-
           ComputermaniaHomeScreen.id: (context) => ComputermaniaHomeScreen(),
-
+          AccessoriesProductGraph.id: (context) => AccessoriesProductGraph(),
         },
 
 

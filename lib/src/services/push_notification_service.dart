@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:e_grocery/src/components/grocery_stores_provider_aggregate_methods.dart';
 import 'package:e_grocery/src/pages/groceries_home.dart';
+import 'package:e_grocery/src/services/grocery_services/grocery_stores_provider_aggregate_methods.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 

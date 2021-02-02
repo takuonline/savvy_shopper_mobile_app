@@ -1,6 +1,6 @@
-import 'package:e_grocery/src/components/clothing/ClothingStoresProviderMethods.dart';
 import 'package:e_grocery/src/components/graph_page_components.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
+import 'package:e_grocery/src/services/clothing_services/ClothingStoresProviderMethods.dart';
 import 'package:e_grocery/src/services/clothing_services/get_graph_page_recommendations_clothing.dart';
 import 'package:flutter/material.dart';
 
@@ -49,7 +49,7 @@ mixin ClothingGraphPageMixin<T extends StatefulWidget> on State<T> {
         isLoadingRecommendations = false;
       });
     } on RangeError {
-      print("range errrrrrrrrrrrrrrrrrrrror ");
+      print("range errrrrrrrrrrrrrrrrrrrror in clothing graph page mixin");
 //      setState(() {
 //        isLoadingRecommendations = true;
 //      });

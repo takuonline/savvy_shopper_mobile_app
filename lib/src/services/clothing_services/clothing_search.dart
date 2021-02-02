@@ -7,11 +7,11 @@ import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/pages/clothing_product_graph/foschini_product_graph.dart';
 import "package:flutter/material.dart";
 
-class FoschiniGroupProductSearch extends SearchDelegate {
+class ClothingProductSearch extends SearchDelegate {
   List items;
   final networkData;
 
-  FoschiniGroupProductSearch({this.items, this.networkData});
+  ClothingProductSearch({this.items, this.networkData});
 
   @override
   TextStyle get searchFieldStyle => TextStyle(

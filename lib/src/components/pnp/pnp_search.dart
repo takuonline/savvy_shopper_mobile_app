@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:e_grocery/src/components/is_loading_dialog.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'package:e_grocery/src/networking/pnp_data.dart';
+import 'package:e_grocery/src/networking/grocery/pnp_data.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/pnp_product_provider.dart';
+import 'package:e_grocery/src/providers/grocery/pnp_product_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 

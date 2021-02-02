@@ -1,15 +1,16 @@
 import 'dart:convert';
 
-import 'package:e_grocery/src/components/clothing/foschini/foschini_search.dart';
+import 'package:e_grocery/src/components/clothing/product_tabbar_view.dart';
 import 'package:e_grocery/src/components/custom_paint.dart';
-import 'package:e_grocery/src/components/homescreen_components.dart';
+import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
+import 'package:e_grocery/src/components/homescreen_components/datatable_grid_selector.dart';
 import 'package:e_grocery/src/components/product_item.dart';
-import 'package:e_grocery/src/components/product_tabbar_view.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/mixins/clothing_home_page_mixin.dart';
 import 'package:e_grocery/src/networking/clothing/superbalist_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/providers/clothing/superbalist_product_provider.dart';
+import 'package:e_grocery/src/services/clothing_services/clothing_search.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
@@ -40,13 +41,9 @@ class _SuperbalistHomeScreenState extends State<SuperbalistHomeScreen>
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    data = Provider
-        .of<SuperbalistAllProductList>(context, listen: true)
-        .data;
+    data = Provider.of<SuperbalistAllProductList>(context, listen: true).data;
 
 //    _data = Provider.of<AllProductList>(context, listen: true).data;
 
@@ -58,24 +55,12 @@ class _SuperbalistHomeScreenState extends State<SuperbalistHomeScreen>
       setState(() => isLoading = false);
     }
 
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     final screenHeight10p =
-        screenHeight * (10 / MediaQuery
-            .of(context)
-            .size
-            .height);
+        screenHeight * (10 / MediaQuery.of(context).size.height);
     final screenWidth10p =
-        screenWidth * (10 / MediaQuery
-            .of(context)
-            .size
-            .width);
+        screenWidth * (10 / MediaQuery.of(context).size.width);
 
     allProducts = cheap + expensive;
     List<ProductItem> bestBuys = cheap.take(5).toList();
@@ -84,9 +69,8 @@ class _SuperbalistHomeScreenState extends State<SuperbalistHomeScreen>
     return Container(
       color: Colors.white,
       child: RefreshIndicator(
-        onRefresh: () =>
-            getDataOnRefresh(
-                Provider.of<SuperbalistAllProductList>(context, listen: false)),
+        onRefresh: () => getDataOnRefresh(
+            Provider.of<SuperbalistAllProductList>(context, listen: false)),
         child: ListView(
           controller: scrollController,
           children: [
@@ -125,8 +109,8 @@ class _SuperbalistHomeScreenState extends State<SuperbalistHomeScreen>
                       height: screenHeight * .025,
                     ),
                     Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: horizontalPadding),
+                        padding:
+                        EdgeInsets.symmetric(horizontal: horizontalPadding),
                         child: Center(
                           child: GestureDetector(
                             onTap: () async {
@@ -136,7 +120,7 @@ class _SuperbalistHomeScreenState extends State<SuperbalistHomeScreen>
 
                                 final result = await showSearch(
                                     context: context,
-                                    delegate: FoschiniGroupProductSearch(
+                                    delegate: ClothingProductSearch(
                                         items: Provider
                                             .of<
                                             SuperbalistAllProductList>(

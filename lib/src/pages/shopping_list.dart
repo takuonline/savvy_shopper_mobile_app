@@ -4,11 +4,11 @@ import 'package:e_grocery/src/components/grocery_shoppinglist/filter_dialog.dart
 import 'package:e_grocery/src/components/grocery_shoppinglist/grocery_shoppinglist_card.dart';
 import 'package:e_grocery/src/components/grocery_shoppinglist/grocery_shoppinglist_item.dart';
 import 'package:e_grocery/src/components/grocery_shoppinglist/grocery_shoppinglist_search.dart';
-import 'package:e_grocery/src/components/grocery_stores_provider_aggregate_methods.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/providers/grocery_shopping_list.dart';
 import 'package:e_grocery/src/providers/shoppinglist_filter.dart';
+import 'package:e_grocery/src/services/grocery_services/grocery_stores_provider_aggregate_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,17 +1,17 @@
 import 'dart:convert';
+import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
+import 'package:e_grocery/src/components/homescreen_components/datatable_grid_selector.dart';
+import 'package:e_grocery/src/mixins/accessories_home_page_mixin.dart';
 
-import 'package:e_grocery/src/components/accessories/accessories_search.dart';
 import 'package:e_grocery/src/components/custom_paint.dart';
-import 'package:e_grocery/src/components/homescreen_components.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/components/grid_homescreen_product_card/product_card_white.dart';
+import 'package:e_grocery/src/components/grid_homescreen_product_card/product_card_white.dart';
 import 'package:e_grocery/src/components/product_item.dart';
-import 'package:e_grocery/src/components/pnp/pnp_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/accessories/hifi_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/pages/accessories_product_graph/accessories_product_graph.dart';
-import 'package:e_grocery/src/providers/accessories/hifi_product_name_provider.dart';
 import 'package:e_grocery/src/providers/accessories/hifi_product_provider.dart';
+import 'package:e_grocery/src/services/accessories_services/accessories_search.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
@@ -22,227 +22,39 @@ class HifiHomeScreen extends StatefulWidget {
   _HifiHomeScreenState createState() => _HifiHomeScreenState();
 }
 
-class _HifiHomeScreenState extends State<HifiHomeScreen> {
-  final _textController = TextEditingController();
-  final _gridScrollController = ScrollController();
-  ScrollController _scrollController = ScrollController();
-
-  bool _isDataLoaded = false;
-
-  bool _isLoading = false;
-  dynamic data;
-
-  List<ProductItem> _cheap = [];
-  List<ProductItem> _expensive = [];
-  List<ProductItem> _allProducts = [];
-
-  Future<void> _showNetworkDialog(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Please check your Network'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'An internet connection is required for this app, please make sure you are'
-                  ' connected to a network and try again',
-                  style: TextStyle(
-                    fontFamily: "Montserrat",
-                    color: Colors.black,
-                  ),
-                ),
-//                Text('Would you like to approve of this message?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'Retry',
-                style: TextStyle(color: kBgHifi),
-              ),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                if (await TestConnection.checkForConnection()) {
-                  Provider.of<HifiAllProductList>(context, listen: false)
-                      .getItems();
-                } else {
-                  _showNetworkDialog(context);
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _testHifiConnection() async {
-    if (await TestConnection.checkForConnection()) {
-      await Future.delayed(Duration(seconds: 7));
-      if (Provider.of<HifiAllProductList>(context, listen: false).data ==
-          null) {
-        setState(() {
-          _isLoading = true;
-        });
-
-        await Provider.of<HifiAllProductList>(context, listen: false)
-            .getItems();
-
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    } else {
-      await _showNetworkDialog(context);
-    }
-  }
-
+class _HifiHomeScreenState extends State<HifiHomeScreen>
+    with AccessoriesHomePageMixin {
   @override
   void initState() {
     super.initState();
-    _testHifiConnection();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (Provider.of<HifiAllProductList>(context, listen: false) == null) {
+      testConnection(Provider.of<HifiAllProductList>(context, listen: false));
+    }
   }
 
   @override
   void dispose() {
-    _textController.dispose();
-    _gridScrollController.dispose();
-    _scrollController.dispose();
+    gridScrollController.dispose();
+    scrollController.dispose();
     super.dispose();
-  }
-
-  void _cleanExpensive(List<dynamic> items) {
-    for (var i in items) {
-      List<DateTime> tempDateList = [];
-
-      List<dynamic> datesList = i[i.keys.elementAt(0).toString()]['dates'];
-
-      for (var dateString in datesList) {
-        tempDateList.add((DateTime.parse(dateString)));
-      }
-
-      ProductItem _productItem = ProductItem(
-          i[i.keys.elementAt(0).toString()]['image_url'],
-          i[i.keys.elementAt(0).toString()]['prices_list'],
-          tempDateList,
-          i.keys.elementAt(0).toString(),
-          i[i.keys.elementAt(0).toString()]['change']);
-
-      _expensive.add(_productItem);
-    }
-
-    setState(() {});
-  }
-
-  void _cleanCheap(List<dynamic> items) {
-    for (var i in items) {
-      List<DateTime> tempDateList = [];
-
-      List<dynamic> datesList = i[i.keys.elementAt(0).toString()]['dates'];
-
-      for (var dateString in datesList) {
-        tempDateList.add((DateTime.parse(dateString)));
-      }
-
-      ProductItem _productItem = ProductItem(
-          i[i.keys.elementAt(0).toString()]['image_url'],
-          i[i.keys.elementAt(0).toString()]['prices_list'],
-          tempDateList,
-          i.keys.elementAt(0).toString(),
-          i[i.keys.elementAt(0).toString()]['change']);
-
-      _cheap.add(_productItem);
-    }
-
-    setState(() {});
-  }
-
-  Future<void> _getDataOnRefresh() async {
-    if (await TestConnection.checkForConnection()) {
-      print('refreshing');
-      setState(() => _isLoading = true);
-      setState(() => _isDataLoaded = false);
-
-      await Provider.of<HifiAllProductList>(context, listen: false).getItems();
-
-      _cheap = [];
-      _expensive = [];
-      _allProducts = [];
-
-      data = Provider.of<HifiAllProductList>(context, listen: false).data;
-
-      print(data);
-      print(_isDataLoaded);
-
-      _cleanCheap(jsonDecode(data["cheap"]));
-      _cleanExpensive(jsonDecode(data["expensive"]));
-
-      setState(() => _isLoading = false);
-      setState(() => _isDataLoaded = true);
-    } else {
-      _showNetworkDialog(context);
-    }
-  }
-
-  final double _horizontalPadding = 20.0;
-  bool _isGridOff = false;
-  final _nullImageUrl =
-      'https://www.pnp.co.za/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_400x400.jpg';
-
-  void toggleGrid() {
-    setState(() {
-      _isGridOff = !_isGridOff;
-    });
-  }
-
-  void _loadData(BuildContext context) {
-    if (data != null && !_isDataLoaded) {
-//        print("in if statement");
-      _cleanCheap(jsonDecode(data["cheap"]));
-      _cleanExpensive(jsonDecode(data["expensive"]));
-
-      setState(() => _isLoading = false);
-      setState(() => _isDataLoaded = true);
-    } else {
-//      print("in else statement");
-      setState(() => _isLoading = true);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     data = Provider.of<HifiAllProductList>(context, listen: true).data;
 
-    if (!_isDataLoaded) {
-      _loadData(context);
+    if (!isDataLoaded) {
+      loadData(context);
     }
 
-    if (_cheap.isNotEmpty && _expensive.isNotEmpty) {
-      setState(() => _isLoading = false);
+    if (cheap.isNotEmpty && expensive.isNotEmpty) {
+      setState(() => isLoading = false);
     }
-
-//    if (data != null) {
-//      setState(() {
-//        _isLoading=false;
-//      });
-//
-//      try{
-//        _cleanCheap(jsonDecode(data["cheap"]));
-//        _cleanExpensive(jsonDecode(data["expensive"]));
-//      } on FormatException catch(e){
-//        print(e);
-//      }
-//
-//
-//    }else{
-//      setState(() {
-//        _isLoading=true;
-//      });
-//    }
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -251,16 +63,17 @@ class _HifiHomeScreenState extends State<HifiHomeScreen> {
     final screenWidth10p =
         screenWidth * (10 / MediaQuery.of(context).size.width);
 
-    _allProducts = _cheap + _expensive;
-    List<ProductItem> bestBuys = _cheap.take(5).toList();
-    _allProducts.shuffle();
+    allProducts = cheap + expensive;
+    List<ProductItem> bestBuys = cheap.take(5).toList();
+    allProducts.shuffle();
 
     return Container(
       color: Colors.white,
       child: RefreshIndicator(
-        onRefresh: () => _getDataOnRefresh(),
+        onRefresh: () => getDataOnRefresh(
+            Provider.of<HifiAllProductList>(context, listen: true)),
         child: ListView(
-          controller: _scrollController,
+          controller: scrollController,
           children: [
             Stack(
               children: [
@@ -279,7 +92,7 @@ class _HifiHomeScreenState extends State<HifiHomeScreen> {
                     ),
                     Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                      EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: FittedBox(
                         child: Text(
                           "Hifi",
@@ -297,8 +110,8 @@ class _HifiHomeScreenState extends State<HifiHomeScreen> {
                       height: screenHeight * .025,
                     ),
                     Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: _horizontalPadding),
+                        padding:
+                        EdgeInsets.symmetric(horizontal: horizontalPadding),
                         child: Center(
                           child: GestureDetector(
                             onTap: () async {
@@ -378,18 +191,18 @@ class _HifiHomeScreenState extends State<HifiHomeScreen> {
               padding: EdgeInsets.symmetric(
                 horizontal: 10,
               ),
-              child: DatatableGridSelector(_isGridOff, toggleGrid),
+              child: DatatableGridSelector(isGridOff, toggleGrid),
             ),
-            _isLoading
+            isLoading
                 ? Center(child: CircularProgressIndicator())
                 : Container(),
             SizedBox(
               height: 30,
             ),
             Container(
-              height: _isGridOff
-                  ? 70 * _cheap.length.toDouble()
-                  : 136 * _cheap.length.toDouble(),
+              height: isGridOff
+                  ? 70 * cheap.length.toDouble()
+                  : 136 * cheap.length.toDouble(),
               child: DefaultTabController(
                 length: 3,
                 child: Column(
@@ -438,9 +251,9 @@ class _HifiHomeScreenState extends State<HifiHomeScreen> {
                           child: TabBarView(
 //                                  controller: _tabController,
                         children: [
-                          productTabBarView(context, _allProducts),
-                          productTabBarView(context, _cheap),
-                          productTabBarView(context, _expensive),
+                          productTabBarView(context, allProducts),
+                          productTabBarView(context, cheap),
+                          productTabBarView(context, expensive),
                         ],
                       )),
                     ),
@@ -466,13 +279,13 @@ class _HifiHomeScreenState extends State<HifiHomeScreen> {
         screenWidth * (10 / MediaQuery.of(context).size.width);
 
     return ListView(
-      controller: _scrollController,
+      controller: scrollController,
       physics: NeverScrollableScrollPhysics(),
       children: [
         SizedBox(
           height: 50,
         ),
-        if (_isGridOff)
+        if (isGridOff)
           Material(
             child: DataTable(
               columnSpacing: 5,
@@ -515,8 +328,9 @@ class _HifiHomeScreenState extends State<HifiHomeScreen> {
                 ...itemList.map(
                   (product) => DataRow(
                     cells: [
-                      DataCell(Image.network(product.imageUrl ?? _nullImageUrl),
-                          onTap: () => product.imageUrl == null
+                      DataCell(Image.network(product.imageUrl ?? nullImageUrl),
+                          onTap: () =>
+                          product.imageUrl == null
                               ? null
                               : _showDialog(product, context)),
                       DataCell(
@@ -586,11 +400,11 @@ class _HifiHomeScreenState extends State<HifiHomeScreen> {
           )
         else
           Scrollbar(
-            controller: _gridScrollController,
+            controller: gridScrollController,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: GridView.builder(
-                  controller: _gridScrollController,
+                  controller: gridScrollController,
                   itemCount: itemList.length,
                   shrinkWrap: true,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -617,7 +431,7 @@ class _HifiHomeScreenState extends State<HifiHomeScreen> {
                                   index: index,
 
                                   cheap: itemList,
-                                  shopriteNullImageUrl: _nullImageUrl,
+                                  shopriteNullImageUrl: nullImageUrl,
 //                                    showDialog: _showDialog(itemList[index], context),
                                   product: itemList[index],
                                 ),
@@ -639,7 +453,7 @@ class _HifiHomeScreenState extends State<HifiHomeScreen> {
                                     index: index,
 
                                     cheap: itemList,
-                                    shopriteNullImageUrl: _nullImageUrl,
+                                    shopriteNullImageUrl: nullImageUrl,
 //                                    showDialog: _showDialog(itemList[index], context),
                                     product: itemList[index],
                                   ),
@@ -666,7 +480,7 @@ class _HifiHomeScreenState extends State<HifiHomeScreen> {
                     flex: 4,
                     child: Container(
                       child: Image.network(
-                        product.imageUrl ?? _nullImageUrl,
+                        product.imageUrl ?? nullImageUrl,
                       ),
                     ),
                   ),
