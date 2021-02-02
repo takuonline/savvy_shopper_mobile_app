@@ -31,8 +31,9 @@ class ShopriteData {
     };
     try {
       print("getting single product data....Shoprite..................");
-      http.Response response =
-          await http.get('$url/get-product-data/$title', headers: headers);
+      http.Response response = await http.get(
+          '$url/get-product-data/${title.replaceAll("/", "@forwardslash@")}',
+          headers: headers);
       String data = response.body;
 
       print(data);

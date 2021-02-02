@@ -173,19 +173,20 @@ class _FoschiniProductGraphState extends State<FoschiniProductGraph>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             GestureDetector(
-                              onLongPress: () async {
-                                print(finalSportsceneProductItems);
-                              },
-                              child: MaxMinCard(
-                                priceValue: widget.productItem.prices
+                          onLongPress: () {
+                            getProductData();
+                            // print(finalSportsceneProductItems);
+                          },
+                          child: MaxMinCard(
+                            priceValue: widget.productItem.prices
                                     .map((e) => double.parse(e.toString()))
                                     .toList()
                                     .reduce(max) ??
-                                    0,
-                                title: "Max",
-                                bgColor: kBgFoschini,
-                                textColor: Colors.white,
-                                headerColor: Colors.white.withOpacity(.6),
+                                0,
+                            title: "Max",
+                            bgColor: kBgFoschini,
+                            textColor: Colors.white,
+                            headerColor: Colors.white.withOpacity(.6),
                               ),
                             ),
                             GestureDetector(

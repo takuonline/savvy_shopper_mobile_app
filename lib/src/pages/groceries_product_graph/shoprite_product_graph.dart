@@ -1,18 +1,12 @@
-import 'dart:convert';
 import 'dart:math';
 import 'package:e_grocery/src/mixins/grocery_graph_page_mixin.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/pnp_product_provider.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/shoprite_product_provider.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/providers/grocery/woolies_product_provider.dart';
 import 'package:e_grocery/src/components/graph_page_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
-import 'package:e_grocery/src/services/grocery_services/get_graph_page_recommendations_groceries.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ShopriteProductGraph extends StatefulWidget {
@@ -52,34 +46,10 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph>
     return RefreshIndicator(
       onRefresh: () => onRefresh(widget.productItem.title),
       child: Scaffold(
-//      appBar: AppBar(
-//        title: Text("${widget.productItem.title}"),
-//      ),
         body: Container(
           color: kShopriteSecondary,
           child: Stack(
             children: [
-//              Positioned(
-//                top: 0,
-//                left: 0,
-//                child: Row(
-//                  children: [
-//                    Expanded(
-//                      child: Container(
-//                        alignment: Alignment.center,
-//                        height: screenHeight*.4,
-//                        decoration: BoxDecoration(
-//                          color: kBgShoprite,
-//                          borderRadius: BorderRadius.circular(20)
-//                        ),
-//                      ),
-//                    ),
-//
-//                    Expanded(child: Container())
-//                  ],
-//                ),
-//              ),
-
               ListView(
                 children: [
                   SizedBox(
@@ -125,40 +95,12 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph>
                   SizedBox(
                     height: 40,
                   ),
-
-//              Padding(
-//                padding:
-//                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-//                child: Row(
-//                  children: [
-//                    GestureDetector(
-//                      onTap: () => Navigator.of(context).pop(),
-//                      child: Card(
-//                        color: kBgShoprite.withOpacity(1),
-//                        shape: RoundedRectangleBorder(
-//                          borderRadius: BorderRadius.circular(5),
-//                        ),
-//                        elevation: 10,
-//                        child: Container(
-//                          height: 50,
-//                          width: 50,
-//                          child: Icon(
-//                            Icons.arrow_back,
-//                            color: Colors.white,
-//                            size: 30,
-//                          ),
-//                        ),
-//                      ),
-//                    )
-//                  ],
-//                ),
-//              ),
                   Container(
-                    margin: EdgeInsets.symmetric(
-                        horizontal: screenHeight10p * 1.5),
-                    decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(
-                        screenHeight10p * 5)),
+                    margin:
+                        EdgeInsets.symmetric(horizontal: screenHeight10p * 1.5),
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(screenHeight10p * 5)),
                     child: Material(
                       elevation: 20,
                       borderRadius: BorderRadius.circular(screenHeight10p * 2),
@@ -169,8 +111,8 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph>
                         width: screenWidth,
                         height: screenHeight * .55,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(screenHeight10p *
-                              2),
+                          borderRadius:
+                              BorderRadius.circular(screenHeight10p * 2),
                           color: Colors.orange,
                         ),
                         child: SfCartesianChart(
@@ -186,37 +128,21 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph>
                           ],
                           //set type for x and y axis
                           primaryXAxis: DateTimeAxis(
-                            majorGridLines: MajorGridLines(
-                                color: Colors.blue,
-                                width: 0
-                            )
-                            , labelStyle: TextStyle(
-                              color: Colors.black
-                          )
-                            ,
+                            majorGridLines:
+                                MajorGridLines(color: Colors.blue, width: 0),
+                            labelStyle: TextStyle(color: Colors.black),
                             title: AxisTitle(
-
                                 text: 'Date',
-                                textStyle: TextStyle(
-                                    color: Colors.black
-                                )
-                            ),
+                                textStyle: TextStyle(color: Colors.black)),
                             intervalType: DateTimeIntervalType.days,
                           ),
                           primaryYAxis: NumericAxis(
-                            labelStyle: TextStyle(
-                                color: Colors.black
-                            ), majorGridLines: MajorGridLines(
-                              color: Colors.yellow.withOpacity(.2),
-                              width: 1
-                          ),
+                            labelStyle: TextStyle(color: Colors.black),
+                            majorGridLines: MajorGridLines(
+                                color: Colors.yellow.withOpacity(.2), width: 1),
                             title: AxisTitle(
                                 text: 'Price',
-                                textStyle: TextStyle(
-                                    color: Colors.black
-                                )
-
-                            ),
+                                textStyle: TextStyle(color: Colors.black)),
 
 //                        labelFormat: 'R{value}'
 //                    interval: 4
@@ -226,20 +152,19 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph>
                           onMarkerRender: (args) {
 //                      args.
                           },
-                          legend: Legend(overflowMode: LegendItemOverflowMode
-                              .wrap),
+                          legend:
+                              Legend(overflowMode: LegendItemOverflowMode.wrap),
                           tooltipBehavior: TooltipBehavior(enable: true),
                           backgroundColor: Colors.orangeAccent,
 
                           series: <LineSeries>[
                             LineSeries(
-
                                 dataSource: getData(widget.productItem),
                                 xValueMapper: (product, _) => product.time,
                                 yValueMapper: (product, _) => product.price,
                                 // Enable data label
                                 dataLabelSettings:
-                                DataLabelSettings(isVisible: false))
+                                    DataLabelSettings(isVisible: false))
                           ],
                         ),
                       ),
@@ -248,34 +173,35 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph>
                   SizedBox(
                     height: 50,
                   ),
-
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-
                           GestureDetector(
                             onLongPress: () {
                               getProductData();
                             },
                             child: MaxMinCard(
 //                        widget: widget,
-                              priceValue: widget.productItem.prices.map((e) =>
-                                  double.parse(e.toString())).toList().reduce(
-                                  max) ?? 0,
+                              priceValue: widget.productItem.prices
+                                      .map((e) => double.parse(e.toString()))
+                                      .toList()
+                                      .reduce(max) ??
+                                  0,
                               title: "Max",
                               bgColor: Colors.orange,
                               textColor: Colors.black87,
                               headerColor: kBgShoprite.withOpacity(.6),
                             ),
                           ),
-
                           MaxMinCard(
 //                      widget: widget,
-                            priceValue: widget.productItem.prices.map((e) =>
-                                double.parse(e.toString())).toList().reduce(
-                                min) ?? 0,
+                            priceValue: widget.productItem.prices
+                                    .map((e) => double.parse(e.toString()))
+                                    .toList()
+                                    .reduce(min) ??
+                                0,
                             title: "Min",
                             bgColor: Colors.orange,
                             textColor: Colors.black87,
@@ -283,130 +209,97 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph>
                           ),
                           MaxMinCard(
 //                      widget: widget,
-                            priceValue: (widget.productItem.prices.map((e) =>
-                                double.parse(e.toString())).reduce((a, b) =>
-                            a + b) / widget.productItem.prices.length)
-                                .roundToDouble() ?? 0,
+                            priceValue: (widget.productItem.prices
+                                            .map((e) =>
+                                                double.parse(e.toString()))
+                                            .reduce((a, b) => a + b) /
+                                        widget.productItem.prices.length)
+                                    .roundToDouble() ??
+                                0,
                             title: "Avg",
                             bgColor: Colors.orange,
                             textColor: Colors.black87,
                             headerColor: kBgShoprite.withOpacity(.6),
                           ),
-
-                        ]
-                    ),
+                        ]),
                   ),
-
                   SizedBox(
                     height: screenHeight10p * 3,
                   ),
                   CurrentPriceCard(
-
                       bgColor: Colors.orange,
                       textColor: Colors.black87,
                       headerColor: kBgShoprite.withOpacity(.6),
-                      priceValue: widget.productItem.prices.last
-
-                  ),
-
+                      priceValue: widget.productItem.prices.last),
                   SizedBox(
                     height: 3 * screenHeight10p,
                   ),
-
-
-                  if(isLoadingRecommendations) Center(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: screenHeight10p * 3),
-                      child: CircularProgressIndicator(
-
+                  if (isLoadingRecommendations)
+                    Center(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: screenHeight10p * 3),
+                        child: CircularProgressIndicator(),
                       ),
                     ),
-                  ),
-
-
-                  if (finalPnPProductItems.isNotEmpty) RecommendationStoreName(
-                      color: kBgPnP,
-                      title: "Pick n Pay"
-
-                  ),
-
-                  if (finalPnPProductItems.isNotEmpty) Container(
-                      height: screenHeight * .35,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: finalPnPProductItems.length,
-                        itemBuilder: (_, index) {
-                          return GestureDetector(
-                            onTap: () =>
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        PnPProductGraph(
-                                            productItem: finalPnPProductItems[index]),
-                                  ),
+                  if (finalPnPProductItems.isNotEmpty)
+                    RecommendationStoreName(color: kBgPnP, title: "Pick n Pay"),
+                  if (finalPnPProductItems.isNotEmpty)
+                    Container(
+                        height: screenHeight * .35,
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: finalPnPProductItems.length,
+                          itemBuilder: (_, index) {
+                            return GestureDetector(
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PnPProductGraph(
+                                      productItem: finalPnPProductItems[index]),
                                 ),
-                            child: RecommendationProductCard(
-                                finalStoreProductItems: finalPnPProductItems,
-                                nullImageUrl: nullImageUrl,
-                                index: index),
-                          );
-                        },
-
-
-                      )
-
-                  ),
-
-
-                  if (finalWooliesProductItems
-                      .isNotEmpty) RecommendationStoreName(
-                      color: kBgWoolies,
-                      title: "Woolworths"
-
-                  ),
-
-                  if (finalWooliesProductItems.isNotEmpty) Container(
-                      height: screenHeight * .19,
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: finalWooliesProductItems.length,
-                        itemBuilder: (_, index) {
-                          return GestureDetector(
-                            onTap: () =>
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        WooliesProductGraph(
-                                            productItem: finalWooliesProductItems[index]),
-                                  ),
+                              ),
+                              child: RecommendationProductCard(
+                                  finalStoreProductItems: finalPnPProductItems,
+                                  nullImageUrl: nullImageUrl,
+                                  index: index),
+                            );
+                          },
+                        )),
+                  if (finalWooliesProductItems.isNotEmpty)
+                    RecommendationStoreName(
+                        color: kBgWoolies, title: "Woolworths"),
+                  if (finalWooliesProductItems.isNotEmpty)
+                    Container(
+                        height: screenHeight * .19,
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: finalWooliesProductItems.length,
+                          itemBuilder: (_, index) {
+                            return GestureDetector(
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => WooliesProductGraph(
+                                      productItem:
+                                          finalWooliesProductItems[index]),
                                 ),
-                            child: RecommendationProductCardNoImage(
-                                finalPnPProductItems: finalWooliesProductItems,
-                                nullImageUrl: nullImageUrl,
-                                index: index
-
-                            ),
-                          );
-                        },
-
-
-                      )
-
-                  ),
-
-                  if (finalShopriteProductItems
-                      .isNotEmpty) RecommendationStoreName(
-                      color: kBgShoprite,
-                      title: "Shoprite"
-                  ),
-
+                              ),
+                              child: RecommendationProductCardNoImage(
+                                  finalPnPProductItems:
+                                      finalWooliesProductItems,
+                                  nullImageUrl: nullImageUrl,
+                                  index: index),
+                            );
+                          },
+                        )),
+                  if (finalShopriteProductItems.isNotEmpty)
+                    RecommendationStoreName(
+                        color: kBgShoprite, title: "Shoprite"),
                   if (finalShopriteProductItems.isNotEmpty)
                     Container(
                         height: screenHeight * .35,
@@ -417,55 +310,32 @@ class _ShopriteProductGraphState extends State<ShopriteProductGraph>
                           itemCount: finalShopriteProductItems.length,
                           itemBuilder: (_, index) {
                             return GestureDetector(
-                              onTap: () =>
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          ShopriteProductGraph(
-                                              productItem: finalShopriteProductItems[index]),
-                                    ),
-                                  ),
-                              child: RecommendationProductCard(
-                                  finalStoreProductItems: finalShopriteProductItems,
-                                  nullImageUrl: nullImageUrl,
-                                  index: index
-
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ShopriteProductGraph(
+                                      productItem:
+                                          finalShopriteProductItems[index]),
+                                ),
                               ),
+                              child: RecommendationProductCard(
+                                  finalStoreProductItems:
+                                      finalShopriteProductItems,
+                                  nullImageUrl: nullImageUrl,
+                                  index: index),
                             );
                           },
-
-
-                        )
-
+                        )),
+                  if (finalWooliesProductItems.isNotEmpty)
+                    SizedBox(
+                      height: 5 * screenHeight10p,
                     ),
-
-
-                  if (finalWooliesProductItems.isNotEmpty) SizedBox(
-                    height: 5 * screenHeight10p,
-                  ),
                 ],
               ),
             ],
-          ),),
+          ),
+        ),
       ),
     );
   }
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
-

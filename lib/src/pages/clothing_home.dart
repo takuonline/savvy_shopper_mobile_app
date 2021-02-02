@@ -27,8 +27,6 @@ class _ClothingHomeState extends State<ClothingHome>
   Animation<Offset> _markhamSlide;
 
 
-  bool _wooliesIsInit = false;
-
   @override
   void initState() {
     super.initState();
@@ -97,7 +95,7 @@ class _ClothingHomeState extends State<ClothingHome>
       curve: Interval(.8, 1, curve: Curves.easeOut),
     ));
 
-    _aController.reverseDuration = Duration(milliseconds: 1000);
+    _aController.reverseDuration = Duration(milliseconds: 1500);
     _aController.addListener(() => setState(() {}));
   }
 
@@ -109,7 +107,7 @@ class _ClothingHomeState extends State<ClothingHome>
 
   Future<void> _whenCardIsClicked() async {
     _aController.reverse();
-    await Future.delayed(Duration(milliseconds: 1500));
+    await Future.delayed(Duration(milliseconds: 2500));
   }
 
   @override

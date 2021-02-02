@@ -31,8 +31,9 @@ class ComputermaniaData {
     };
     try {
       print("getting single product data.......computermania...............");
-      http.Response response = await http
-          .get('$url/computermania-get-product-data/$title', headers: headers);
+      http.Response response = await http.get(
+          '$url/computermania-get-product-data/${title.replaceAll("/", "@forwardslash@")}',
+          headers: headers);
 
       String data = response.body;
 

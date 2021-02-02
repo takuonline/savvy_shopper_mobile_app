@@ -36,7 +36,8 @@ class PnPData {
     try {
       print("getting single product data.......PnP...............");
       http.Response response = await http.get(
-          '$url/pnp-get-product-data/$title', headers: headers);
+          '$url/pnp-get-product-data/${title.replaceAll("/", "@forwardslash@")}',
+          headers: headers);
 
       String data = response.body;
 

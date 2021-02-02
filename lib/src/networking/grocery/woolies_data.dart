@@ -26,7 +26,7 @@ class WooliesData {
     try {
       print("getting single product data.........Woolies.............");
       http.Response response = await http.get(
-          '$url/woolies-get-product-data/$title');
+          '$url/woolies-get-product-data/${title.replaceAll("/", "@forwardslash@")}');
 
       String data = response.body;
 

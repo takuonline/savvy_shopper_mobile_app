@@ -31,8 +31,9 @@ class HifiData {
     };
     try {
       print("getting single product data.......hifi...............");
-      http.Response response =
-          await http.get('$url/hifi-get-product-data/$title', headers: headers);
+      http.Response response = await http.get(
+          '$url/hifi-get-product-data/${title.replaceAll("/", "@forwardslash@")}',
+          headers: headers);
 
       String data = response.body;
 

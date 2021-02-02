@@ -76,7 +76,7 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
       curve: Interval(.8, 1, curve: Curves.easeOut),
     ));
 
-    _aController.reverseDuration = Duration(milliseconds: 1000);
+    _aController.reverseDuration = Duration(milliseconds: 1500);
     _aController.addListener(() => setState(() {}));
   }
 
@@ -89,7 +89,7 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
   Future<void> _whenCardIsClicked() async {
     _aController.reverse();
     await Future.delayed(
-      Duration(milliseconds: 1500),
+      Duration(milliseconds: 2500),
     );
   }
 

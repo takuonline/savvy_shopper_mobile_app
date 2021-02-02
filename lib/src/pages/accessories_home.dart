@@ -77,7 +77,7 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
       curve: Interval(.8, 1, curve: Curves.easeOut),
     ));
 
-    _aController.reverseDuration = Duration(milliseconds: 1000);
+    _aController.reverseDuration = Duration(milliseconds: 1500);
     _aController.addListener(() => setState(() {}));
   }
 
