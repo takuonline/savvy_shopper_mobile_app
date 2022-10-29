@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-const url = 'http://ec2-3-12-76-166.us-east-2.compute.amazonaws.com:4000';
+const url = 'http://52.50.112.49:9876';
 
 class ComputermaniaData {
   Future<dynamic> getData() async {
