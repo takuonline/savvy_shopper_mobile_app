@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:e_grocery/src/components/is_loading_dialog.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
@@ -22,16 +23,16 @@ class WooliesProductSearch extends SearchDelegate {
   @override
   ThemeData appBarTheme(BuildContext context) {
     Map<int, Color> color = {
-      50:  Color.fromRGBO(0,0,0, .1),
-      100: Color.fromRGBO(0,0,0, .2),
-      200: Color.fromRGBO(0,0,0, .3),
-      300: Color.fromRGBO(0,0,0, .4),
-      400: Color.fromRGBO(0,0,0, .5),
-      500: Color.fromRGBO(0,0,0, .6),
-      600: Color.fromRGBO(0,0,0, .7),
-      700: Color.fromRGBO(0,0,0, .8),
-      800: Color.fromRGBO(0,0,0, .9),
-      900: Color.fromRGBO(0,0,0, 1),
+      50: Color.fromRGBO(0, 0, 0, .1),
+      100: Color.fromRGBO(0, 0, 0, .2),
+      200: Color.fromRGBO(0, 0, 0, .3),
+      300: Color.fromRGBO(0, 0, 0, .4),
+      400: Color.fromRGBO(0, 0, 0, .5),
+      500: Color.fromRGBO(0, 0, 0, .6),
+      600: Color.fromRGBO(0, 0, 0, .7),
+      700: Color.fromRGBO(0, 0, 0, .8),
+      800: Color.fromRGBO(0, 0, 0, .9),
+      900: Color.fromRGBO(0, 0, 0, 1),
     };
     MaterialColor colorCustom = MaterialColor(0xff000000, color);
 
@@ -70,7 +71,9 @@ class WooliesProductSearch extends SearchDelegate {
   }
 
   @override
-  Widget buildResults(BuildContext context,) {
+  Widget buildResults(
+    BuildContext context,
+  ) {
     return Container();
   }
 
@@ -79,31 +82,27 @@ class WooliesProductSearch extends SearchDelegate {
     List<String> _providerData = items;
     final results = _providerData
         .where(
-          (product) =>
-          product.toLowerCase().contains(
-            query.toLowerCase(),
-          ),
-    )
+          (product) => product.toLowerCase().contains(
+                query.toLowerCase(),
+              ),
+        )
         .toList();
 
     return ((query == '')
         ? Container()
         : ListView.builder(
-        itemCount: results.length,
-        itemBuilder: (context, index) =>
-            ListTile(
-              title: Text(
-                results[index],
-                style: TextStyle(color: Colors.black87),
-              ),
-
-              onTap: () {
-                getProduct(results[index], context, networkData);
-              },
-              focusColor: Colors.red,
-            )));
+            itemCount: results.length,
+            itemBuilder: (context, index) => ListTile(
+                  title: Text(
+                    results[index],
+                    style: TextStyle(color: Colors.black87),
+                  ),
+                  onTap: () {
+                    getProduct(results[index], context, networkData);
+                  },
+                  focusColor: Colors.red,
+                )));
   }
-
 
   void getProduct(dynamic result, BuildContext context, networkData) async {
     if (result != null) {
@@ -115,9 +114,9 @@ class WooliesProductSearch extends SearchDelegate {
 
         List<DateTime> tempDateList = [];
 
-        List<dynamic> datesList = parsedResponse[parsedResponse.keys.elementAt(
-            0)
-            .toString()]['dates'];
+        List<dynamic> datesList =
+            parsedResponse[parsedResponse.keys.elementAt(0).toString()]
+                ['dates'];
 
         for (var dateString in datesList) {
           tempDateList.add((DateTime.parse(dateString)));
@@ -126,13 +125,12 @@ class WooliesProductSearch extends SearchDelegate {
         WooliesProductItem _parsedProductItem = WooliesProductItem(
 //            parsedResponse[parsedResponse.keys.elementAt(0)
 //                .toString()]['image_url'],
-            parsedResponse[parsedResponse.keys.elementAt(0)
-                .toString()]['prices_list'],
+            parsedResponse[parsedResponse.keys.elementAt(0).toString()]
+                ['prices_list'],
             tempDateList,
             parsedResponse.keys.elementAt(0).toString(),
-            parsedResponse[parsedResponse.keys.elementAt(0)
-                .toString()]['change']);
-
+            parsedResponse[parsedResponse.keys.elementAt(0).toString()]
+                ['change']);
 
         Navigator.pop(context);
 
@@ -140,22 +138,14 @@ class WooliesProductSearch extends SearchDelegate {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                WoolworthsClothingProductGraph(
-                    productItem:
-                    _parsedProductItem),
+                WoolworthsClothingProductGraph(productItem: _parsedProductItem),
           ),
         );
-      } else{
-       await TestConnection.showNoNetworkDialog(context);
+      } else {
+        await TestConnection.showNoNetworkDialog(context);
       }
-
     } else {
       close(context, result);
     }
   }
-
-
-
-
-
 }

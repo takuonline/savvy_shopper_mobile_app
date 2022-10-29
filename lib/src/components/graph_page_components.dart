@@ -2,17 +2,9 @@ import 'dart:convert';
 
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/networking/grocery/pnp_data.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/networking/grocery/shoprite_data.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/networking/grocery/woolies_data.dart';
 import 'package:e_grocery/src/pages/clothing_product_graph/foschini_product_graph.dart';
 import 'package:e_grocery/src/pages/clothing_product_graph/woolworths_clothing_product_graph.dart';
-import 'package:e_grocery/src/providers/grocery/pnp_product_provider.dart';
-import 'package:e_grocery/src/providers/grocery/shoprite_product_provider.dart';
-import 'package:e_grocery/src/providers/grocery/woolies_product_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:string_similarity/string_similarity.dart';
 
 class RecommendationListViewBuilderNoImage extends StatelessWidget {
   const RecommendationListViewBuilderNoImage({
@@ -377,8 +369,7 @@ class RecommendationProductCard extends StatelessWidget {
                     Flexible(
                       child: FittedBox(
                         child: Text(
-                          "Price:  R${finalStoreProductItems[index].prices
-                              .last}",
+                          "Price:  R${finalStoreProductItems[index].prices.last}",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: "Montserrat",
@@ -548,9 +539,9 @@ class RecommendationStoreName extends StatelessWidget {
   }
 }
 
-
 class ProductData {
   DateTime time;
   double price;
+
   ProductData(this.time, this.price);
 }

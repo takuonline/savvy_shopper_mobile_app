@@ -12,10 +12,7 @@ import 'package:e_grocery/src/networking/grocery/woolies_data.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
 import 'package:e_grocery/src/providers/grocery_shopping_list.dart';
-import 'package:e_grocery/src/providers/pnp_product_name_provider.dart';
 import 'package:e_grocery/src/providers/shoppinglist_filter.dart';
-import 'package:e_grocery/src/providers/shoprite_product_name_provider.dart';
-import 'package:e_grocery/src/providers/woolies_product_name_provider.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
 
@@ -75,7 +72,6 @@ class GroceryShoppingListSearch
       child: IconButton(
         icon: Icon(Icons.arrow_back),
         onPressed: () {
-
           close(context, _resultsList);
         },
       ),
@@ -83,7 +79,9 @@ class GroceryShoppingListSearch
   }
 
   @override
-  Widget buildResults(BuildContext context,) {
+  Widget buildResults(
+    BuildContext context,
+  ) {
     return Container();
   }
 
@@ -91,7 +89,6 @@ class GroceryShoppingListSearch
   void showResults(BuildContext context) {
     close(context, _resultsList);
   }
-
 
   @override
   Widget buildSuggestions(BuildContext context) {
@@ -119,92 +116,79 @@ class GroceryShoppingListSearch
 //
 //    final results = bestMatches.ratings.getRange(0, 50).toList();
 
-
     return query == ''
         ? Container()
         : StatefulBuilder(
-
-      builder: (BuildContext context, StateSetter setState) {
-        return WillPopScope(
-          onWillPop: () => Future.sync(onWillPop),
-          child: ListView.builder(
-            itemCount: results == null ? 0 : results.length,
-            itemBuilder: (context, index) =>
-                ListTile(
-                  onTap: () {
-                    getProduct(results[index], context);
-                  },
-                  subtitle: Text(results[index].store,
-                      style: TextStyle(color: Colors.black54,
-                        fontFamily: "Montserrat",
-                        fontStyle: FontStyle.italic,
-
-                      )
-
-                  ),
-                  trailing: FlatButton(
+            builder: (BuildContext context, StateSetter setState) {
+              return WillPopScope(
+                onWillPop: () => Future.sync(onWillPop),
+                child: ListView.builder(
+                  itemCount: results == null ? 0 : results.length,
+                  itemBuilder: (context, index) => ListTile(
+                    onTap: () {
+                      getProduct(results[index], context);
+                    },
+                    subtitle: Text(results[index].store,
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontFamily: "Montserrat",
+                          fontStyle: FontStyle.italic,
+                        )),
+                    trailing: FlatButton(
 //                    color: ,
-                    onPressed: () async {
-                      try {
+                      onPressed: () async {
+                        try {
 // keeps adding two items to provider.
 
 //                        _resultsList.add(await addToShoppingList(results[index], context));
 
-                        Provider
-                            .of<GroceryShoppingList>(context,
-                            listen: false).addToGroceryShoppingList(
-                            await addToShoppingList(results[index], context));
+                          Provider.of<GroceryShoppingList>(context,
+                                  listen: false)
+                              .addToGroceryShoppingList(await addToShoppingList(
+                                  results[index], context));
 
-                        print(
-                            Provider
-                                .of<GroceryShoppingList>(context,
-                                listen: false)
-                                .items
-                                .length
-                        );
-
+                          print(Provider.of<GroceryShoppingList>(context,
+                                  listen: false)
+                              .items
+                              .length);
 
 //                        _resultsList.add();
-                        _showSnackBar(context,
-                            " Added ${results[index].title} to shopping list");
-                      } on NoSuchMethodError {
-                        Navigator.pop(context);
-                        TestConnection.showProductErrorDialog(context);
-                        print("is no such methodddddd");
-                      } on SocketException catch (_) {
-                        Navigator.pop(context);
-                        TestConnection.showNoNetworkDialog(context);
-                      } catch (error) {
-                        print(error);
-                        Navigator.pop(context);
-                        TestConnection.showProductErrorDialog(context);
-                      }
-                    },
-                    child: Text(
-                      "add", style: TextStyle(
-                        color: Colors.red,
-                        fontFamily: "Montserrat",
-                        fontSize: 15
+                          _showSnackBar(context,
+                              " Added ${results[index].title} to shopping list");
+                        } on NoSuchMethodError {
+                          Navigator.pop(context);
+                          TestConnection.showProductErrorDialog(context);
+                          print("is no such methodddddd");
+                        } on SocketException catch (_) {
+                          Navigator.pop(context);
+                          TestConnection.showNoNetworkDialog(context);
+                        } catch (error) {
+                          print(error);
+                          Navigator.pop(context);
+                          TestConnection.showProductErrorDialog(context);
+                        }
+                      },
+                      child: Text(
+                        "add",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontFamily: "Montserrat",
+                            fontSize: 15),
+                      ),
                     ),
+                    title: Text(
+                      results[index].title,
+                      style: TextStyle(color: Colors.black87),
                     ),
                   ),
-                  title: Text(
-                    results[index].title,
-                    style: TextStyle(color: Colors.black87),
-                  ),
-
                 ),
-          ),
-        );
-      },
-    )
-    ;
+              );
+            },
+          );
   }
 
-
-
-  void openGraph(BuildContext context, _networkData,
-      StoreAndTitle result) async {
+  void openGraph(
+      BuildContext context, _networkData, StoreAndTitle result) async {
     IsLoading.showIsLoadingDialog(context);
 
     dynamic response = await _networkData.getSingleProductData(result.title);
@@ -213,35 +197,32 @@ class GroceryShoppingListSearch
     List<DateTime> tempDateList = [];
 
     List<dynamic> datesList =
-    parsedResponse[parsedResponse.keys.elementAt(0).toString()]
-    ['dates'];
+        parsedResponse[parsedResponse.keys.elementAt(0).toString()]['dates'];
     for (var dateString in datesList) {
       tempDateList.add((DateTime.parse(dateString)));
     }
 
     ProductItem _parsedProductItem = ProductItem(
         parsedResponse[parsedResponse.keys.elementAt(0).toString()]
-        ['image_url'],
+            ['image_url'],
         parsedResponse[parsedResponse.keys.elementAt(0).toString()]
-        ['prices_list'],
+            ['prices_list'],
         tempDateList,
         parsedResponse.keys.elementAt(0).toString(),
-        parsedResponse[parsedResponse.keys.elementAt(0).toString()]
-        ['change']);
+        parsedResponse[parsedResponse.keys.elementAt(0).toString()]['change']);
 
     Navigator.pop(context);
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            PnPProductGraph(productItem: _parsedProductItem),
+        builder: (context) => PnPProductGraph(productItem: _parsedProductItem),
       ),
     );
   }
 
-  void openGraphNoImage(BuildContext context, _networkData,
-      StoreAndTitle result) async {
+  void openGraphNoImage(
+      BuildContext context, _networkData, StoreAndTitle result) async {
     IsLoading.showIsLoadingDialog(context);
 
     dynamic response = await _networkData.getSingleProductData(result.title);
@@ -250,19 +231,17 @@ class GroceryShoppingListSearch
     List<DateTime> tempDateList = [];
 
     List<dynamic> datesList =
-    parsedResponse[parsedResponse.keys.elementAt(0).toString()]
-    ['dates'];
+        parsedResponse[parsedResponse.keys.elementAt(0).toString()]['dates'];
     for (var dateString in datesList) {
       tempDateList.add((DateTime.parse(dateString)));
     }
 
     WooliesProductItem _parsedProductItem = WooliesProductItem(
         parsedResponse[parsedResponse.keys.elementAt(0).toString()]
-        ['prices_list'],
+            ['prices_list'],
         tempDateList,
         parsedResponse.keys.elementAt(0).toString(),
-        parsedResponse[parsedResponse.keys.elementAt(0).toString()]
-        ['change']);
+        parsedResponse[parsedResponse.keys.elementAt(0).toString()]['change']);
 
     Navigator.pop(context);
 
@@ -281,12 +260,10 @@ class GroceryShoppingListSearch
         if (result.store == "Pick n Pay") {
           PnPData _networkData = PnPData();
           return openGraph(context, _networkData, result);
-        }
-        else if (result.store == "Shoprite") {
+        } else if (result.store == "Shoprite") {
           ShopriteData _networkData = ShopriteData();
           return openGraph(context, _networkData, result);
-        }
-        else if (result.store == "Woolworths") {
+        } else if (result.store == "Woolworths") {
           WooliesData _networkData = WooliesData();
           return openGraphNoImage(context, _networkData, result);
         }
@@ -298,9 +275,8 @@ class GroceryShoppingListSearch
     }
   }
 
-
-  Future<GroceryShoppingListItem> addToShoppingList(StoreAndTitle result,
-      BuildContext context) async {
+  Future<GroceryShoppingListItem> addToShoppingList(
+      StoreAndTitle result, BuildContext context) async {
     if (result != null) {
       if (await TestConnection.checkForConnection()) {
         IsLoading.showIsLoadingDialog(context);
@@ -308,12 +284,10 @@ class GroceryShoppingListSearch
         if (result.store == "Pick n Pay") {
           PnPData _networkData = PnPData();
           return getDataFromNetwork(context, _networkData, result);
-        }
-        else if (result.store == "Shoprite") {
+        } else if (result.store == "Shoprite") {
           ShopriteData _networkData = ShopriteData();
           return getDataFromNetwork(context, _networkData, result);
-        }
-        else if (result.store == "Woolworths") {
+        } else if (result.store == "Woolworths") {
           WooliesData _networkData = WooliesData();
           return getDataFromNetworkNoImage(context, _networkData, result);
         } else {
@@ -327,8 +301,8 @@ class GroceryShoppingListSearch
     }
   }
 
-  Future<GroceryShoppingListItem> getDataFromNetwork(context, _networkData,
-      result) async {
+  Future<GroceryShoppingListItem> getDataFromNetwork(
+      context, _networkData, result) async {
     dynamic response = await _networkData.getSingleProductData(result.title);
     dynamic parsedResponse = jsonDecode(response);
     print("got data");
@@ -336,21 +310,19 @@ class GroceryShoppingListSearch
     List<DateTime> tempDateList = [];
 
     List<dynamic> datesList =
-    parsedResponse[parsedResponse.keys.elementAt(0).toString()]
-    ['dates'];
+        parsedResponse[parsedResponse.keys.elementAt(0).toString()]['dates'];
     for (var dateString in datesList) {
       tempDateList.add((DateTime.parse(dateString)));
     }
 
     ProductItem _parsedProductItem = ProductItem(
         parsedResponse[parsedResponse.keys.elementAt(0).toString()]
-        ['image_url'],
+            ['image_url'],
         parsedResponse[parsedResponse.keys.elementAt(0).toString()]
-        ['prices_list'],
+            ['prices_list'],
         tempDateList,
         parsedResponse.keys.elementAt(0).toString(),
-        parsedResponse[parsedResponse.keys.elementAt(0).toString()]
-        ['change']);
+        parsedResponse[parsedResponse.keys.elementAt(0).toString()]['change']);
 
     GroceryShoppingListItem _groceryItem = GroceryShoppingListItem(
         title: _parsedProductItem.title,
@@ -359,8 +331,7 @@ class GroceryShoppingListSearch
         imageUrl: _parsedProductItem.imageUrl,
         change: _parsedProductItem.change,
         quantity: 1,
-        productItem: _parsedProductItem
-    );
+        productItem: _parsedProductItem);
 
     Provider.of<GroceryShoppingList>(context, listen: false)
         .addToGroceryShoppingList(_groceryItem);
@@ -370,9 +341,8 @@ class GroceryShoppingListSearch
     return _groceryItem;
   }
 
-
-  Future<GroceryShoppingListItem> getDataFromNetworkNoImage(context,
-      _networkData, result) async {
+  Future<GroceryShoppingListItem> getDataFromNetworkNoImage(
+      context, _networkData, result) async {
     dynamic response = await _networkData.getSingleProductData(result.title);
     dynamic parsedResponse = jsonDecode(response);
     print("got data");
@@ -380,19 +350,17 @@ class GroceryShoppingListSearch
     List<DateTime> tempDateList = [];
 
     List<dynamic> datesList =
-    parsedResponse[parsedResponse.keys.elementAt(0).toString()]
-    ['dates'];
+        parsedResponse[parsedResponse.keys.elementAt(0).toString()]['dates'];
     for (var dateString in datesList) {
       tempDateList.add((DateTime.parse(dateString)));
     }
 
     WooliesProductItem _parsedProductItem = WooliesProductItem(
         parsedResponse[parsedResponse.keys.elementAt(0).toString()]
-        ['prices_list'],
+            ['prices_list'],
         tempDateList,
         parsedResponse.keys.elementAt(0).toString(),
-        parsedResponse[parsedResponse.keys.elementAt(0).toString()]
-        ['change']);
+        parsedResponse[parsedResponse.keys.elementAt(0).toString()]['change']);
 
     GroceryShoppingListItem _groceryItem = GroceryShoppingListItem(
         title: _parsedProductItem.title,
@@ -400,9 +368,7 @@ class GroceryShoppingListSearch
         prices: _parsedProductItem.prices,
         change: _parsedProductItem.change,
         quantity: 1,
-        wooliesProductItem: _parsedProductItem
-    );
-
+        wooliesProductItem: _parsedProductItem);
 
     Provider.of<GroceryShoppingList>(context, listen: false)
         .addToGroceryShoppingList(_groceryItem);
@@ -411,27 +377,18 @@ class GroceryShoppingListSearch
     return _groceryItem;
   }
 
-
   void _showSnackBar(BuildContext context, String text) {
     Scaffold.of(context).showSnackBar(new SnackBar(
       duration: Duration(milliseconds: 2000),
-
       content: new Text(
         text,
         textAlign: TextAlign.center,
-        style: TextStyle(
-            color: Colors.white
-
-
-        ),
+        style: TextStyle(color: Colors.white),
       ),
       backgroundColor: kBgPnP,
-
     ));
   }
-
 }
-
 
 class StoreAndTitle {
   String store;

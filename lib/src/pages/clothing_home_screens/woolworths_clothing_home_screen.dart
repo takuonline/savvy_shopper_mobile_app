@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
 import 'package:e_grocery/src/components/product_item.dart';
@@ -39,13 +37,9 @@ class _WoolworthsClothingHomeScreenState
     super.dispose();
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
-    data = Provider
-        .of<WoolworthsClothingAllProductList>(context, listen: true)
+    data = Provider.of<WoolworthsClothingAllProductList>(context, listen: true)
         .data;
 
     if (!isDataLoaded) {
@@ -56,36 +50,23 @@ class _WoolworthsClothingHomeScreenState
       setState(() => isLoading = false);
     }
 
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     final screenHeight10p =
-        screenHeight * (10 / MediaQuery
-            .of(context)
-            .size
-            .height);
+        screenHeight * (10 / MediaQuery.of(context).size.height);
     final screenWidth10p =
-        screenWidth * (10 / MediaQuery
-            .of(context)
-            .size
-            .width);
+        screenWidth * (10 / MediaQuery.of(context).size.width);
 
     allProducts = cheap + expensive;
     List<WooliesProductItem> bestBuys = cheap.take(5).toList();
     allProducts.shuffle();
 
     return Container(
-
       color: Colors.white,
       child: RefreshIndicator(
-        onRefresh: () =>
-            getDataOnRefresh(Provider
-                .of<WoolworthsClothingAllProductList>(context, listen: false)),
+        onRefresh: () => getDataOnRefresh(
+            Provider.of<WoolworthsClothingAllProductList>(context,
+                listen: false)),
         child: ListView(
           controller: scrollController,
           children: [
@@ -93,10 +74,7 @@ class _WoolworthsClothingHomeScreenState
               children: [
                 Positioned(
                   child: CustomPaint(
-                    size: Size(
-                        screenWidth,
-                        screenHeight *
-                            .37),
+                    size: Size(screenWidth, screenHeight * .37),
                     //You can Replace this with your desired WIDTH and HEIGHT
                     painter: HomeBGCustomPaint(color: kBgWoolies),
                   ),
@@ -109,7 +87,7 @@ class _WoolworthsClothingHomeScreenState
                     ),
                     Padding(
                       padding:
-                      EdgeInsets.symmetric(horizontal: horizontalPadding),
+                          EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: FittedBox(
                         child: Text(
                           "Woolworths Clothing",
@@ -127,13 +105,14 @@ class _WoolworthsClothingHomeScreenState
                       height: screenHeight * .025,
                     ),
                     Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: horizontalPadding),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: horizontalPadding),
                         child: Center(
                           child: GestureDetector(
                             onTap: () async {
                               if (await TestConnection.checkForConnection()) {
-                                WoolworthsClothingData _networkData = WoolworthsClothingData();
+                                WoolworthsClothingData _networkData =
+                                    WoolworthsClothingData();
 
                                 final result = await showSearch(
                                   context: context,
@@ -197,7 +176,6 @@ class _WoolworthsClothingHomeScreenState
             SizedBox(
               height: 40,
             ),
-
             isLoading
                 ? Center(child: CircularProgressIndicator())
                 : Container(),
@@ -296,7 +274,6 @@ class _WoolworthsClothingHomeScreenState
                 fontFamily: "Montserrat",
                 fontWeight: FontWeight.w600,
                 color: Colors.black),
-
             showBottomBorder: false,
             sortAscending: true,
             sortColumnIndex: 1,
@@ -350,9 +327,8 @@ class _WoolworthsClothingHomeScreenState
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              WoolworthsClothingProductGraph(
-                                  productItem: product),
+                          builder: (context) => WoolworthsClothingProductGraph(
+                              productItem: product),
                         ),
                       ),
                     ),
@@ -370,9 +346,8 @@ class _WoolworthsClothingHomeScreenState
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              WoolworthsClothingProductGraph(
-                                  productItem: product),
+                          builder: (context) => WoolworthsClothingProductGraph(
+                              productItem: product),
                         ),
                       ),
                     ),
@@ -386,9 +361,8 @@ class _WoolworthsClothingHomeScreenState
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              WoolworthsClothingProductGraph(
-                                  productItem: product),
+                          builder: (context) => WoolworthsClothingProductGraph(
+                              productItem: product),
                         ),
                       ),
                     )
@@ -398,10 +372,7 @@ class _WoolworthsClothingHomeScreenState
             ],
           ),
         )
-
       ],
     );
   }
-
-
 }

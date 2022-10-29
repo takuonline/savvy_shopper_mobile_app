@@ -1,4 +1,3 @@
-import 'package:e_grocery/src/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreenButton {
@@ -7,5 +6,5 @@ class WelcomeScreenButton {
   Function navigationFunction;
   Color color;
 
-  WelcomeScreenButton({ this.text, this.navigationFunction,this.color});
+  WelcomeScreenButton({this.text, this.navigationFunction, this.color});
 }

@@ -40,7 +40,6 @@ class _ShoppingListState extends State<ShoppingList> {
     Provider.of<GroceryShoppingList>(context, listen: false)
         .clearGroceryShoppingList();
     setState(() => _calculateBalance());
-
   }
 
   void _calculateBalance() {
@@ -96,7 +95,6 @@ class _ShoppingListState extends State<ShoppingList> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Container(
-
           margin: EdgeInsets.symmetric(
             vertical: screenHeight * .27,
             horizontal: screenWidth * .15,
@@ -108,36 +106,25 @@ class _ShoppingListState extends State<ShoppingList> {
     ));
   }
 
-
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final screenHeight10p =
-        screenHeight * (10 / MediaQuery
-            .of(context)
-            .size
-            .height);
+        screenHeight * (10 / MediaQuery.of(context).size.height);
     final screenWidth10p =
-        screenWidth * (10 / MediaQuery
-            .of(context)
-            .size
-            .width);
+        screenWidth * (10 / MediaQuery.of(context).size.width);
 
-    _productsList = Provider
-        .of<GroceryShoppingList>(context, listen: true)
+    _productsList = Provider.of<GroceryShoppingList>(context, listen: true)
         .items
         .toSet()
         .toList();
 
-    _isShopriteChecked = Provider
-        .of<GroceryShoppingListFilter>(context)
-        .getData['shoprite'];
-    _isPnPChecked = Provider
-        .of<GroceryShoppingListFilter>(context)
-        .getData['pnp'];
-    _isWooliesChecked = Provider
-        .of<GroceryShoppingListFilter>(context)
-        .getData['woolies'];
+    _isShopriteChecked =
+        Provider.of<GroceryShoppingListFilter>(context).getData['shoprite'];
+    _isPnPChecked =
+        Provider.of<GroceryShoppingListFilter>(context).getData['pnp'];
+    _isWooliesChecked =
+        Provider.of<GroceryShoppingListFilter>(context).getData['woolies'];
 
     _calculateBalance();
 
@@ -271,8 +258,9 @@ class _ShoppingListState extends State<ShoppingList> {
                                     }
 
                                     Provider.of<GroceryShoppingListFilter>(
-                                        context, listen: false).getCombinedList(
-                                        context);
+                                            context,
+                                            listen: false)
+                                        .getCombinedList(context);
 
                                     final result = await showSearch(
                                         context: context,
@@ -306,20 +294,18 @@ class _ShoppingListState extends State<ShoppingList> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Icon(
                                         Icons.search,
                                         color: Colors.black,
                                         size: screenWidth10p * 2.3,
                                       ),
-
                                       Flexible(
                                         child: SizedBox(
                                           width: screenWidth * .04,
                                         ),
                                       ),
-
                                       Padding(
                                         padding: EdgeInsets.symmetric(
                                             horizontal: screenWidth10p * .2,
@@ -337,8 +323,6 @@ class _ShoppingListState extends State<ShoppingList> {
                                           ),
                                         ),
                                       ),
-
-
                                     ],
                                   ),
                                 ),
@@ -487,8 +471,8 @@ class _ShoppingListState extends State<ShoppingList> {
     );
   }
 
-  static Future<void> showClearAllDialog(BuildContext context,
-      Function clearAllProducts) async {
+  static Future<void> showClearAllDialog(
+      BuildContext context, Function clearAllProducts) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -535,5 +519,3 @@ class _ShoppingListState extends State<ShoppingList> {
     );
   }
 }
-
-

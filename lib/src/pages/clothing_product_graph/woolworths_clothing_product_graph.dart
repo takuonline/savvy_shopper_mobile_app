@@ -179,7 +179,7 @@ class _WoolworthsClothingProductGraphState
                       //set type for x and y axis
                       primaryXAxis: DateTimeAxis(
                         majorGridLines:
-                        MajorGridLines(color: Colors.blue, width: 0),
+                            MajorGridLines(color: Colors.blue, width: 0),
                         labelStyle: TextStyle(color: Colors.white),
                         title: AxisTitle(
                             text: 'Date',
@@ -215,7 +215,7 @@ class _WoolworthsClothingProductGraphState
                             yValueMapper: (product, _) => product.price,
                             // Enable data label
                             dataLabelSettings:
-                            DataLabelSettings(isVisible: false))
+                                DataLabelSettings(isVisible: false))
                       ],
                     ),
                   ),
@@ -236,9 +236,9 @@ class _WoolworthsClothingProductGraphState
                         child: MaxMinCard(
 //                        widget: widget,
                           priceValue: widget.productItem.prices
-                              .map((e) => double.parse(e.toString()))
-                              .toList()
-                              .reduce(max) ??
+                                  .map((e) => double.parse(e.toString()))
+                                  .toList()
+                                  .reduce(max) ??
                               0,
                           title: "Max",
                           bgColor: kBgWoolies,
@@ -249,9 +249,9 @@ class _WoolworthsClothingProductGraphState
                       MaxMinCard(
 //                        widget: widget,
                         priceValue: widget.productItem.prices
-                            .map((e) => double.parse(e.toString()))
-                            .toList()
-                            .reduce(min) ??
+                                .map((e) => double.parse(e.toString()))
+                                .toList()
+                                .reduce(min) ??
                             0,
                         title: "Min",
                         bgColor: kBgWoolies,
@@ -291,7 +291,7 @@ class _WoolworthsClothingProductGraphState
                 Center(
                   child: Container(
                     padding:
-                    EdgeInsets.symmetric(vertical: screenHeight10p * 3),
+                        EdgeInsets.symmetric(vertical: screenHeight10p * 3),
                     child: CircularProgressIndicator(),
                   ),
                 ),

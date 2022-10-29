@@ -1,15 +1,11 @@
-
-
 import 'dart:io';
+
 import 'package:e_grocery/src/constants/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/cupertino.dart';
-
 class TestConnection {
-
   static Future<bool> checkForConnection() async {
-
     bool isConnected = false;
 
     try {
@@ -40,7 +36,7 @@ class TestConnection {
               children: <Widget>[
                 Text(
                   'An internet connection is required for this app, please make sure you are'
-                      ' connected to a network and try again',
+                  ' connected to a network and try again',
                   style: TextStyle(
                     fontFamily: "Montserrat",
                     color: Colors.black,
@@ -143,5 +139,3 @@ class TestConnection {
     );
   }
 }
-
-

@@ -18,26 +18,25 @@ class GroceryShoppingListFilter with ChangeNotifier {
   }
 
   void getCombinedList(BuildContext context) {
-    List<StoreAndTitle> _pnpTitles = Provider
-        .of<PnPAllProductList>(context, listen: false)
-        .titles
-        .map((e) => StoreAndTitle("Pick n Pay", e))
-        .toList();
-    List<StoreAndTitle> _shopriteTitles = Provider
-        .of<ShopriteAllProductList>(context, listen: false)
-        .titles
-        .map((e) => StoreAndTitle("Shoprite", e))
-        .toList();
-    List<StoreAndTitle> _wooliesTitles = Provider
-        .of<WooliesAllProductList>(context, listen: false)
-        .titles
-        .map((e) => StoreAndTitle("Woolworths", e))
-        .toList();
+    List<StoreAndTitle> _pnpTitles =
+        Provider.of<PnPAllProductList>(context, listen: false)
+            .titles
+            .map((e) => StoreAndTitle("Pick n Pay", e))
+            .toList();
+    List<StoreAndTitle> _shopriteTitles =
+        Provider.of<ShopriteAllProductList>(context, listen: false)
+            .titles
+            .map((e) => StoreAndTitle("Shoprite", e))
+            .toList();
+    List<StoreAndTitle> _wooliesTitles =
+        Provider.of<WooliesAllProductList>(context, listen: false)
+            .titles
+            .map((e) => StoreAndTitle("Woolworths", e))
+            .toList();
 
     List<StoreAndTitle> shuffledList = [];
 
-    if (Provider
-        .of<GroceryShoppingListFilter>(context, listen: false)
+    if (Provider.of<GroceryShoppingListFilter>(context, listen: false)
         .getData['pnp']) {
       shuffledList += _pnpTitles;
     }

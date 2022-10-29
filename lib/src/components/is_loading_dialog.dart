@@ -1,9 +1,6 @@
-
 import 'package:flutter/material.dart';
 
-
-class IsLoading{
-
+class IsLoading {
   static Future<void> showIsLoadingDialog(BuildContext context) async {
     return showDialog<void>(
       barrierDismissible: false,
@@ -14,12 +11,10 @@ class IsLoading{
           width: double.infinity,
           height: double.infinity,
           child: Center(
-            child: CircularProgressIndicator(
-            ),
+            child: CircularProgressIndicator(),
           ),
         );
       },
     );
   }
-
 }

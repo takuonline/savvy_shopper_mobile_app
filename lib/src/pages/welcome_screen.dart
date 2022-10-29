@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {
   WelcomeScreenItem StoreWelcomeScreenItem;
+
   WelcomeScreen(this.StoreWelcomeScreenItem);
 
   @override
@@ -49,7 +50,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     _textHeaderFade = CurvedAnimation(
       parent: _aController,
       curve: Interval(
-        0,.6,
+        0,
+        .6,
         curve: Curves.easeOut,
       ),
     );
@@ -74,7 +76,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     _buttonPop = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
       parent: _aController,
       curve: Interval(
-        0.7,1,
+        0.7,
+        1,
         curve: Curves.easeIn,
       ),
     ));
@@ -93,8 +96,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenHeight10p = screenHeight*(10/MediaQuery.of(context).size.height);
-    final screenWidth10p =screenWidth* (10/MediaQuery.of(context).size.width);
+    final screenHeight10p =
+        screenHeight * (10 / MediaQuery.of(context).size.height);
+    final screenWidth10p =
+        screenWidth * (10 / MediaQuery.of(context).size.width);
 
     WelcomeScreenButton btn = widget.StoreWelcomeScreenItem.btn;
     String details = widget.StoreWelcomeScreenItem.details;
@@ -182,7 +187,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                               fontFamily: "Montserrat",
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
-                              fontSize: screenWidth10p*2.4),
+                              fontSize: screenWidth10p * 2.4),
                         ),
                       ),
                       elevation: 1,

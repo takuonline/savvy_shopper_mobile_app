@@ -1,8 +1,6 @@
-
 import 'package:flutter/material.dart';
 
-
-const kTextColor =  Color(0xff555555);
+const kTextColor = Color(0xff555555);
 
 const kBgShoprite = Color(0xffcf0f14);
 const kShopriteSecondary = Color(0xffffdbc5);

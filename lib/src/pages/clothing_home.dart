@@ -1,7 +1,7 @@
 import 'package:e_grocery/src/components/welcome_screen_components.dart';
 import 'package:e_grocery/src/constants/constants.dart';
-import 'package:e_grocery/src/pages/welcome_screen.dart';
 import 'package:e_grocery/src/page_views/clothing_page_view.dart';
+import 'package:e_grocery/src/pages/welcome_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -25,7 +25,6 @@ class _ClothingHomeState extends State<ClothingHome>
   Animation<Offset> _superbalistSlide;
   Animation<Offset> _woolworthsClothingSlide;
   Animation<Offset> _markhamSlide;
-
 
   @override
   void initState() {
@@ -233,10 +232,9 @@ class _ClothingHomeState extends State<ClothingHome>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    ClothingPageView(
-                      pageNumber: 1,
-                    ),
+                builder: (context) => ClothingPageView(
+                  pageNumber: 1,
+                ),
               ),
             );
 //            Navigator.pushNamed(context, SportsceneHomeScreen.id);
@@ -285,10 +283,9 @@ class _ClothingHomeState extends State<ClothingHome>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    ClothingPageView(
-                      pageNumber: 2,
-                    ),
+                builder: (context) => ClothingPageView(
+                  pageNumber: 2,
+                ),
               ),
             );
 //            Navigator.pushNamed(context, MarkhamHomeScreen.id);
@@ -336,10 +333,9 @@ class _ClothingHomeState extends State<ClothingHome>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    ClothingPageView(
-                      pageNumber: 3,
-                    ),
+                builder: (context) => ClothingPageView(
+                  pageNumber: 3,
+                ),
               ),
             );
 //            Navigator.pushNamed(context, SuperbalistHomeScreen.id);
@@ -385,10 +381,7 @@ class _ClothingHomeState extends State<ClothingHome>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    ClothingPageView(
-                        pageNumber: 4
-                    ),
+                builder: (context) => ClothingPageView(pageNumber: 4),
               ),
             );
 //            Navigator.pushNamed(context, WoolworthsClothingHomeScreen.id);
@@ -445,24 +438,23 @@ class _ClothingHomeState extends State<ClothingHome>
                     "assets/main_menu/clothing_bg.svg",
                     width: screenWidth * 4,
                     fit: BoxFit.cover,
-
                   ),
                 ),
                 Positioned.fill(
                   child: Container(
 //                      color: Colors.black.withOpacity(.5),
                       decoration: BoxDecoration(
-                        gradient: RadialGradient(
-                          radius: .8,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black.withOpacity(.3),
-                          ],
-                        ),)
-                  ),
+                    gradient: RadialGradient(
+                      radius: .8,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(.3),
+                      ],
+                    ),
+                  )),
                 ),
                 Positioned(
-                    bottom: screenHeight10p * 2.3,
+                  bottom: screenHeight10p * 2.3,
                   child: FadeTransition(
                     opacity: _textFadeAnimation,
                     child: SlideTransition(
@@ -485,15 +477,12 @@ class _ClothingHomeState extends State<ClothingHome>
                 ),
               ],
             ),
-
-
             Transform.translate(
               offset: Offset(0, -screenHeight * .05),
               child: Container(
                 decoration: BoxDecoration(
                     color: kTextFieldBgGrey,
                     borderRadius: BorderRadius.circular(screenWidth10p * 3)),
-
                 child: Column(
                   children: [
                     SizedBox(
@@ -512,8 +501,8 @@ class _ClothingHomeState extends State<ClothingHome>
                               builder: (context) => WelcomeScreen(_item),
                             ),
                           );
-                          _aController.animateTo(
-                              1, duration: Duration(milliseconds: 4000),
+                          _aController.animateTo(1,
+                              duration: Duration(milliseconds: 4000),
                               curve: Curves.easeIn);
                         },
                         child: Padding(
@@ -530,7 +519,6 @@ class _ClothingHomeState extends State<ClothingHome>
                                   borderRadius: cardBorderRadius),
                               child: Stack(
                                 children: [
-
                                   Positioned(
                                     bottom: 20,
                                     left: 20,
@@ -560,7 +548,6 @@ class _ClothingHomeState extends State<ClothingHome>
                       position: _sportsceneSlide,
                       child: InkWell(
                         onTap: () async {
-
                           final _item = welcomeScreenItems['sportscene'];
                           await _whenCardIsClicked();
                           Navigator.push(
@@ -569,8 +556,8 @@ class _ClothingHomeState extends State<ClothingHome>
                               builder: (context) => WelcomeScreen(_item),
                             ),
                           );
-                          _aController.animateTo(
-                              1, duration: Duration(milliseconds: 4000),
+                          _aController.animateTo(1,
+                              duration: Duration(milliseconds: 4000),
                               curve: Curves.easeIn);
                         },
                         child: Padding(
@@ -587,7 +574,6 @@ class _ClothingHomeState extends State<ClothingHome>
                                   borderRadius: cardBorderRadius),
                               child: Stack(
                                 children: [
-
                                   Positioned(
                                     bottom: 20,
                                     right: 20,
@@ -614,7 +600,6 @@ class _ClothingHomeState extends State<ClothingHome>
                       position: _markhamSlide,
                       child: InkWell(
                         onTap: () async {
-
                           final _item = welcomeScreenItems['markham'];
                           await _whenCardIsClicked();
 
@@ -625,8 +610,8 @@ class _ClothingHomeState extends State<ClothingHome>
                             ),
                           );
 
-                          _aController.animateTo(
-                              1, duration: Duration(milliseconds: 4000),
+                          _aController.animateTo(1,
+                              duration: Duration(milliseconds: 4000),
                               curve: Curves.easeIn);
                         },
                         child: Padding(
@@ -643,7 +628,6 @@ class _ClothingHomeState extends State<ClothingHome>
                                   borderRadius: cardBorderRadius),
                               child: Stack(
                                 children: [
-
                                   Positioned(
                                     bottom: 20,
                                     left: 20,
@@ -670,7 +654,6 @@ class _ClothingHomeState extends State<ClothingHome>
                       position: _superbalistSlide,
                       child: InkWell(
                         onTap: () async {
-
                           final _item = welcomeScreenItems['superbalist'];
                           await _whenCardIsClicked();
 
@@ -680,8 +663,8 @@ class _ClothingHomeState extends State<ClothingHome>
                               builder: (context) => WelcomeScreen(_item),
                             ),
                           );
-                          _aController.animateTo(
-                              1, duration: Duration(milliseconds: 4000),
+                          _aController.animateTo(1,
+                              duration: Duration(milliseconds: 4000),
                               curve: Curves.easeIn);
                         },
                         child: Padding(
@@ -698,7 +681,6 @@ class _ClothingHomeState extends State<ClothingHome>
                                   borderRadius: cardBorderRadius),
                               child: Stack(
                                 children: [
-
                                   Positioned(
                                     bottom: 20,
                                     right: 20,
@@ -727,52 +709,52 @@ class _ClothingHomeState extends State<ClothingHome>
                     SlideTransition(
                       position: _woolworthsClothingSlide,
                       child: InkWell(
-                        onTap: () async {
-                          final _item = welcomeScreenItems['woolworths_clothing'];
-                          await _whenCardIsClicked();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => WelcomeScreen(_item),
-                            ),
-                          );
-                          _aController.animateTo(
-                              1, duration: Duration(milliseconds: 4000),
-                              curve: Curves.easeIn);
-                        },
-                        child: Padding(
-                          padding: cardPadding,
-                          child: ClipRRect(
-                            borderRadius: cardBorderRadius,
-                            child: Container(
-                              width: cardWidth,
-                              height: cardHeight,
-                              decoration: BoxDecoration(
-                                  boxShadow: [_cardBoxShadow],
-                                  color: kBgWoolies,
-                                  image: decorationImages['woolworths_clothing'],
-                                  borderRadius: cardBorderRadius),
-                              child: Stack(
-                                children: [
-
-                                  Positioned(
-                                    bottom: 20,
-                                    left: 20,
-                                    child: FittedBox(
-                                      child: Text("Woolworths",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: "Montserrat",
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: screenWidth * .08)),
+                          onTap: () async {
+                            final _item =
+                                welcomeScreenItems['woolworths_clothing'];
+                            await _whenCardIsClicked();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => WelcomeScreen(_item),
+                              ),
+                            );
+                            _aController.animateTo(1,
+                                duration: Duration(milliseconds: 4000),
+                                curve: Curves.easeIn);
+                          },
+                          child: Padding(
+                            padding: cardPadding,
+                            child: ClipRRect(
+                              borderRadius: cardBorderRadius,
+                              child: Container(
+                                width: cardWidth,
+                                height: cardHeight,
+                                decoration: BoxDecoration(
+                                    boxShadow: [_cardBoxShadow],
+                                    color: kBgWoolies,
+                                    image:
+                                        decorationImages['woolworths_clothing'],
+                                    borderRadius: cardBorderRadius),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      bottom: 20,
+                                      left: 20,
+                                      child: FittedBox(
+                                        child: Text("Woolworths",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: "Montserrat",
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: screenWidth * .08)),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                      ),
+                          )),
                     ),
                     SizedBox(
                       height: screenHeight10p * 2,

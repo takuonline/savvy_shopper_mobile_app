@@ -12,18 +12,26 @@ class ProductCardWhite extends StatelessWidget {
       {this.cheap, this.shopriteNullImageUrl, this.index, this.product});
 
   final double gridCardBorderRadius = 25;
-  final _pnpNullImageUrl ='https://www.pnp.co.za/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_400x400.jpg';
-  final _badImageUrl = "/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_140x140.jpg";
+  final _pnpNullImageUrl =
+      'https://www.pnp.co.za/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_400x400.jpg';
+  final _badImageUrl =
+      "/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_140x140.jpg";
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenHeight10p = screenHeight*(10/MediaQuery.of(context).size.height);
-    final screenWidth10p =screenWidth* (10/MediaQuery.of(context).size.width);
+    final screenHeight10p =
+        screenHeight * (10 / MediaQuery.of(context).size.height);
+    final screenWidth10p =
+        screenWidth * (10 / MediaQuery.of(context).size.width);
 
     return Card(
       elevation: 0,
-      margin: EdgeInsets.only(top:  screenHeight*.01,bottom:  screenHeight*.01,),
+      margin: EdgeInsets.only(
+        top: screenHeight * .01,
+        bottom: screenHeight * .01,
+      ),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(gridCardBorderRadius)),
       color: Colors.white,
@@ -64,13 +72,12 @@ class ProductCardWhite extends StatelessWidget {
 //                                            ),
 
                 Center(
-                  child:
-
-                  cheap[index].imageUrl == _badImageUrl ? Image.network(_pnpNullImageUrl)  :
-                  Image.network(
-                    cheap[index].imageUrl ?? shopriteNullImageUrl,
-                    height:  screenHeight*.35,
-                  ),
+                  child: cheap[index].imageUrl == _badImageUrl
+                      ? Image.network(_pnpNullImageUrl)
+                      : Image.network(
+                          cheap[index].imageUrl ?? shopriteNullImageUrl,
+                          height: screenHeight * .35,
+                        ),
                 ),
               ],
             ),
@@ -80,7 +87,7 @@ class ProductCardWhite extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                  height:  screenHeight*.015,
+                  height: screenHeight * .015,
                 ),
                 FittedBox(
                   child: Text(
@@ -94,10 +101,10 @@ class ProductCardWhite extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: screenHeight*.013,
+                  height: screenHeight * .013,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal:  screenWidth10p*1),
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth10p * 1),
                   child: Text(
                     "${cheap[index].title}",
                     maxLines: 2,
@@ -106,7 +113,7 @@ class ProductCardWhite extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: "Montserrat",
                       fontWeight: FontWeight.w400,
-                      fontSize: screenWidth10p*1.2,
+                      fontSize: screenWidth10p * 1.2,
                     ),
                   ),
                 ),
@@ -114,7 +121,6 @@ class ProductCardWhite extends StatelessWidget {
 //                SizedBox(
 //                  height: screenHeight10p*,
 //                ),
-
               ],
             ),
           ),

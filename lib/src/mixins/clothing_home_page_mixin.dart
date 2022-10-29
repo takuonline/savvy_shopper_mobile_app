@@ -4,7 +4,6 @@ import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 mixin ClothingHomePageMixin<T extends StatefulWidget> on State<T> {
   final textController = TextEditingController();

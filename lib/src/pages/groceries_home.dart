@@ -1,7 +1,7 @@
-import 'package:e_grocery/src/page_views/grocery_page_view.dart';
-import 'package:e_grocery/src/pages/welcome_screen.dart';
 import 'package:e_grocery/src/components/welcome_screen_components.dart';
 import 'package:e_grocery/src/constants/constants.dart';
+import 'package:e_grocery/src/page_views/grocery_page_view.dart';
+import 'package:e_grocery/src/pages/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -22,7 +22,6 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
   Animation<Offset> _shopriteSlide;
   Animation<Offset> _pnpSlide;
   Animation<Offset> _woolworthsSlide;
-
 
   @override
   void initState() {
@@ -144,7 +143,6 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
           ),
         ),
         bgColor: kBgShoprite,
-
         btn: WelcomeScreenButton(
           text: "Explore",
           color: kBgShoprite,
@@ -165,8 +163,7 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
       ),
       'pnp': WelcomeScreenItem(
         header: "Pick n Pay",
-        details:
-        "As a major retailer in Africa, the Group strives "
+        details: "As a major retailer in Africa, the Group strives "
             "to address socio-economic challenges through the"
             " supply of high-quality, affordable food for all"
             " customers.",
@@ -213,10 +210,9 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    GroceryPageView(
-                      pageNumber: 1,
-                    ),
+                builder: (context) => GroceryPageView(
+                  pageNumber: 1,
+                ),
               ),
             );
 //            Navigator.pushNamed(context, PnPHomeScreen.id);
@@ -225,8 +221,7 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
       ),
       'woolies': WelcomeScreenItem(
         header: "Woolworths",
-        details:
-        "Building on our reputation for superior quality, "
+        details: "Building on our reputation for superior quality, "
             "exciting innovation and excellent value.",
         blob1: Positioned(
           top: screenHeight10p * -30,
@@ -240,7 +235,6 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
         blob2: Positioned(
           top: screenHeight10p,
           left: screenWidth10p * 20,
-
           child: SvgPicture.asset(
             "assets/blob-2.svg",
             color: Colors.white,
@@ -264,10 +258,9 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    GroceryPageView(
-                      pageNumber: 2,
-                    ),
+                builder: (context) => GroceryPageView(
+                  pageNumber: 2,
+                ),
               ),
             );
 //            Navigator.pushNamed(context, WooliesHomeScreen.id);
@@ -275,7 +268,6 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
         ),
       )
     };
-
 
     return Scaffold(
       body: Container(
@@ -293,14 +285,13 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                       "assets/main_menu/grocery_shoppinglist_bg.svg",
                       width: screenWidth * 4,
                       fit: BoxFit.cover,
-
                     ),
                   ),
                   Positioned.fill(
                       child: Container(
 //                          color: Colors.black.withOpacity(.5),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(.3),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(.3),
 //                          gradient: RadialGradient(
 //                            radius: .5,
 //                            colors: [
@@ -308,8 +299,8 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
 //                              Colors.black.withOpacity(.3),
 //                            ],
 //                          ),
-                        ),
-                      )),
+                    ),
+                  )),
                   Positioned(
                     bottom: screenHeight10p * 2.3,
                     child: FadeTransition(
@@ -335,16 +326,12 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                 ],
               ),
             ),
-
             Transform.translate(
               offset: Offset(0, -screenHeight * .05),
               child: Container(
                 decoration: BoxDecoration(
                     color: kTextFieldBgGrey,
-                    borderRadius: BorderRadius.circular(
-                        screenWidth * .06
-                    )
-                ),
+                    borderRadius: BorderRadius.circular(screenWidth * .06)),
                 child: Column(
                   children: [
                     SizedBox(
@@ -362,8 +349,8 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                               builder: (context) => WelcomeScreen(_item),
                             ),
                           );
-                          _aController.animateTo(
-                              1, duration: Duration(milliseconds: 4000));
+                          _aController.animateTo(1,
+                              duration: Duration(milliseconds: 4000));
                         },
                         child: ClipRRect(
                           borderRadius: cardBorderRadius,
@@ -382,15 +369,12 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                                 borderRadius: cardBorderRadius),
                             child: Stack(
                               children: [
-
-
                                 Positioned(
                                   right: 30,
                                   bottom: 40,
                                   child: SvgPicture.asset(
                                     "assets/grocery_card_svg/trolley.svg",
                                     height: screenWidth * .23,
-
                                   ),
                                 ),
                                 Positioned(
@@ -411,7 +395,6 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                               ],
                             ),
                           ),
-
                         ),
                       ),
                     ),
@@ -430,10 +413,8 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
 //                        });
 //                      }
 
-
                           final _item = _welcomeScreenItemMap['pnp'];
                           await _whenCardIsClicked();
-
 
                           Navigator.push(
                             context,
@@ -442,8 +423,8 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                             ),
                           );
 
-                          _aController.animateTo(
-                              1, duration: Duration(milliseconds: 4000));
+                          _aController.animateTo(1,
+                              duration: Duration(milliseconds: 4000));
                         },
                         child: Padding(
                           padding: cardPadding,
@@ -466,11 +447,8 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                                       gradient: LinearGradient(
                                         colors: [
                                           kBgPnP.withBlue(110),
-
                                           kBgPnP,
-
                                         ],
-
                                       ),
                                       borderRadius: cardBorderRadius),
                                   child: Stack(
@@ -498,16 +476,13 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                                         right: 20,
                                         child: FittedBox(
                                           child: Text("Pick n Pay",
-                                              style: _cardHeaderStyle
-
-                                          ),
+                                              style: _cardHeaderStyle),
                                         ),
                                       ),
                                     ],
                                   ),
                                 );
                               },
-
                             ),
                           ),
                         ),
@@ -535,8 +510,8 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                               builder: (context) => WelcomeScreen(_item),
                             ),
                           );
-                          _aController.animateTo(
-                              1, duration: Duration(milliseconds: 4000));
+                          _aController.animateTo(1,
+                              duration: Duration(milliseconds: 4000));
                         },
                         child: Padding(
                           padding: cardPadding,
@@ -553,19 +528,16 @@ class _GroceriesHomePageState extends State<GroceriesHomePage>
                                       kBgWoolies.withOpacity(.87),
                                       kBgWoolies,
                                     ],
-
                                   ),
                                   borderRadius: cardBorderRadius),
                               child: Stack(
                                 children: [
-
                                   Positioned(
                                     right: 30,
                                     bottom: 60,
                                     child: SvgPicture.asset(
                                       "assets/grocery_card_svg/plastic_bag.svg",
                                       height: screenHeight * .12,
-
                                     ),
                                   ),
                                   Positioned(

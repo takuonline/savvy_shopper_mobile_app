@@ -1,12 +1,10 @@
-import 'dart:convert';
-import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
-import 'package:e_grocery/src/components/homescreen_components/datatable_grid_selector.dart';
-import 'package:e_grocery/src/mixins/accessories_home_page_mixin.dart';
-
 import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/grid_homescreen_product_card/product_card_white.dart';
+import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
+import 'package:e_grocery/src/components/homescreen_components/datatable_grid_selector.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
+import 'package:e_grocery/src/mixins/accessories_home_page_mixin.dart';
 import 'package:e_grocery/src/networking/accessories/hifi_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/pages/accessories_product_graph/accessories_product_graph.dart';
@@ -92,7 +90,7 @@ class _HifiHomeScreenState extends State<HifiHomeScreen>
                     ),
                     Padding(
                       padding:
-                      EdgeInsets.symmetric(horizontal: horizontalPadding),
+                          EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: FittedBox(
                         child: Text(
                           "Hifi",
@@ -111,7 +109,7 @@ class _HifiHomeScreenState extends State<HifiHomeScreen>
                     ),
                     Padding(
                         padding:
-                        EdgeInsets.symmetric(horizontal: horizontalPadding),
+                            EdgeInsets.symmetric(horizontal: horizontalPadding),
                         child: Center(
                           child: GestureDetector(
                             onTap: () async {
@@ -121,10 +119,9 @@ class _HifiHomeScreenState extends State<HifiHomeScreen>
                                     delegate: AccessoriesProductSearch(
                                       networkData: HifiData(),
                                       bgColor: kBgHifi,
-                                      items: Provider
-                                          .of<HifiAllProductList>(
-                                          context,
-                                          listen: false)
+                                      items: Provider.of<HifiAllProductList>(
+                                              context,
+                                              listen: false)
                                           .titles,
                                     ));
                                 print(result);
@@ -329,8 +326,7 @@ class _HifiHomeScreenState extends State<HifiHomeScreen>
                   (product) => DataRow(
                     cells: [
                       DataCell(Image.network(product.imageUrl ?? nullImageUrl),
-                          onTap: () =>
-                          product.imageUrl == null
+                          onTap: () => product.imageUrl == null
                               ? null
                               : _showDialog(product, context)),
                       DataCell(

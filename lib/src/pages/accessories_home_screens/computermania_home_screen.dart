@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/grid_homescreen_product_card/product_card_white.dart';
 import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
@@ -87,7 +85,7 @@ class _ComputermaniaHomeScreenState extends State<ComputermaniaHomeScreen>
                     ),
                     Padding(
                       padding:
-                      EdgeInsets.symmetric(horizontal: horizontalPadding),
+                          EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: FittedBox(
                         child: Text(
                           "Computer mania",
@@ -106,7 +104,7 @@ class _ComputermaniaHomeScreenState extends State<ComputermaniaHomeScreen>
                     ),
                     Padding(
                         padding:
-                        EdgeInsets.symmetric(horizontal: horizontalPadding),
+                            EdgeInsets.symmetric(horizontal: horizontalPadding),
                         child: Center(
                           child: GestureDetector(
                             onTap: () async {
@@ -207,7 +205,7 @@ class _ComputermaniaHomeScreenState extends State<ComputermaniaHomeScreen>
                       child: TabBar(
                         indicator: BoxDecoration(
                             border:
-                            Border.all(color: kBgComputermania, width: 5),
+                                Border.all(color: kBgComputermania, width: 5),
                             borderRadius: BorderRadius.circular(50)),
                         tabs: [
                           Tab(
@@ -326,8 +324,7 @@ class _ComputermaniaHomeScreenState extends State<ComputermaniaHomeScreen>
                   (product) => DataRow(
                     cells: [
                       DataCell(Image.network(product.imageUrl ?? nullImageUrl),
-                          onTap: () =>
-                          product.imageUrl == null
+                          onTap: () => product.imageUrl == null
                               ? null
                               : _showDialog(product, context)),
                       DataCell(

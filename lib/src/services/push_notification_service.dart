@@ -13,11 +13,10 @@ class PushNotificationService {
       _fcm.requestNotificationPermissions(IosNotificationSettings());
     }
 
-    _fcm.configure(
-        onMessage: (Map<String, dynamic> message) async {
-          print("onMessage $message");
-          print("onMessage ${message['notification']['title']}");
-        }, onLaunch: (Map<String, dynamic> message) async {
+    _fcm.configure(onMessage: (Map<String, dynamic> message) async {
+      print("onMessage $message");
+      print("onMessage ${message['notification']['title']}");
+    }, onLaunch: (Map<String, dynamic> message) async {
       print("onMessage $message");
       _serialAndNavigate(message);
     }, onResume: (Map<String, dynamic> message) async {
@@ -31,7 +30,7 @@ class PushNotificationService {
     var view = notificationData['view'];
 
     final GlobalKey<NavigatorState> navigatorKey =
-    GlobalKey(debugLabel: "Main Navigator");
+        GlobalKey(debugLabel: "Main Navigator");
     print("serializing");
 
     if (view != null) {
@@ -43,7 +42,6 @@ class PushNotificationService {
         navigatorKey.currentState
             .push(MaterialPageRoute(builder: (_) => GroceriesHomePage()));
         print(navigatorKey.currentWidget);
-
 
 //        Navigator.pushNamed(_context, GroceriesHomePage.id);
       } else if (view == 'clothing') {

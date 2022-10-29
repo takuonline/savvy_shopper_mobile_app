@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/grid_homescreen_product_card/product_card_white.dart';
 import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
 import 'package:e_grocery/src/components/homescreen_components/datatable_grid_selector.dart';
-import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/components/pnp/pnp_search.dart';
+import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/mixins/grocery_home_page_mixin.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
@@ -47,16 +45,14 @@ class _PnPHomeScreenState extends State<PnPHomeScreen>
 
   final double _horizontalPadding = 20.0;
 
-  final _pnpNullImageUrl ='https://www.pnp.co.za/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_400x400.jpg';
-  final _badImageUrl = "/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_140x140.jpg";
-
-
+  final _pnpNullImageUrl =
+      'https://www.pnp.co.za/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_400x400.jpg';
+  final _badImageUrl =
+      "/pnpstorefront/_ui/responsive/theme-blue/images/missing_product_EN_140x140.jpg";
 
   @override
   Widget build(BuildContext context) {
-    data = Provider
-        .of<PnPAllProductList>(context, listen: true)
-        .data;
+    data = Provider.of<PnPAllProductList>(context, listen: true).data;
 
     if (!isDataLoaded) {
       loadData(context);
@@ -66,23 +62,12 @@ class _PnPHomeScreenState extends State<PnPHomeScreen>
       setState(() => isLoading = false);
     }
 
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final screenHeight10p = screenHeight * (10 / MediaQuery
-        .of(context)
-        .size
-        .height);
-    final screenWidth10p = screenWidth * (10 / MediaQuery
-        .of(context)
-        .size
-        .width);
-
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight10p =
+        screenHeight * (10 / MediaQuery.of(context).size.height);
+    final screenWidth10p =
+        screenWidth * (10 / MediaQuery.of(context).size.width);
 
     allProducts = cheap + expensive;
     List<ProductItem> bestBuys = cheap.take(5).toList();
@@ -94,15 +79,13 @@ class _PnPHomeScreenState extends State<PnPHomeScreen>
         onRefresh: () => getDataOnRefresh(
             Provider.of<PnPAllProductList>(context, listen: false)),
         child: ListView(
-
           controller: scrollController,
           children: [
             Stack(
               children: [
                 Positioned(
                   child: CustomPaint(
-                    size: Size(screenWidth,
-                        screenHeight * .37),
+                    size: Size(screenWidth, screenHeight * .37),
                     //You can Replace this with your desired WIDTH and HEIGHT
                     painter: HomeBGCustomPaint(color: kBgPnP),
                   ),
@@ -111,18 +94,18 @@ class _PnPHomeScreenState extends State<PnPHomeScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: screenHeight*.05,
+                      height: screenHeight * .05,
                     ),
                     Padding(
                       padding:
-                      EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                          EdgeInsets.symmetric(horizontal: _horizontalPadding),
                       child: FittedBox(
                         child: Text(
                           "Pick n Pay",
                           style: TextStyle(
                             fontFamily: "Montserrat",
                             color: Colors.white,
-                            fontSize: screenWidth10p*3,
+                            fontSize: screenWidth10p * 3,
                             fontWeight: FontWeight.w700,
                             decoration: TextDecoration.none,
                           ),
@@ -130,28 +113,27 @@ class _PnPHomeScreenState extends State<PnPHomeScreen>
                       ),
                     ),
                     SizedBox(
-                      height: screenHeight*.025,
+                      height: screenHeight * .025,
                     ),
                     Padding(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: _horizontalPadding),
                         child: Center(
                           child: GestureDetector(
                             onTap: () async {
-
-                              if(await TestConnection.checkForConnection()){
-
+                              if (await TestConnection.checkForConnection()) {
                                 final result = await showSearch(
-                                    context: context, delegate: ProductSearch());
+                                    context: context,
+                                    delegate: ProductSearch());
                                 print(result);
-                              } else{
+                              } else {
                                 await TestConnection.showNoNetworkDialog(
                                     context);
                               }
-
                             },
                             child: Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 20),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               decoration: BoxDecoration(
                                   color: Colors.white.withOpacity(.8),
                                   borderRadius: BorderRadius.circular(10)),
@@ -164,7 +146,7 @@ class _PnPHomeScreenState extends State<PnPHomeScreen>
                                     color: Colors.black,
                                   ),
                                   SizedBox(
-                                    width:  screenWidth*.025,
+                                    width: screenWidth * .025,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -207,15 +189,11 @@ class _PnPHomeScreenState extends State<PnPHomeScreen>
               padding: EdgeInsets.symmetric(
                 horizontal: 10,
               ),
-              child: DatatableGridSelector(
-                  isGridOff, toggleGrid
-
-              ),
+              child: DatatableGridSelector(isGridOff, toggleGrid),
             ),
-
-            isLoading ? Center(child: CircularProgressIndicator()) : Container()
-
-            ,
+            isLoading
+                ? Center(child: CircularProgressIndicator())
+                : Container(),
             SizedBox(
               height: 30,
             ),
@@ -235,34 +213,34 @@ class _PnPHomeScreenState extends State<PnPHomeScreen>
                         tabs: [
                           Tab(
                               child: FittedBox(
-                                child: Text(
-                                  "All",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: "Montserrat",
-                                      fontSize: 20),
-                                ),
-                              )),
+                            child: Text(
+                              "All",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: "Montserrat",
+                                  fontSize: 20),
+                            ),
+                          )),
                           Tab(
                               child: FittedBox(
-                                child: Text(
-                                  "Cheap",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: "Montserrat",
-                                      fontSize: 18),
-                                ),
-                              )),
+                            child: Text(
+                              "Cheap",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: "Montserrat",
+                                  fontSize: 18),
+                            ),
+                          )),
                           Tab(
                               child: FittedBox(
-                                child: Text(
-                                  "Expensive",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: "Montserrat",
-                                      fontSize: 20),
-                                ),
-                              )),
+                            child: Text(
+                              "Expensive",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: "Montserrat",
+                                  fontSize: 20),
+                            ),
+                          )),
                         ],
                       ),
                     ),
@@ -270,12 +248,12 @@ class _PnPHomeScreenState extends State<PnPHomeScreen>
                       child: Material(
                           child: TabBarView(
 //                                  controller: _tabController,
-                            children: [
-                              productTabBarView(context, allProducts),
-                              productTabBarView(context, cheap),
-                              productTabBarView(context, expensive),
-                            ],
-                          )),
+                        children: [
+                          productTabBarView(context, allProducts),
+                          productTabBarView(context, cheap),
+                          productTabBarView(context, expensive),
+                        ],
+                      )),
                     ),
                   ],
                 ),
@@ -290,12 +268,13 @@ class _PnPHomeScreenState extends State<PnPHomeScreen>
     );
   }
 
-
   ListView productTabBarView(BuildContext context, List<ProductItem> itemList) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenHeight10p = screenHeight*(10/MediaQuery.of(context).size.height);
-    final screenWidth10p =screenWidth* (10/MediaQuery.of(context).size.width);
+    final screenHeight10p =
+        screenHeight * (10 / MediaQuery.of(context).size.height);
+    final screenWidth10p =
+        screenWidth * (10 / MediaQuery.of(context).size.width);
 
     return ListView(
       controller: scrollController,
@@ -304,183 +283,174 @@ class _PnPHomeScreenState extends State<PnPHomeScreen>
         SizedBox(
           height: 50,
         ),
-        if (isGridOff) Material(
-          child: DataTable(
-            columnSpacing: 5,
-            headingTextStyle: TextStyle(
-                fontFamily: "Montserrat",
-                fontWeight: FontWeight.w600,
-                color: Colors.black),
+        if (isGridOff)
+          Material(
+            child: DataTable(
+              columnSpacing: 5,
+              headingTextStyle: TextStyle(
+                  fontFamily: "Montserrat",
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black),
 
-            showBottomBorder: false,
-            sortAscending: true,
-            sortColumnIndex: 1,
-            dividerThickness: 0,
+              showBottomBorder: false,
+              sortAscending: true,
+              sortColumnIndex: 1,
+              dividerThickness: 0,
 //                  horizontalMargin: 20,
-            dataRowHeight: 55,
-            headingRowColor: MaterialStateProperty.all(
-                kPnPSecondary.withOpacity(.3)),
-            columns: [
-              DataColumn(
-                label: FittedBox(child: Text('Image')),
-              ),
-              DataColumn(
-                label: FittedBox(child: Text('Title')),
-              ),
-              DataColumn(
-                  label: FittedBox(
-                    child: Text(
-                      'Price',
-                    ),
-                  ),
-                  numeric: true),
-              DataColumn(
-                  label: FittedBox(
-                    child: Text(
-                      'Change',
-                    ),
-                  ),
-                  numeric: true),
-            ],
-            rows: [
-              ...itemList.map(
-                    (product) =>
-                    DataRow(
-                      cells: [
-                        DataCell(
-                    product.imageUrl== _badImageUrl ? Image.network(_pnpNullImageUrl)  : Image.network(
-                                product.imageUrl ?? _pnpNullImageUrl),
-                            onTap: () =>
-                            product.imageUrl == null
-                                ? null
-                                : _showDialog(product, context)),
-                        DataCell(
-                          Text(
-                            "${product.title}",
-                            maxLines: 3,
-                            style: TextStyle(
-                              fontSize: screenWidth10p*1.2,
-//                                color: Colors.redAccent,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          onTap: () =>
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      PnPProductGraph(
-                                          productItem: product),
-                                ),
-                              ),
-                        ),
-                        DataCell(
-                          FittedBox(
-                            child: Text(
-                              'R${product.prices[product.prices.length - 1]}',
-                              style: TextStyle(
-                                fontSize: screenWidth10p*1.4,
-//                                color: Colors.redAccent,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          onTap: () =>
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      PnPProductGraph(
-                                          productItem: product),
-                                ),
-                              ),
-                        ),
-                        DataCell(
-                          Text(
-                            "${product.change.round()}%",
-                            style: TextStyle(
-                              color: product.change > 0
-                                  ? Colors.red
-                                  : Colors.green,
-                            ),
-                          ),
-                          onTap: () =>
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      PnPProductGraph(
-                                          productItem: product),
-                                ),
-                              ),
-                        )
-                      ],
-                    ),
-              )
-            ],
-          ),
-        ) else Scrollbar(
-          controller: gridScrollController,
-
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: GridView.builder(
-                controller: gridScrollController,
-                itemCount: itemList.length,
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1 / 1.4,
-                  crossAxisSpacing: screenWidth * .03,
+              dataRowHeight: 55,
+              headingRowColor:
+                  MaterialStateProperty.all(kPnPSecondary.withOpacity(.3)),
+              columns: [
+                DataColumn(
+                  label: FittedBox(child: Text('Image')),
                 ),
-                itemBuilder: (_, index) {
-                  return index == itemList.length - 1 ? Container() :
-                  (index.isEven ?
-                  GestureDetector(
-                    onTap: () =>Navigator.push(
+                DataColumn(
+                  label: FittedBox(child: Text('Title')),
+                ),
+                DataColumn(
+                    label: FittedBox(
+                      child: Text(
+                        'Price',
+                      ),
+                    ),
+                    numeric: true),
+                DataColumn(
+                    label: FittedBox(
+                      child: Text(
+                        'Change',
+                      ),
+                    ),
+                    numeric: true),
+              ],
+              rows: [
+                ...itemList.map(
+                  (product) => DataRow(
+                    cells: [
+                      DataCell(
+                          product.imageUrl == _badImageUrl
+                              ? Image.network(_pnpNullImageUrl)
+                              : Image.network(
+                                  product.imageUrl ?? _pnpNullImageUrl),
+                          onTap: () => product.imageUrl == null
+                              ? null
+                              : _showDialog(product, context)),
+                      DataCell(
+                        Text(
+                          "${product.title}",
+                          maxLines: 3,
+                          style: TextStyle(
+                            fontSize: screenWidth10p * 1.2,
+//                                color: Colors.redAccent,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                PnPProductGraph(
-                                    productItem: itemList[index]),
+                                PnPProductGraph(productItem: product),
                           ),
-                        )
-                        ,
-                    child: ProductCardWhite(
-                      index: index,
-
-                      cheap: itemList,
-                      shopriteNullImageUrl: _pnpNullImageUrl,
-//                                    showDialog: _showDialog(itemList[index], context),
-                      product: itemList[index],
-                    ),
-                  ) :
-                  Transform.translate(
-                    offset: Offset(0,80),
-                    child: GestureDetector(
-                      onTap: () =>
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  PnPProductGraph(
-                                      productItem: itemList[index]),
-                            ),
-                          )
-                      ,
-                      child: ProductCardWhite(
-                        index: index,
-
-                        cheap: itemList,
-                        shopriteNullImageUrl: _pnpNullImageUrl,
-//                                    showDialog: _showDialog(itemList[index], context),
-                        product: itemList[index],
+                        ),
                       ),
-                    ),
-                  ));
-                }),
+                      DataCell(
+                        FittedBox(
+                          child: Text(
+                            'R${product.prices[product.prices.length - 1]}',
+                            style: TextStyle(
+                              fontSize: screenWidth10p * 1.4,
+//                                color: Colors.redAccent,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                PnPProductGraph(productItem: product),
+                          ),
+                        ),
+                      ),
+                      DataCell(
+                        Text(
+                          "${product.change.round()}%",
+                          style: TextStyle(
+                            color:
+                                product.change > 0 ? Colors.red : Colors.green,
+                          ),
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                PnPProductGraph(productItem: product),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )
+        else
+          Scrollbar(
+            controller: gridScrollController,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: GridView.builder(
+                  controller: gridScrollController,
+                  itemCount: itemList.length,
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1 / 1.4,
+                    crossAxisSpacing: screenWidth * .03,
+                  ),
+                  itemBuilder: (_, index) {
+                    return index == itemList.length - 1
+                        ? Container()
+                        : (index.isEven
+                            ? GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PnPProductGraph(
+                                        productItem: itemList[index]),
+                                  ),
+                                ),
+                                child: ProductCardWhite(
+                                  index: index,
+
+                                  cheap: itemList,
+                                  shopriteNullImageUrl: _pnpNullImageUrl,
+//                                    showDialog: _showDialog(itemList[index], context),
+                                  product: itemList[index],
+                                ),
+                              )
+                            : Transform.translate(
+                                offset: Offset(0, 80),
+                                child: GestureDetector(
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PnPProductGraph(
+                                          productItem: itemList[index]),
+                                    ),
+                                  ),
+                                  child: ProductCardWhite(
+                                    index: index,
+
+                                    cheap: itemList,
+                                    shopriteNullImageUrl: _pnpNullImageUrl,
+//                                    showDialog: _showDialog(itemList[index], context),
+                                    product: itemList[index],
+                                  ),
+                                ),
+                              ));
+                  }),
+            ),
           ),
-        ),
       ],
     );
   }
@@ -498,13 +468,11 @@ class _PnPHomeScreenState extends State<PnPHomeScreen>
                   Expanded(
                     flex: 4,
                     child: Container(
-                        child:
-                        product.imageUrl == _badImageUrl ? Image.network(_pnpNullImageUrl) : Image.network(
-                          product.imageUrl??_pnpNullImageUrl,
-                        ),
-
-
-
+                      child: product.imageUrl == _badImageUrl
+                          ? Image.network(_pnpNullImageUrl)
+                          : Image.network(
+                              product.imageUrl ?? _pnpNullImageUrl,
+                            ),
                     ),
                   ),
                   Expanded(
@@ -519,8 +487,4 @@ class _PnPHomeScreenState extends State<PnPHomeScreen>
       },
     );
   }
-
-
 }
-
-

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:e_grocery/src/components/grocery_shoppinglist/grocery_shoppinglist_item.dart';
+import 'package:flutter/material.dart';
 
 class GroceryShoppingList with ChangeNotifier {
   List<GroceryShoppingListItem> _items = [];

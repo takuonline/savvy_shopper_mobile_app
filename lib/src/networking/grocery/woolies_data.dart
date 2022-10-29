@@ -3,12 +3,10 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-const url  = 'http://ec2-3-12-76-166.us-east-2.compute.amazonaws.com:4000';
-
+const url = 'http://ec2-3-12-76-166.us-east-2.compute.amazonaws.com:4000';
 
 class WooliesData {
-
-  Future<dynamic> getData ()async {
+  Future<dynamic> getData() async {
     try {
       print("getting data.......Woolies...............");
       http.Response response = await http.get('$url/woolies-client');

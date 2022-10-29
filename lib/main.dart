@@ -1,4 +1,3 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:e_grocery/locator.dart';
 import 'package:e_grocery/src/pages/accessories_home.dart';
 import 'package:e_grocery/src/pages/accessories_home_screens/computermania_home_screen.dart';
@@ -13,31 +12,31 @@ import 'package:e_grocery/src/pages/clothing_home_screens/superbalist_home_scree
 import 'package:e_grocery/src/pages/clothing_home_screens/woolworths_clothing_home_screen.dart';
 import 'package:e_grocery/src/pages/clothing_product_graph/foschini_product_graph.dart';
 import 'package:e_grocery/src/pages/clothing_product_graph/woolworths_clothing_product_graph.dart';
-import 'package:e_grocery/src/pages/main_menu.dart';
+import 'package:e_grocery/src/pages/groceries_home.dart';
 import 'package:e_grocery/src/pages/groceries_home_screens/pnp_home_screen.dart';
-import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
-import 'package:e_grocery/src/pages/shopping_list.dart';
-import 'package:e_grocery/src/pages/groceries_product_graph/shoprite_product_graph.dart';
+import 'package:e_grocery/src/pages/groceries_home_screens/shoprite_home_screen.dart';
 import 'package:e_grocery/src/pages/groceries_home_screens/woolies_home_screen.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/shoprite_product_graph.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
+import 'package:e_grocery/src/pages/main_menu.dart';
+import 'package:e_grocery/src/pages/shopping_list.dart';
 import 'package:e_grocery/src/providers/accessories/computermania_product_provider.dart';
 import 'package:e_grocery/src/providers/accessories/hifi_product_provider.dart';
 import 'package:e_grocery/src/providers/accessories/takealot_product_provider.dart';
-import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
+import 'package:e_grocery/src/providers/clothing/foschini_product_provider.dart';
 import 'package:e_grocery/src/providers/clothing/markham_product_provider.dart';
 import 'package:e_grocery/src/providers/clothing/sportscene_product_provider.dart';
-import 'package:e_grocery/src/providers/clothing/foschini_product_provider.dart';
 import 'package:e_grocery/src/providers/clothing/superbalist_product_provider.dart';
 import 'package:e_grocery/src/providers/clothing/woolworths_clothing_product_provider.dart';
-import 'package:e_grocery/src/providers/grocery_shopping_list.dart';
 import 'package:e_grocery/src/providers/grocery/pnp_product_provider.dart';
-import 'package:e_grocery/src/providers/shoppinglist_filter.dart';
 import 'package:e_grocery/src/providers/grocery/shoprite_product_provider.dart';
 import 'package:e_grocery/src/providers/grocery/woolies_product_provider.dart';
+import 'package:e_grocery/src/providers/grocery_shopping_list.dart';
+import 'package:e_grocery/src/providers/shoppinglist_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:e_grocery/src/pages/groceries_home.dart';
-import 'package:e_grocery/src/pages/groceries_home_screens/shoprite_home_screen.dart';
 
 void main() {
   setupLocator();
@@ -72,34 +71,20 @@ class MyApp extends StatelessWidget {
 //    SystemChrome.setEnabledSystemUIOverlays ([SystemUiOverlay.bottom]);
     return MultiProvider(
       providers: [
-
         ChangeNotifierProvider(create: (_) => GroceryShoppingListFilter()),
-
         ChangeNotifierProvider(create: (_) => ShopriteAllProductList()),
-
         ChangeNotifierProvider(create: (_) => PnPAllProductList()),
-
         ChangeNotifierProvider(create: (_) => WooliesAllProductList()),
-
         ChangeNotifierProvider(create: (_) => GroceryShoppingList()),
-
         ChangeNotifierProvider(create: (_) => FoschiniAllProductList()),
-
         ChangeNotifierProvider(create: (_) => SportsceneAllProductList()),
-
         ChangeNotifierProvider(create: (_) => SuperbalistAllProductList()),
-
         ChangeNotifierProvider(create: (_) => MarkhamAllProductList()),
-
         ChangeNotifierProvider(
             create: (_) => WoolworthsClothingAllProductList()),
-
         ChangeNotifierProvider(create: (_) => TakealotAllProductList()),
-
         ChangeNotifierProvider(create: (_) => HifiAllProductList()),
-
         ChangeNotifierProvider(create: (_) => ComputermaniaAllProductList()),
-
       ],
       child: MaterialApp(
 //          ---second part here uncomment here - -two lines
@@ -108,8 +93,8 @@ class MyApp extends StatelessWidget {
         title: "Savvy shopper",
 
         theme: ThemeData(
-          bottomSheetTheme: BottomSheetThemeData(
-              backgroundColor: Colors.transparent),
+          bottomSheetTheme:
+              BottomSheetThemeData(backgroundColor: Colors.transparent),
           fontFamily: "Montserrat",
 
           primarySwatch: Colors.blue,
@@ -121,30 +106,20 @@ class MyApp extends StatelessWidget {
         initialRoute: MainMenu.id,
         routes: {
           GroceriesHomePage.id: (context) => GroceriesHomePage(),
-
           ShopriteHomeScreen.id: (context) => ShopriteHomeScreen(),
           ShopriteProductGraph.id: (context) => ShopriteProductGraph(),
-
           PnPHomeScreen.id: (context) => PnPHomeScreen(),
           PnPProductGraph.id: (context) => PnPProductGraph(),
-
           WooliesHomeScreen.id: (context) => WooliesHomeScreen(),
           WooliesProductGraph.id: (context) => WooliesProductGraph(),
-
           MainMenu.id: (context) => MainMenu(),
-
           ShoppingList.id: (context) => ShoppingList(),
-
           ClothingHome.id: (context) => ClothingHome(),
-
           FoschiniHomeScreen.id: (context) => FoschiniHomeScreen(),
           FoschiniProductGraph.id: (context) => FoschiniProductGraph(),
-
           SportsceneHomeScreen.id: (context) => SportsceneHomeScreen(),
           SuperbalistHomeScreen.id: (context) => SuperbalistHomeScreen(),
-
           MarkhamHomeScreen.id: (context) => MarkhamHomeScreen(),
-
           WoolworthsClothingHomeScreen.id: (context) =>
               WoolworthsClothingHomeScreen(),
           WoolworthsClothingProductGraph.id: (context) =>
@@ -155,11 +130,7 @@ class MyApp extends StatelessWidget {
           ComputermaniaHomeScreen.id: (context) => ComputermaniaHomeScreen(),
           AccessoriesProductGraph.id: (context) => AccessoriesProductGraph(),
         },
-
-
       ),
     );
   }
 }
-
-

@@ -21,7 +21,7 @@ class ProductSearch extends SearchDelegate {
   @override
   ThemeData appBarTheme(BuildContext context) {
     Map<int, Color> color = {
-      50:  Color.fromRGBO(0, 51, 89, .1),
+      50: Color.fromRGBO(0, 51, 89, .1),
       100: Color.fromRGBO(0, 51, 89, .2),
       200: Color.fromRGBO(0, 51, 89, .3),
       300: Color.fromRGBO(0, 51, 89, .4),
@@ -70,50 +70,44 @@ class ProductSearch extends SearchDelegate {
   }
 
   @override
-  Widget buildResults(BuildContext context,) {
+  Widget buildResults(
+    BuildContext context,
+  ) {
     return Container();
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var _providerData = Provider
-        .of<PnPAllProductList>(context)
-        .titles;
+    var _providerData = Provider.of<PnPAllProductList>(context).titles;
     final results = _providerData
         .where(
-          (product) =>
-          product.toLowerCase().contains(
-            query.toLowerCase(),
-          ),
-    )
+          (product) => product.toLowerCase().contains(
+                query.toLowerCase(),
+              ),
+        )
         .toList();
 
     return ((query == '')
         ? Container()
         : ListView.builder(
-        itemCount: results.length,
-        itemBuilder: (context, index) =>
-            ListTile(
-              title: Text(
-                results[index],
-                style: TextStyle(color: Colors.black87),
-              ),
-
-              onTap: () {
-                getProduct(results[index], context);
-              },
-              focusColor: Colors.red,
-            )));
+            itemCount: results.length,
+            itemBuilder: (context, index) => ListTile(
+                  title: Text(
+                    results[index],
+                    style: TextStyle(color: Colors.black87),
+                  ),
+                  onTap: () {
+                    getProduct(results[index], context);
+                  },
+                  focusColor: Colors.red,
+                )));
   }
-
 
   void getProduct(dynamic result, BuildContext context) async {
     PnPData _pnpData = PnPData();
 
     if (result != null) {
-
-
-      if( await TestConnection.checkForConnection()){
+      if (await TestConnection.checkForConnection()) {
         IsLoading.showIsLoadingDialog(context);
 
         dynamic response = await _pnpData.getSingleProductData(result);
@@ -121,22 +115,23 @@ class ProductSearch extends SearchDelegate {
 
         List<DateTime> tempDateList = [];
 
-        List<dynamic> datesList = parsedResponse[parsedResponse.keys.elementAt(0)
-            .toString()]['dates'];
+        List<dynamic> datesList =
+            parsedResponse[parsedResponse.keys.elementAt(0).toString()]
+                ['dates'];
 
         for (var dateString in datesList) {
           tempDateList.add((DateTime.parse(dateString)));
         }
 
         ProductItem _parsedProductItem = ProductItem(
-            parsedResponse[parsedResponse.keys.elementAt(0)
-                .toString()]['image_url'],
-            parsedResponse[parsedResponse.keys.elementAt(0)
-                .toString()]['prices_list'],
+            parsedResponse[parsedResponse.keys.elementAt(0).toString()]
+                ['image_url'],
+            parsedResponse[parsedResponse.keys.elementAt(0).toString()]
+                ['prices_list'],
             tempDateList,
             parsedResponse.keys.elementAt(0).toString(),
-            parsedResponse[parsedResponse.keys.elementAt(0)
-                .toString()]['change']);
+            parsedResponse[parsedResponse.keys.elementAt(0).toString()]
+                ['change']);
 
         Navigator.pop(context);
 
@@ -144,19 +139,14 @@ class ProductSearch extends SearchDelegate {
           context,
           MaterialPageRoute(
             builder: (context) =>
-               PnPProductGraph(
-                    productItem:
-                    _parsedProductItem),
+                PnPProductGraph(productItem: _parsedProductItem),
           ),
         );
-      } else{
+      } else {
         await TestConnection.showNoNetworkDialog(context);
       }
-
-
     } else {
       close(context, result);
     }
   }
-
 }

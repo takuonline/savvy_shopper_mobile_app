@@ -1,12 +1,9 @@
 import 'package:e_grocery/src/components/grocery_shoppinglist/grocery_shoppinglist_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
-import 'package:e_grocery/src/providers/grocery_shopping_list.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/pnp_product_graph.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/shoprite_product_graph.dart';
-import 'file:///C:/Users/Taku/AndroidStudioProjects/e_grocery/lib/src/pages/groceries_product_graph/woolies_product_graph.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/shoprite_product_graph.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 
 class ShoppingListCard extends StatefulWidget {
   int index;
@@ -30,7 +27,6 @@ class _ShoppingListCardState extends State<ShoppingListCard> {
         screenHeight * (10 / MediaQuery.of(context).size.height);
     final screenWidth10p =
         screenWidth * (10 / MediaQuery.of(context).size.width);
-
 
     Future<void> showDropItemDialog(BuildContext context, int index) async {
       return showDialog<void>(
@@ -221,9 +217,7 @@ class _ShoppingListCardState extends State<ShoppingListCard> {
                             decoration: TextDecoration.none),
                       ),
                       Text(
-                        'R${(widget.productItem.quantity *
-                            widget.productItem.prices.last).toStringAsFixed(
-                            2)}',
+                        'R${(widget.productItem.quantity * widget.productItem.prices.last).toStringAsFixed(2)}',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w500,

@@ -74,7 +74,9 @@ class ProductSearch extends SearchDelegate {
   }
 
   @override
-  Widget buildResults(BuildContext context,) {
+  Widget buildResults(
+    BuildContext context,
+  ) {
     return Container();
   }
 
@@ -94,31 +96,29 @@ class ProductSearch extends SearchDelegate {
         ? Container()
         : ListView.builder(
             itemCount: results.length,
-        itemBuilder: (context, index) =>
-            ListTile(
-              title: Text(
-                results[index],
-                style: TextStyle(color: Colors.black87),
-              ),
-
-              onTap: () {
-                try {
-                  getProduct(results[index], context);
-                } on NoSuchMethodError {
-                  Navigator.pop(context);
-                  showErrorDialog(context);
-                  print("is no such methodddddd");
-                } on SocketException catch (_) {
-                  Navigator.pop(context);
-                  TestConnection.showNoNetworkDialog(context);
-                } catch (error) {
-                  print(error);
-                  Navigator.pop(context);
-                  showErrorDialog(context);
-                }
-              },
-              focusColor: Colors.red,
-            )));
+            itemBuilder: (context, index) => ListTile(
+                  title: Text(
+                    results[index],
+                    style: TextStyle(color: Colors.black87),
+                  ),
+                  onTap: () {
+                    try {
+                      getProduct(results[index], context);
+                    } on NoSuchMethodError {
+                      Navigator.pop(context);
+                      showErrorDialog(context);
+                      print("is no such methodddddd");
+                    } on SocketException catch (_) {
+                      Navigator.pop(context);
+                      TestConnection.showNoNetworkDialog(context);
+                    } catch (error) {
+                      print(error);
+                      Navigator.pop(context);
+                      showErrorDialog(context);
+                    }
+                  },
+                  focusColor: Colors.red,
+                )));
   }
 
   static Future<void> showErrorDialog(BuildContext context) async {
@@ -133,7 +133,7 @@ class ProductSearch extends SearchDelegate {
               children: <Widget>[
                 Text(
                   'Sorry but it seems like we are having trouble'
-                      ' getting infomation on this product',
+                  ' getting infomation on this product',
                   style: TextStyle(
                     fontFamily: "Montserrat",
                     color: Colors.black,
@@ -173,22 +173,23 @@ class ProductSearch extends SearchDelegate {
 
         List<DateTime> tempDateList = [];
 
-        List<dynamic> datesList = parsedResponse[parsedResponse.keys.elementAt(0)
-            .toString()]['dates'];
+        List<dynamic> datesList =
+            parsedResponse[parsedResponse.keys.elementAt(0).toString()]
+                ['dates'];
 
         for (var dateString in datesList) {
           tempDateList.add((DateTime.parse(dateString)));
         }
 
         ProductItem _parsedProductItem = ProductItem(
-            parsedResponse[parsedResponse.keys.elementAt(0)
-                .toString()]['image_url'],
-            parsedResponse[parsedResponse.keys.elementAt(0)
-                .toString()]['prices_list'],
+            parsedResponse[parsedResponse.keys.elementAt(0).toString()]
+                ['image_url'],
+            parsedResponse[parsedResponse.keys.elementAt(0).toString()]
+                ['prices_list'],
             tempDateList,
             parsedResponse.keys.elementAt(0).toString(),
-            parsedResponse[parsedResponse.keys.elementAt(0)
-                .toString()]['change']);
+            parsedResponse[parsedResponse.keys.elementAt(0).toString()]
+                ['change']);
 
         _isLoading = false;
         Navigator.pop(context);
@@ -197,23 +198,14 @@ class ProductSearch extends SearchDelegate {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                ShopriteProductGraph(
-                    productItem:
-                    _parsedProductItem),
+                ShopriteProductGraph(productItem: _parsedProductItem),
           ),
         );
-      } else{
+      } else {
         await TestConnection.showNoNetworkDialog(context);
       }
-
-
     } else {
       close(context, result);
     }
   }
-
-
-
-
-
 }

@@ -6,8 +6,8 @@ import 'package:e_grocery/src/networking/accessories/takealot_data.dart';
 import 'package:e_grocery/src/providers/accessories/computermania_product_provider.dart';
 import 'package:e_grocery/src/providers/accessories/hifi_product_provider.dart';
 import 'package:e_grocery/src/providers/accessories/takealot_product_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:string_similarity/string_similarity.dart';
 
 class AccessoriesGraphRecommendations {
@@ -15,7 +15,6 @@ class AccessoriesGraphRecommendations {
       BuildContext context, String productTitle) async {
     List<String> takealotList =
         Provider.of<TakealotAllProductList>(context, listen: false).titles;
-
 
     List<String> hifiList =
         Provider.of<HifiAllProductList>(context, listen: false).titles;

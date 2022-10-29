@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/grid_homescreen_product_card/product_card_white.dart';
 import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
 import 'package:e_grocery/src/components/homescreen_components/datatable_grid_selector.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
+import 'package:e_grocery/src/mixins/accessories_home_page_mixin.dart';
 import 'package:e_grocery/src/networking/accessories/takealot_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:e_grocery/src/pages/accessories_product_graph/accessories_product_graph.dart';
@@ -13,7 +12,6 @@ import 'package:e_grocery/src/providers/accessories/takealot_product_provider.da
 import 'package:e_grocery/src/services/accessories_services/accessories_search.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
-import 'package:e_grocery/src/mixins/accessories_home_page_mixin.dart';
 
 class TakealotHomeScreen extends StatefulWidget {
   static const id = "/takealotHomeScreen";
@@ -24,8 +22,6 @@ class TakealotHomeScreen extends StatefulWidget {
 
 class _TakealotHomeScreenState extends State<TakealotHomeScreen>
     with AccessoriesHomePageMixin {
-
-
   @override
   void initState() {
     super.initState();
@@ -40,13 +36,9 @@ class _TakealotHomeScreenState extends State<TakealotHomeScreen>
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    data = Provider
-        .of<TakealotAllProductList>(context, listen: true)
-        .data;
+    data = Provider.of<TakealotAllProductList>(context, listen: true).data;
 
     if (!isDataLoaded) {
       loadData(context);
@@ -56,25 +48,12 @@ class _TakealotHomeScreenState extends State<TakealotHomeScreen>
       setState(() => isLoading = false);
     }
 
-
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     final screenHeight10p =
-        screenHeight * (10 / MediaQuery
-            .of(context)
-            .size
-            .height);
+        screenHeight * (10 / MediaQuery.of(context).size.height);
     final screenWidth10p =
-        screenWidth * (10 / MediaQuery
-            .of(context)
-            .size
-            .width);
+        screenWidth * (10 / MediaQuery.of(context).size.width);
 
     allProducts = cheap + expensive;
     List<ProductItem> bestBuys = cheap.take(5).toList();
@@ -105,7 +84,7 @@ class _TakealotHomeScreenState extends State<TakealotHomeScreen>
                     ),
                     Padding(
                       padding:
-                      EdgeInsets.symmetric(horizontal: horizontalPadding),
+                          EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: FittedBox(
                         child: Text(
                           "Takealot",
@@ -123,8 +102,8 @@ class _TakealotHomeScreenState extends State<TakealotHomeScreen>
                       height: screenHeight * .025,
                     ),
                     Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: horizontalPadding),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: horizontalPadding),
                         child: Center(
                           child: GestureDetector(
                             onTap: () async {
@@ -342,8 +321,7 @@ class _TakealotHomeScreenState extends State<TakealotHomeScreen>
                   (product) => DataRow(
                     cells: [
                       DataCell(Image.network(product.imageUrl ?? nullImageUrl),
-                          onTap: () =>
-                          product.imageUrl == null
+                          onTap: () => product.imageUrl == null
                               ? null
                               : _showDialog(product, context)),
                       DataCell(

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:e_grocery/src/components/clothing/product_tabbar_view.dart';
 import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
@@ -116,7 +114,7 @@ class _MarkhamHomeScreenState extends State<MarkhamHomeScreen>
                     ),
                     Padding(
                         padding:
-                        EdgeInsets.symmetric(horizontal: horizontalPadding),
+                            EdgeInsets.symmetric(horizontal: horizontalPadding),
                         child: Center(
                           child: GestureDetector(
                             onTap: () async {
@@ -130,11 +128,10 @@ class _MarkhamHomeScreenState extends State<MarkhamHomeScreen>
                                     context: context,
                                     delegate: ClothingProductSearch(
                                         items:
-                                        Provider
-                                            .of<MarkhamAllProductList>(
-                                            context,
-                                            listen: false)
-                                            .items,
+                                            Provider.of<MarkhamAllProductList>(
+                                                    context,
+                                                    listen: false)
+                                                .items,
                                         networkData: _networkData));
                                 print(result);
                               } else {

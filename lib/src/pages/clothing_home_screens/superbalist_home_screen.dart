@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:e_grocery/src/components/clothing/product_tabbar_view.dart';
 import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
@@ -91,7 +89,7 @@ class _SuperbalistHomeScreenState extends State<SuperbalistHomeScreen>
                     ),
                     Padding(
                       padding:
-                      EdgeInsets.symmetric(horizontal: horizontalPadding),
+                          EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: FittedBox(
                         child: Text(
                           "Superbalist",
@@ -110,22 +108,21 @@ class _SuperbalistHomeScreenState extends State<SuperbalistHomeScreen>
                     ),
                     Padding(
                         padding:
-                        EdgeInsets.symmetric(horizontal: horizontalPadding),
+                            EdgeInsets.symmetric(horizontal: horizontalPadding),
                         child: Center(
                           child: GestureDetector(
                             onTap: () async {
                               if (await TestConnection.checkForConnection()) {
                                 SuperbalistData _networkData =
-                                SuperbalistData();
+                                    SuperbalistData();
 
                                 final result = await showSearch(
                                     context: context,
                                     delegate: ClothingProductSearch(
-                                        items: Provider
-                                            .of<
-                                            SuperbalistAllProductList>(
-                                            context,
-                                            listen: false)
+                                        items: Provider.of<
+                                                    SuperbalistAllProductList>(
+                                                context,
+                                                listen: false)
                                             .items,
                                         networkData: _networkData));
                                 print(result);
@@ -209,9 +206,9 @@ class _SuperbalistHomeScreenState extends State<SuperbalistHomeScreen>
 //
 //                 :
 
-              (isGridOff
-                  ? screenHeight10p * 7 * cheap.length.toDouble()
-                  : screenHeight10p * 13.6 * cheap.length.toDouble()),
+                  (isGridOff
+                      ? screenHeight10p * 7 * cheap.length.toDouble()
+                      : screenHeight10p * 13.6 * cheap.length.toDouble()),
 
               child: DefaultTabController(
                 length: 3,

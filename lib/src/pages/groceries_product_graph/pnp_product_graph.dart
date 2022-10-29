@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:e_grocery/src/components/graph_page_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
@@ -85,9 +86,9 @@ class _PnPProductGraphState extends State<PnPProductGraph>
                           child: widget.productItem.imageUrl == _badImageUrl
                               ? Image.network(nullImageUrl)
                               : Image.network(
-                            widget.productItem.imageUrl ?? nullImageUrl,
-                            fit: BoxFit.contain,
-                          ),
+                                  widget.productItem.imageUrl ?? nullImageUrl,
+                                  fit: BoxFit.contain,
+                                ),
                         ),
                       ),
                     ),
@@ -122,7 +123,7 @@ class _PnPProductGraphState extends State<PnPProductGraph>
                 ),
                 Container(
                   margin:
-                  EdgeInsets.symmetric(horizontal: screenHeight10p * 1.5),
+                      EdgeInsets.symmetric(horizontal: screenHeight10p * 1.5),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(screenHeight10p * 5)),
                   child: Material(
@@ -136,7 +137,7 @@ class _PnPProductGraphState extends State<PnPProductGraph>
                       height: screenHeight * .55,
                       decoration: BoxDecoration(
                         borderRadius:
-                        BorderRadius.circular(screenHeight10p * 2),
+                            BorderRadius.circular(screenHeight10p * 2),
                         color: kBgPnP,
                       ),
                       child: SfCartesianChart(
@@ -153,7 +154,7 @@ class _PnPProductGraphState extends State<PnPProductGraph>
                         //set type for x and y axis
                         primaryXAxis: DateTimeAxis(
                           majorGridLines:
-                          MajorGridLines(color: Colors.blue, width: 0),
+                              MajorGridLines(color: Colors.blue, width: 0),
                           labelStyle: TextStyle(color: Colors.white),
                           title: AxisTitle(
                               text: 'Date',
@@ -179,7 +180,7 @@ class _PnPProductGraphState extends State<PnPProductGraph>
 //                      args.
                         },
                         legend:
-                        Legend(overflowMode: LegendItemOverflowMode.wrap),
+                            Legend(overflowMode: LegendItemOverflowMode.wrap),
                         tooltipBehavior: TooltipBehavior(enable: true),
                         backgroundColor: Colors.black.withOpacity(.2),
 
@@ -190,7 +191,7 @@ class _PnPProductGraphState extends State<PnPProductGraph>
                               yValueMapper: (product, _) => product.price,
                               // Enable data label
                               dataLabelSettings:
-                              DataLabelSettings(isVisible: false))
+                                  DataLabelSettings(isVisible: false))
                         ],
                       ),
                     ),
@@ -210,9 +211,9 @@ class _PnPProductGraphState extends State<PnPProductGraph>
                           },
                           child: MaxMinCard(
                             priceValue: widget.productItem.prices
-                                .map((e) => double.parse(e.toString()))
-                                .toList()
-                                .reduce(max) ??
+                                    .map((e) => double.parse(e.toString()))
+                                    .toList()
+                                    .reduce(max) ??
                                 0,
                             title: "Max",
                             bgColor: kBgPnP,
@@ -222,9 +223,9 @@ class _PnPProductGraphState extends State<PnPProductGraph>
                         ),
                         MaxMinCard(
                           priceValue: widget.productItem.prices
-                              .map((e) => double.parse(e.toString()))
-                              .toList()
-                              .reduce(min) ??
+                                  .map((e) => double.parse(e.toString()))
+                                  .toList()
+                                  .reduce(min) ??
                               0,
                           title: "Min",
                           bgColor: kBgPnP,
@@ -233,11 +234,11 @@ class _PnPProductGraphState extends State<PnPProductGraph>
                         ),
                         MaxMinCard(
                           priceValue: (widget.productItem.prices
-                              .map(
-                                  (e) => double.parse(e.toString()))
-                              .reduce((a, b) => a + b) /
-                              widget.productItem.prices.length)
-                              .roundToDouble() ??
+                                          .map(
+                                              (e) => double.parse(e.toString()))
+                                          .reduce((a, b) => a + b) /
+                                      widget.productItem.prices.length)
+                                  .roundToDouble() ??
                               0,
                           title: "Avg",
                           bgColor: kBgPnP,
@@ -264,7 +265,7 @@ class _PnPProductGraphState extends State<PnPProductGraph>
                   Center(
                     child: Container(
                       padding:
-                      EdgeInsets.symmetric(vertical: screenHeight10p * 3),
+                          EdgeInsets.symmetric(vertical: screenHeight10p * 3),
                       child: CircularProgressIndicator(),
                     ),
                   ),
@@ -281,19 +282,17 @@ class _PnPProductGraphState extends State<PnPProductGraph>
                         itemCount: finalShopriteProductItems.length,
                         itemBuilder: (_, index) {
                           return GestureDetector(
-                            onTap: () =>
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        ShopriteProductGraph(
-                                            productItem:
-                                            finalShopriteProductItems[index]),
-                                  ),
-                                ),
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ShopriteProductGraph(
+                                    productItem:
+                                        finalShopriteProductItems[index]),
+                              ),
+                            ),
                             child: RecommendationProductCard(
                                 finalStoreProductItems:
-                                finalShopriteProductItems,
+                                    finalShopriteProductItems,
                                 nullImageUrl: nullImageUrl,
                                 index: index),
                           );
@@ -312,16 +311,14 @@ class _PnPProductGraphState extends State<PnPProductGraph>
                         itemCount: finalWooliesProductItems.length,
                         itemBuilder: (_, index) {
                           return GestureDetector(
-                            onTap: () =>
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        WooliesProductGraph(
-                                            productItem:
-                                            finalWooliesProductItems[index]),
-                                  ),
-                                ),
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => WooliesProductGraph(
+                                    productItem:
+                                        finalWooliesProductItems[index]),
+                              ),
+                            ),
                             child: RecommendationProductCardNoImage(
                                 finalPnPProductItems: finalWooliesProductItems,
                                 nullImageUrl: nullImageUrl,
@@ -341,15 +338,13 @@ class _PnPProductGraphState extends State<PnPProductGraph>
                         itemCount: finalPnPProductItems.length,
                         itemBuilder: (_, index) {
                           return GestureDetector(
-                            onTap: () =>
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        PnPProductGraph(
-                                            productItem: finalPnPProductItems[index]),
-                                  ),
-                                ),
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PnPProductGraph(
+                                    productItem: finalPnPProductItems[index]),
+                              ),
+                            ),
                             child: RecommendationProductCard(
                                 finalStoreProductItems: finalPnPProductItems,
                                 nullImageUrl: nullImageUrl,

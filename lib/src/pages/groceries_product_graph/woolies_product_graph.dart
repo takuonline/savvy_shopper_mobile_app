@@ -1,14 +1,13 @@
 import 'dart:math';
+
 import 'package:e_grocery/src/components/graph_page_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/mixins/grocery_graph_page_mixin.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
 import 'package:e_grocery/src/pages/groceries_product_graph/shoprite_product_graph.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class WooliesProductGraph extends StatefulWidget {
@@ -24,7 +23,6 @@ class WooliesProductGraph extends StatefulWidget {
 
 class _WooliesProductGraphState extends State<WooliesProductGraph>
     with GroceryGraphPageMixin {
-
   @override
   void initState() {
     super.initState();
@@ -167,7 +165,6 @@ class _WooliesProductGraphState extends State<WooliesProductGraph>
                 SizedBox(
                   height: 50,
                 ),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(

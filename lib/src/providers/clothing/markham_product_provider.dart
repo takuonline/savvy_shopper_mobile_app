@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:e_grocery/src/networking/clothing/foschini_data.dart';
 import 'package:e_grocery/src/networking/clothing/markham_data.dart';
 import 'package:e_grocery/src/networking/connection_test.dart';
 import 'package:flutter/material.dart';

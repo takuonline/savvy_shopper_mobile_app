@@ -1,11 +1,12 @@
-import 'package:e_grocery/src/page_views/accessories_page_view.dart';
-import 'package:e_grocery/src/pages/welcome_screen.dart';
+import 'dart:math' as math;
+
 import 'package:e_grocery/src/components/welcome_screen_components.dart';
 import 'package:e_grocery/src/constants/constants.dart';
+import 'package:e_grocery/src/page_views/accessories_page_view.dart';
+import 'package:e_grocery/src/pages/welcome_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:math' as math;
 
 class AccessoriesHome extends StatefulWidget {
   static const id = "/accessoriesHome";
@@ -116,7 +117,7 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
       'takealot': WelcomeScreenItem(
           header: "Takealot",
           details:
-          "Takealot, a place where extraordinary people come together to do extraordinary "
+              "Takealot, a place where extraordinary people come together to do extraordinary "
               "things, bringing world-class online shopping to the"
               " people of South Africa.",
           blob1: Positioned(
@@ -150,16 +151,14 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
           btn: WelcomeScreenButton(
             text: "Explore",
             color: kBgTakealot,
-            navigationFunction: () =>
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        AccessoriesPageView(
-                          pageNumber: 0,
-                        ),
-                  ),
+            navigationFunction: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AccessoriesPageView(
+                  pageNumber: 0,
                 ),
+              ),
+            ),
           )),
 //                Navigator.pushNamed(context, TakealotHomeScreen.id)),
 
@@ -214,10 +213,9 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    AccessoriesPageView(
-                      pageNumber: 1,
-                    ),
+                builder: (context) => AccessoriesPageView(
+                  pageNumber: 1,
+                ),
               ),
             );
           },
@@ -228,7 +226,7 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
       'computermania': WelcomeScreenItem(
         header: "Computer Mania",
         details:
-        'With a success record spanning more than 28 years, Computer Mania'
+            'With a success record spanning more than 28 years, Computer Mania'
             'is equipped to lead dedicated'
             ' franchisees and become a successful retailer.',
         blob1: Positioned(
@@ -266,10 +264,9 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    AccessoriesPageView(
-                      pageNumber: 2,
-                    ),
+                builder: (context) => AccessoriesPageView(
+                  pageNumber: 2,
+                ),
               ),
             );
 //            Navigator.pushNamed(context, ComputermaniaHomeScreen.id);
@@ -297,8 +294,7 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
                       child: Transform.rotate(
                         angle: math.pi / 2 * .2,
                         child: Transform(
-                          transform: Matrix4.identity()
-                            ..scale(.8),
+                          transform: Matrix4.identity()..scale(.8),
                           child: SvgPicture.asset(
                             "assets/headphone_bg.svg",
 
@@ -480,7 +476,6 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
                                       borderRadius: cardBorderRadius),
                                   child: Stack(
                                     children: [
-
                                       Positioned(
                                         bottom: 20,
                                         right: 20,
@@ -534,7 +529,6 @@ class _AccessoriesHomeState extends State<AccessoriesHome>
                                   borderRadius: cardBorderRadius),
                               child: Stack(
                                 children: [
-
                                   Positioned(
                                     bottom: 20,
                                     left: 20,

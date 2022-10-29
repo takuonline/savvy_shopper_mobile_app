@@ -1,10 +1,11 @@
 import 'dart:math';
-import 'package:e_grocery/src/mixins/grocery_graph_page_mixin.dart';
-import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
-import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
+
 import 'package:e_grocery/src/components/graph_page_components.dart';
 import 'package:e_grocery/src/components/product_item.dart';
 import 'package:e_grocery/src/constants/constants.dart';
+import 'package:e_grocery/src/mixins/grocery_graph_page_mixin.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/pnp_product_graph.dart';
+import 'package:e_grocery/src/pages/groceries_product_graph/woolies_product_graph.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';

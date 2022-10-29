@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:e_grocery/src/components/custom_paint.dart';
+import 'package:e_grocery/src/components/grid_homescreen_product_card/shoprite_product_card.dart';
 import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
 import 'package:e_grocery/src/components/homescreen_components/datatable_grid_selector.dart';
 import 'package:e_grocery/src/components/product_item.dart';
-import 'package:e_grocery/src/components/grid_homescreen_product_card/shoprite_product_card.dart';
 import 'package:e_grocery/src/components/shoprite/shoprite_search.dart';
 import 'package:e_grocery/src/constants/constants.dart';
 import 'package:e_grocery/src/mixins/grocery_home_page_mixin.dart';
@@ -14,8 +12,6 @@ import 'package:e_grocery/src/providers/grocery/shoprite_product_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:ui' as ui;
-
 import 'package:provider/provider.dart';
 
 class ShopriteHomeScreen extends StatefulWidget {
@@ -68,23 +64,12 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen>
       setState(() => isLoading = false);
     }
 
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final screenHeight10p = screenHeight * (10 / MediaQuery
-        .of(context)
-        .size
-        .height);
-    final screenWidth10p = screenWidth * (10 / MediaQuery
-        .of(context)
-        .size
-        .width);
-
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight10p =
+        screenHeight * (10 / MediaQuery.of(context).size.height);
+    final screenWidth10p =
+        screenWidth * (10 / MediaQuery.of(context).size.width);
 
     allProducts = cheap + expensive;
     List<ProductItem> bestBuys = cheap.take(5).toList();
@@ -102,45 +87,43 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen>
               children: [
                 Positioned(
                   child: CustomPaint(
-                    size: Size(screenWidth,
-                        screenHeight * .37),
+                    size: Size(screenWidth, screenHeight * .37),
                     //You can Replace this with your desired WIDTH and HEIGHT
                     painter: HomeBGCustomPaint(color: kBgShoprite),
                   ),
                 ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: screenHeight*.05,
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: _horizontalPadding),
-                        child: FittedBox(
-                          child: Text(
-                            "Shoprite",
-                            style: TextStyle(
-                              fontFamily: "Montserrat",
-                              color: Colors.white,
-                              fontSize: screenWidth10p*3,
-                              fontWeight: FontWeight.w700,
-                              decoration: TextDecoration.none,
-                            ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: screenHeight * .05,
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                      child: FittedBox(
+                        child: Text(
+                          "Shoprite",
+                          style: TextStyle(
+                            fontFamily: "Montserrat",
+                            color: Colors.white,
+                            fontSize: screenWidth10p * 3,
+                            fontWeight: FontWeight.w700,
+                            decoration: TextDecoration.none,
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: screenHeight*.025,
-                      ),
-                      Padding(
-                          padding:
-                          EdgeInsets.symmetric(horizontal: _horizontalPadding),
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () async {
-
-                                if(await TestConnection.checkForConnection()) {
+                    ),
+                    SizedBox(
+                      height: screenHeight * .025,
+                    ),
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: _horizontalPadding),
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () async {
+                              if (await TestConnection.checkForConnection()) {
 //                                  Provider.of<ShopriteAllProductList>(
 //                                      context, listen: false)
 //                                      .getProductNameList();
@@ -148,49 +131,49 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen>
                                     context: context,
                                     delegate: ProductSearch());
                                 print(result);
-                              } else{
-                                 await TestConnection.showNoNetworkDialog(
+                              } else {
+                                await TestConnection.showNoNetworkDialog(
                                     context);
                               }
-
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 20),
-                                decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(.8),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.search,
-                                      color: Colors.black,
-                                    ),
-                                    SizedBox(
-                                      width:  screenWidth*.025,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 20),
-                                      child: FittedBox(
-                                        child: Text(
-                                          "Search Product",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily: "Montserrat",
-                                              decoration: TextDecoration.none,
-                                              color: kTextColor,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 18),
-                                        ),
+                            },
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(.8),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.search,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(
+                                    width: screenWidth * .025,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 20),
+                                    child: FittedBox(
+                                      child: Text(
+                                        "Search Product",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontFamily: "Montserrat",
+                                            decoration: TextDecoration.none,
+                                            color: kTextColor,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
-                          )
+                          ),
+                        )
 
 //                    Material(
 //                      color: Colors.transparent,
@@ -210,105 +193,104 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen>
 //                        ),
 //                      ),
 //                    ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              BestBuys(bestBuys: bestBuys, color: kBgShoprite.withOpacity(.1),),
-              SizedBox(
-                height: 40,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    color: kBgShoprite.withOpacity(.1),
-                    borderRadius: BorderRadius.circular(15)),
-                height: 70,
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 10,
-                ),
-                child: DatatableGridSelector(
-                    isGridOff,
-                    toggleGrid
-                ),
-              ),
-
-            isLoading ? Center(child: CircularProgressIndicator()) : Container()
-
-              ,
-              SizedBox(
-                height: 30,
-              ),
-              Container(
-                height: isGridOff
-                    ? screenHeight10p * 7 * cheap.length.toDouble()
-                    : screenHeight10p * 13.6 * cheap.length.toDouble(),
-                child: DefaultTabController(
-                  length: 3,
-                  child: Column(
-                    children: [
-                      Material(
-                        child: TabBar(
-                          indicator: BoxDecoration(
-                              border: Border.all(color: kBgShoprite, width: 5),
-                              borderRadius: BorderRadius.circular(50)),
-                          tabs: [
-                            Tab(
-                                child: FittedBox(
-                                  child: Text(
-                                    "All",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: "Montserrat",
-                                        fontSize: 20),
-                                  ),
-                                )),
-                            Tab(
-                                child: FittedBox(
-                                  child: Text(
-                                    "Cheap",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: "Montserrat",
-                                        fontSize: 18),
-                                  ),
-                                )),
-                            Tab(
-                                child: FittedBox(
-                                  child: Text(
-                                    "Expensive",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: "Montserrat",
-                                        fontSize: 20),
-                                  ),
-                                )),
-                          ],
                         ),
+                  ],
+                )
+              ],
+            ),
+            BestBuys(
+              bestBuys: bestBuys,
+              color: kBgShoprite.withOpacity(.1),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: kBgShoprite.withOpacity(.1),
+                  borderRadius: BorderRadius.circular(15)),
+              height: 70,
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: EdgeInsets.symmetric(
+                horizontal: 10,
+              ),
+              child: DatatableGridSelector(isGridOff, toggleGrid),
+            ),
+            isLoading
+                ? Center(child: CircularProgressIndicator())
+                : Container(),
+            SizedBox(
+              height: 30,
+            ),
+            Container(
+              height: isGridOff
+                  ? screenHeight10p * 7 * cheap.length.toDouble()
+                  : screenHeight10p * 13.6 * cheap.length.toDouble(),
+              child: DefaultTabController(
+                length: 3,
+                child: Column(
+                  children: [
+                    Material(
+                      child: TabBar(
+                        indicator: BoxDecoration(
+                            border: Border.all(color: kBgShoprite, width: 5),
+                            borderRadius: BorderRadius.circular(50)),
+                        tabs: [
+                          Tab(
+                              child: FittedBox(
+                            child: Text(
+                              "All",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: "Montserrat",
+                                  fontSize: 20),
+                            ),
+                          )),
+                          Tab(
+                              child: FittedBox(
+                            child: Text(
+                              "Cheap",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: "Montserrat",
+                                  fontSize: 18),
+                            ),
+                          )),
+                          Tab(
+                              child: FittedBox(
+                            child: Text(
+                              "Expensive",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: "Montserrat",
+                                  fontSize: 20),
+                            ),
+                          )),
+                        ],
                       ),
-                      Expanded(
-                        child: Material(
-                            child: TabBarView(
+                    ),
+                    Expanded(
+                      child: Material(
+                          child: TabBarView(
 //                                  controller: _tabController,
-                          children: [
-                            productTabBarView(context, allProducts),
-                            productTabBarView(context, cheap),
-                            productTabBarView(context, expensive),
-                          ],
-                        )),
-                      ),
-                    ],
-                  ),
+                        children: [
+                          productTabBarView(context, allProducts),
+                          productTabBarView(context, cheap),
+                          productTabBarView(context, expensive),
+                        ],
+                      )),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 70,
-              ),
-            ],
-          ),
+            ),
+            SizedBox(
+              height: 70,
+            ),
+          ],
         ),
-      );
+      ),
+    );
   }
 
   Future<void> _showNetworkDialog(BuildContext context) async {
@@ -323,7 +305,7 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen>
               children: <Widget>[
                 Text(
                   'An internet connection is required for this app, please make sure you are'
-                      ' connected to a network and try again',
+                  ' connected to a network and try again',
                   style: TextStyle(
                     fontFamily: "Montserrat",
                     color: Colors.black,
@@ -339,12 +321,12 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen>
                 'Retry',
                 style: TextStyle(color: kBgShoprite),
               ),
-              onPressed: () async{
+              onPressed: () async {
                 Navigator.of(context).pop();
-                if (await TestConnection.checkForConnection()){
+                if (await TestConnection.checkForConnection()) {
                   Provider.of<ShopriteAllProductList>(context, listen: false)
                       .getItems();
-                }else{
+                } else {
                   _showNetworkDialog(context);
                 }
               },
@@ -428,7 +410,6 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen>
 //
 //  }
 
-
 //  void _cleanExpensive(List<dynamic> items) {
 //    for (var i in items) {
 //      List<DateTime> tempDateList = [];
@@ -485,75 +466,62 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen>
             setState(() {
               isGridOff = !isGridOff;
             });
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: isGridOff ? Colors.white : Colors
-                                .transparent,
-                            borderRadius: BorderRadius.circular(10)),
-                        width: screenWidth * .5 * .8,
-                        padding:
-                        EdgeInsets.symmetric(horizontal:screenWidth10p* 2, vertical: screenWidth10p ),
-                        child: FittedBox(
-                          child: Text(
-                            "DataTable",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: "Montserrat",
-                                fontWeight: FontWeight.w500,
-                                fontSize: screenWidth10p* 1.8,
-                                decoration: TextDecoration.none),
-                          ),
-                        )),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isGridOff = !isGridOff;
-                      });
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: isGridOff ? Colors.transparent : Colors
-                                .white,
-                            borderRadius: BorderRadius.circular(10)),
-                        width: screenWidth * .5 * .8,
-                        padding:
-                            EdgeInsets.symmetric(horizontal:screenWidth10p* 2, vertical: screenWidth10p *1),
-                        child: Text(
-                          "Grid",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: "Montserrat",
-                              fontWeight: FontWeight.w500,
-                              fontSize: screenWidth10p * 1.8,
-                              decoration: TextDecoration.none),
-                        )),
-                  ),
-                ],
+          },
+          child: Container(
+              decoration: BoxDecoration(
+                  color: isGridOff ? Colors.white : Colors.transparent,
+                  borderRadius: BorderRadius.circular(10)),
+              width: screenWidth * .5 * .8,
+              padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth10p * 2, vertical: screenWidth10p),
+              child: FittedBox(
+                child: Text(
+                  "DataTable",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: "Montserrat",
+                      fontWeight: FontWeight.w500,
+                      fontSize: screenWidth10p * 1.8,
+                      decoration: TextDecoration.none),
+                ),
+              )),
+        ),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              isGridOff = !isGridOff;
+            });
+          },
+          child: Container(
+              decoration: BoxDecoration(
+                  color: isGridOff ? Colors.transparent : Colors.white,
+                  borderRadius: BorderRadius.circular(10)),
+              width: screenWidth * .5 * .8,
+              padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth10p * 2, vertical: screenWidth10p * 1),
+              child: Text(
+                "Grid",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w500,
+                    fontSize: screenWidth10p * 1.8,
+                    decoration: TextDecoration.none),
+              )),
+        ),
+      ],
     );
   }
 
-  ListView productTabBarView(BuildContext context,
-      List<ProductItem> itemList) {
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    final screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final screenHeight10p = screenHeight * (10 / MediaQuery
-        .of(context)
-        .size
-        .height);
-    final screenWidth10p = screenWidth * (10 / MediaQuery
-        .of(context)
-        .size
-        .width);
+  ListView productTabBarView(BuildContext context, List<ProductItem> itemList) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight10p =
+        screenHeight * (10 / MediaQuery.of(context).size.height);
+    final screenWidth10p =
+        screenWidth * (10 / MediaQuery.of(context).size.width);
 
     return ListView(
       controller: scrollController,
@@ -562,177 +530,170 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen>
         SizedBox(
           height: 50,
         ),
-        if ( isGridOff) Material(
-          child: DataTable(
-            columnSpacing: 5,
-            headingTextStyle: TextStyle(
-                fontFamily: "Montserrat",
-                fontWeight: FontWeight.w600,
-                color: Colors.black),
+        if (isGridOff)
+          Material(
+            child: DataTable(
+              columnSpacing: 5,
+              headingTextStyle: TextStyle(
+                  fontFamily: "Montserrat",
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black),
 
-            showBottomBorder: false,
-            sortAscending: true,
-            sortColumnIndex: 1,
-            dividerThickness: 0,
+              showBottomBorder: false,
+              sortAscending: true,
+              sortColumnIndex: 1,
+              dividerThickness: 0,
 //                  horizontalMargin: 20,
-            dataRowHeight: 55,
-            headingRowColor: MaterialStateProperty.all(
-                kShopriteSecondary.withOpacity(.3)),
-            columns: [
-              DataColumn(
-                label: FittedBox(child: Text('Image')),
-              ),
-              DataColumn(
-                label: FittedBox(child: Text('Title')),
-              ),
-              DataColumn(
-                  label: FittedBox(
-                    child: Text(
-                      'Price',
-                    ),
-                  ),
-                  numeric: true),
-              DataColumn(
-                  label: FittedBox(
-                    child: Text(
-                      'Change',
-                    ),
-                  ),
-                  numeric: true),
-            ],
-            rows: [
-              ...itemList.map(
-                    (product) =>
-                    DataRow(
-                      cells: [
-                        DataCell(
-                            Image.network(
-                                product.imageUrl ?? _shopriteNullImageUrl),
-                            onTap: () =>
-                            product.imageUrl == null
-                                ? null
-                                : _showDialog(product, context)),
-                        DataCell(
-                          Text(
-                            "${product.title}",
-                            maxLines: 3,
-                            style: TextStyle(
-                              fontSize: screenWidth10p*1.2,
-//                                color: Colors.redAccent,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          onTap: () =>
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ShopriteProductGraph(
-                                          productItem: product),
-                                ),
-                              ),
-                        ),
-                        DataCell(
-                          FittedBox(
-                            child: Text(
-                              'R${product.prices[product.prices.length - 1]}',
-                              style: TextStyle(
-                                fontSize: screenWidth10p*1.4,
-//                                color: Colors.redAccent,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          onTap: () =>
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ShopriteProductGraph(
-                                          productItem: product),
-                                ),
-                              ),
-                        ),
-                        DataCell(
-                          Text(
-                            "${product.change.round()}%",
-                            style: TextStyle(
-                              color: product.change > 0
-                                  ? Colors.red
-                                  : Colors.green,
-                            ),
-                          ),
-                          onTap: () =>
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ShopriteProductGraph(
-                                          productItem: product),
-                                ),
-                              ),
-                        )
-                      ],
-                    ),
-              )
-            ],
-          ),
-        ) else Scrollbar(
-          controller: gridScrollController,
-
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: GridView.builder(
-                controller: gridScrollController,
-                itemCount: itemList.length,
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1 / 1.4,
-                  crossAxisSpacing: screenWidth * .03,
+              dataRowHeight: 55,
+              headingRowColor:
+                  MaterialStateProperty.all(kShopriteSecondary.withOpacity(.3)),
+              columns: [
+                DataColumn(
+                  label: FittedBox(child: Text('Image')),
                 ),
-                itemBuilder: (_, index) {
-                  return index == itemList.length - 1 ? Container() :
-                  (index.isEven ? GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ShopriteProductGraph(
-                                  productItem: itemList[index]),
-                        ),
-                      );
-                    }
-                    ,
-                    child: ProductCardRed(
-//                      index: index,
-                      shopriteNullImageUrl: _shopriteNullImageUrl,
-                      product: itemList[index],
-                    ),
-                  ) :
-                  Transform.translate(
-                    offset: Offset(0,80),
-                    child: GestureDetector(
-                      onTap: () =>
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ShopriteProductGraph(
-                                      productItem: itemList[index]),
-                            ),
-                          ),
-                      child: ProductCardRed(
-//                        index: index,
-                        shopriteNullImageUrl: _shopriteNullImageUrl,
-                        product: itemList[index],
+                DataColumn(
+                  label: FittedBox(child: Text('Title')),
+                ),
+                DataColumn(
+                    label: FittedBox(
+                      child: Text(
+                        'Price',
                       ),
                     ),
-                  ));
-                }),
+                    numeric: true),
+                DataColumn(
+                    label: FittedBox(
+                      child: Text(
+                        'Change',
+                      ),
+                    ),
+                    numeric: true),
+              ],
+              rows: [
+                ...itemList.map(
+                  (product) => DataRow(
+                    cells: [
+                      DataCell(
+                          Image.network(
+                              product.imageUrl ?? _shopriteNullImageUrl),
+                          onTap: () => product.imageUrl == null
+                              ? null
+                              : _showDialog(product, context)),
+                      DataCell(
+                        Text(
+                          "${product.title}",
+                          maxLines: 3,
+                          style: TextStyle(
+                            fontSize: screenWidth10p * 1.2,
+//                                color: Colors.redAccent,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ShopriteProductGraph(productItem: product),
+                          ),
+                        ),
+                      ),
+                      DataCell(
+                        FittedBox(
+                          child: Text(
+                            'R${product.prices[product.prices.length - 1]}',
+                            style: TextStyle(
+                              fontSize: screenWidth10p * 1.4,
+//                                color: Colors.redAccent,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ShopriteProductGraph(productItem: product),
+                          ),
+                        ),
+                      ),
+                      DataCell(
+                        Text(
+                          "${product.change.round()}%",
+                          style: TextStyle(
+                            color:
+                                product.change > 0 ? Colors.red : Colors.green,
+                          ),
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ShopriteProductGraph(productItem: product),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )
+        else
+          Scrollbar(
+            controller: gridScrollController,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: GridView.builder(
+                  controller: gridScrollController,
+                  itemCount: itemList.length,
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1 / 1.4,
+                    crossAxisSpacing: screenWidth * .03,
+                  ),
+                  itemBuilder: (_, index) {
+                    return index == itemList.length - 1
+                        ? Container()
+                        : (index.isEven
+                            ? GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ShopriteProductGraph(
+                                              productItem: itemList[index]),
+                                    ),
+                                  );
+                                },
+                                child: ProductCardRed(
+//                      index: index,
+                                  shopriteNullImageUrl: _shopriteNullImageUrl,
+                                  product: itemList[index],
+                                ),
+                              )
+                            : Transform.translate(
+                                offset: Offset(0, 80),
+                                child: GestureDetector(
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ShopriteProductGraph(
+                                              productItem: itemList[index]),
+                                    ),
+                                  ),
+                                  child: ProductCardRed(
+//                        index: index,
+                                    shopriteNullImageUrl: _shopriteNullImageUrl,
+                                    product: itemList[index],
+                                  ),
+                                ),
+                              ));
+                  }),
+            ),
           ),
-        ),
       ],
     );
   }
@@ -767,4 +728,3 @@ class _ShopriteHomeScreenState extends State<ShopriteHomeScreen>
     );
   }
 }
-

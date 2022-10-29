@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:e_grocery/src/components/clothing/product_tabbar_view.dart';
 import 'package:e_grocery/src/components/custom_paint.dart';
 import 'package:e_grocery/src/components/homescreen_components/best_buys.dart';
@@ -99,7 +97,7 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
                     ),
                     Padding(
                       padding:
-                      EdgeInsets.symmetric(horizontal: horizontalPadding),
+                          EdgeInsets.symmetric(horizontal: horizontalPadding),
                       child: FittedBox(
                         child: Text(
                           "Sportscene",
@@ -118,7 +116,7 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
                     ),
                     Padding(
                         padding:
-                        EdgeInsets.symmetric(horizontal: horizontalPadding),
+                            EdgeInsets.symmetric(horizontal: horizontalPadding),
                         child: Center(
                           child: GestureDetector(
                             onTap: () async {
@@ -131,11 +129,10 @@ class _SportsceneHomeScreenState extends State<SportsceneHomeScreen>
                                 final result = await showSearch(
                                     context: context,
                                     delegate: ClothingProductSearch(
-                                        items: Provider
-                                            .of<
-                                            SportsceneAllProductList>(
-                                            context,
-                                            listen: false)
+                                        items: Provider.of<
+                                                    SportsceneAllProductList>(
+                                                context,
+                                                listen: false)
                                             .items,
                                         networkData: _networkData));
                                 print(result);
