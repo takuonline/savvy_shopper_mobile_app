@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "68184783518",
+    "project_id": "savvy-shopper-6bc20",
+    "storage_bucket": "savvy-shopper-6bc20.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:68184783518:android:7b8889fc23a8068e29998f",
+        "android_client_info": {
+          "package_name": "takuonline.e_grocery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "68184783518-h9e673nahhb5hjpuapnebqn4m4pb07a3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCilOu35D7EOLHNzBuUA7VPNXXoHajiMik"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "68184783518-h9e673nahhb5hjpuapnebqn4m4pb07a3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

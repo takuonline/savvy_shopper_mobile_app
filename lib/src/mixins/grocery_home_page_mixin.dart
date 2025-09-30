@@ -1,0 +1,176 @@
+import 'dart:convert';
+
+import 'package:e_grocery/src/components/product_item.dart';
+import 'package:e_grocery/src/constants/constants.dart';
+import 'package:e_grocery/src/networking/connection_test.dart';
+import 'package:e_grocery/src/providers/grocery/pnp_product_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+mixin GroceriesHomePageMixin<T extends StatefulWidget> on State<T> {
+  bool isGridOff = false;
+
+  void toggleGrid() => setState(() => isGridOff = !isGridOff);
+
+  Future<void> showNetworkDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Please check your Network'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'An internet connection is required for this app, please make sure you are'
+                  ' connected to a network and try again',
+                  style: TextStyle(
+                    fontFamily: "Montserrat",
+                    color: Colors.black,
+                  ),
+                ),
+//                Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Retry',
+                style: TextStyle(color: kBgPnP),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                if (await TestConnection.checkForConnection()) {
+                  Provider.of<PnPAllProductList>(context, listen: false)
+                      .getItems();
+                } else {
+                  showNetworkDialog(context);
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  List<ProductItem> cheap = [];
+  List<ProductItem> expensive = [];
+  List<ProductItem> allProducts = [];
+  final textController = TextEditingController();
+  final gridScrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
+  bool isDataLoaded = false;
+
+  bool isLoading = false;
+  dynamic data;
+
+  void testConnection(storeProvider) async {
+    if (await TestConnection.checkForConnection()) {
+      print("testing connection");
+      await Future.delayed(Duration(seconds: 7));
+      if (storeProvider.data == null) {
+        setState(() {
+          isLoading = true;
+        });
+        await storeProvider.getItems();
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } else {
+      await showNetworkDialog(context);
+    }
+  }
+
+//  void toggleGrid(){
+//    setState(() =>isGridOff = !isGridOff);
+//  }
+
+  void cleanExpensive(List<dynamic> items) {
+    for (var i in items) {
+      List<DateTime> tempDateList = [];
+
+      List<dynamic> datesList = i[i.keys.elementAt(0).toString()]['dates'];
+
+      for (var dateString in datesList) {
+        tempDateList.add((DateTime.parse(dateString)));
+      }
+
+      ProductItem _productItem = ProductItem(
+          i[i.keys.elementAt(0).toString()]['image_url'],
+          i[i.keys.elementAt(0).toString()]['prices_list'],
+          tempDateList,
+          i.keys.elementAt(0).toString(),
+          i[i.keys.elementAt(0).toString()]['change']);
+
+      expensive.add(_productItem);
+    }
+
+    setState(() {});
+  }
+
+  void loadData(BuildContext context) {
+    if (data != null && !isDataLoaded) {
+      cleanCheap(jsonDecode(data["cheap"]));
+      cleanExpensive(jsonDecode(data["expensive"]));
+
+      setState(() => isLoading = false);
+      setState(() => isDataLoaded = true);
+    } else {
+      setState(() => isLoading = true);
+    }
+  }
+
+  void cleanCheap(List<dynamic> items) {
+    for (var i in items) {
+      List<DateTime> tempDateList = [];
+
+      List<dynamic> datesList = i[i.keys.elementAt(0).toString()]['dates'];
+
+      for (var dateString in datesList) {
+        tempDateList.add((DateTime.parse(dateString)));
+      }
+
+      ProductItem _productItem = ProductItem(
+          i[i.keys.elementAt(0).toString()]['image_url'],
+          i[i.keys.elementAt(0).toString()]['prices_list'],
+          tempDateList,
+          i.keys.elementAt(0).toString(),
+          i[i.keys.elementAt(0).toString()]['change']);
+
+      cheap.add(_productItem);
+    }
+
+    setState(() {});
+  }
+
+  Future<void> getDataOnRefresh(storeProvider) async {
+    if (await TestConnection.checkForConnection()) {
+      print('refreshing');
+      setState(() => isLoading = true);
+      setState(() => isDataLoaded = false);
+
+      await storeProvider.getItems();
+
+      cheap.clear();
+      expensive.clear();
+      allProducts.clear();
+
+      data = storeProvider.data;
+
+      print(data);
+      print(isDataLoaded);
+
+      cleanCheap(jsonDecode(data["cheap"]));
+      cleanExpensive(jsonDecode(data["expensive"]));
+
+      setState(() => isLoading = false);
+      setState(() => isDataLoaded = true);
+    } else {
+      showNetworkDialog(context);
+    }
+  }
+}
