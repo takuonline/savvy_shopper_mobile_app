@@ -2,6 +2,19 @@
 
 A cross-platform Flutter mobile application for price comparison across 11(removed 1) South African retailers in three major categories: Groceries, Clothing, and Electronics/PC Components.
 
+
+## Demo
+
+<div align="center">
+
+### 📱 Mobile App
+<video src="static/savvy-shopper-demo-1_small1.mp4" controls autoplay loop muted width="300" style="border: 8px solid #1a1a1a; border-radius: 24px; box-shadow: 0 8px 16px rgba(0,0,0,0.3); margin: 20px;">
+  Your browser does not support the video tag.
+</video>
+
+</div>
+
+
 ## 🎯 Project Overview
 
 Savvy Shopper mobile app empowers consumers to make informed purchasing decisions by providing real-time price tracking, historical price trends, and multi-store comparisons. The app connects to a REST API backend that aggregates data from web scrapers across multiple retailers.
