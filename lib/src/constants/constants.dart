@@ -27,3 +27,5 @@ const kBgTakealot = Color(0xff0b79bf);
 
 const kBgComputermania = Color(0xff0b3254);
 const kComputermaniaSecondary = Color(0xffe3df1c);
+
+const serverUrl = 'http://localhost:5000';

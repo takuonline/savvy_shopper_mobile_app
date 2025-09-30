@@ -4,7 +4,7 @@ import 'dart:io';
 //import 'package:http
 import 'package:http/http.dart' as http;
 
-const url = 'http://52.50.112.49:9876';
+import 'package:e_grocery/src/constants/constants.dart';
 
 class WoolworthsClothingData {
   Future<dynamic> getData() async {
@@ -15,7 +15,7 @@ class WoolworthsClothingData {
     try {
       print("getting data...WoolworthsClothing...................");
       http.Response response =
-          await http.get('$url/woolworths-clothing-client', headers: headers);
+          await http.get('$serverUrl/woolworths-clothing-client', headers: headers);
 
       String data = response.body;
 
@@ -35,7 +35,7 @@ class WoolworthsClothingData {
       print(
           "getting single product data.......woolworths-clothing...............");
       http.Response response = await http.get(
-          '$url/woolworths-clothing-get-product-data/${title.replaceAll("/", "@forwardslash@")}',
+          '$serverUrl/woolworths-clothing-get-product-data/${title.replaceAll("/", "@forwardslash@")}',
           headers: headers);
 
       String data = response.body;

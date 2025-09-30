@@ -4,7 +4,7 @@ import 'dart:io';
 //import 'package:http
 import 'package:http/http.dart' as http;
 
-const url = 'http://52.50.112.49:9876';
+import 'package:e_grocery/src/constants/constants.dart';
 
 class MarkhamData {
   Future<dynamic> getData() async {
@@ -15,7 +15,7 @@ class MarkhamData {
     try {
       print("getting data...markham...................");
       http.Response response =
-          await http.get('$url/markham-client', headers: headers);
+          await http.get('$serverUrl/markham-client', headers: headers);
 
       String data = response.body;
 
@@ -34,7 +34,7 @@ class MarkhamData {
     try {
       print("getting single product data.......markham...............");
       http.Response response = await http.get(
-          '$url/markham-get-product-data/${title.replaceAll("/", "@forwardslash@")}',
+          '$serverUrl/markham-get-product-data/${title.replaceAll("/", "@forwardslash@")}',
           headers: headers);
 
       String data = response.body;

@@ -4,13 +4,14 @@ import 'dart:io';
 //import 'package:http
 import 'package:http/http.dart' as http;
 
-const url = 'http://52.50.112.49:9876';
+import 'package:e_grocery/src/constants/constants.dart';
+
 
 class ShopriteData {
   Future<dynamic> getData() async {
     try {
       print("getting data....Shoprite..................");
-      http.Response response = await http.get('$url/client');
+      http.Response response = await http.get('$serverUrl/client');
 
       String data = response.body;
 //    print(response.statusCode);
@@ -30,7 +31,7 @@ class ShopriteData {
     try {
       print("getting single product data....Shoprite..................");
       http.Response response = await http.get(
-          '$url/get-product-data/${title.replaceAll("/", "@forwardslash@")}',
+          '$serverUrl/get-product-data/${title.replaceAll("/", "@forwardslash@")}',
           headers: headers);
       String data = response.body;
 

@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:e_grocery/src/constants/constants.dart';
 import 'package:http/http.dart' as http;
-
-const url = 'http://52.50.112.49:9876';
 
 class ComputermaniaData {
   Future<dynamic> getData() async {
@@ -14,7 +13,7 @@ class ComputermaniaData {
     try {
       print("getting data...computermania...................");
       http.Response response =
-          await http.get('$url/computermania-client', headers: headers);
+          await http.get('$serverUrl/computermania-client', headers: headers);
 
       String data = response.body;
 
@@ -33,7 +32,7 @@ class ComputermaniaData {
     try {
       print("getting single product data.......computermania...............");
       http.Response response = await http.get(
-          '$url/computermania-get-product-data/${title.replaceAll("/", "@forwardslash@")}',
+          '$serverUrl/computermania-get-product-data/${title.replaceAll("/", "@forwardslash@")}',
           headers: headers);
 
       String data = response.body;
